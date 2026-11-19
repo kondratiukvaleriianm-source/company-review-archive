@@ -10,7 +10,7 @@
 <style>
 :root{
   /* Layout idea: an archive binder. Cream paper, one vermilion accent, numbered index rows,
-     condensed caps headlines with italic serif accents, a black verdict block. */
+     condensed caps headlines with italic serif accents, a black at-a-glance block. */
   --paper:#EAE5D9;
   --paper-deep:#DED7C6;
   --card:#F3EFE5;
@@ -136,14 +136,7 @@ mark{background:rgba(217,58,34,.22);color:inherit;padding:0 1px}
 .cell small{display:block;font:500 10.5px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--mute);margin-bottom:4px}
 .cell b{font:600 22px/1 var(--f-display);font-variant-numeric:tabular-nums;white-space:nowrap}
 .cell .ev{margin-top:5px}
-.bars{display:flex;gap:2px;margin-top:6px}
-.bars i{width:12px;height:7px;background:transparent;border:1px solid var(--ink)}
-.bars i.on{background:var(--red);border-color:var(--red)}
 .pill{display:inline-flex;align-items:center;gap:6px;font:500 11px/1 var(--f-mono);letter-spacing:.06em;text-transform:uppercase;padding:6px 10px;border:1px solid var(--ink);white-space:nowrap}
-.v-learn{background:var(--ink);color:var(--paper)}
-.v-dig{background:var(--red-text);color:var(--paper);border-color:var(--red-text)}
-.v-track{background:transparent}
-.v-pass{background:transparent;color:var(--mute);border:1px dashed var(--mute)}
 .s-refresh{color:var(--red-text);border-color:var(--red-text)}
 .s-reviewed{background:transparent}
 .s-research,.s-queue{border-style:dashed}
@@ -196,14 +189,6 @@ mark{background:rgba(217,58,34,.22);color:inherit;padding:0 1px}
 .sec-t{margin:0;font:600 clamp(26px,3.4vw,42px)/1.05 var(--f-display);text-transform:uppercase}
 .sec h3{margin:34px 0 12px;font:500 12px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--mute)}
 .sec p{max-width:66ch}
-.score{display:grid;gap:0;margin:0 0 6px;border-top:1px solid var(--ink)}
-.score-row{display:grid;grid-template-columns:minmax(150px,1fr) 150px minmax(0,2fr);gap:8px 24px;align-items:baseline;padding:14px 0;border-bottom:1px solid var(--rule)}
-.score-row b{font:600 18px var(--f-display);text-transform:uppercase}
-.score-row .bars i{width:20px;height:9px}
-.score-row p{margin:0;font-size:14.5px;color:var(--ink-soft);max-width:none}
-.score-total{display:flex;flex-wrap:wrap;gap:12px 30px;align-items:center;padding:16px 0}
-.score-total .big{font:700 52px/1 var(--f-display);font-variant-numeric:tabular-nums}
-.score-total .big small{font:500 22px var(--f-display);color:var(--mute)}
 .dl{margin:0;border-top:1px solid var(--ink)}
 .dl .r{display:grid;grid-template-columns:200px minmax(0,1fr) auto;gap:6px 24px;padding:14px 0;border-bottom:1px solid var(--rule);align-items:start}
 .dl dt{font:500 11.5px/1.7 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--mute)}
@@ -240,13 +225,9 @@ mark{background:rgba(217,58,34,.22);color:inherit;padding:0 1px}
 .list li>span:last-child{flex:1}
 .list.num{counter-reset:n}
 .list.num li::before{counter-increment:n;content:counter(n,decimal-leading-zero);font:600 20px/1.2 var(--f-display);color:var(--red);flex:none;min-width:30px}
+.list.core li{justify-content:space-between;gap:18px}
+.list.core .tg{display:flex;gap:8px;align-items:center;flex:none;flex-wrap:wrap;justify-content:flex-end}
 .list.q li::before{content:"?";font:600 20px/1.2 var(--f-display);color:var(--red);flex:none;min-width:30px}
-.list.plus li::before{content:"+";font:600 20px/1.2 var(--f-display);color:var(--ink);flex:none;min-width:30px}
-.sev{font:500 10.5px/1 var(--f-mono);letter-spacing:.06em;text-transform:uppercase;padding:5px 8px;border:1px solid var(--ink);flex:none;min-width:84px;text-align:center}
-.sev-high{background:var(--red-text);border-color:var(--red-text);color:var(--paper)}
-.sev-med{background:transparent}
-.sev-low{border-color:var(--mute);color:var(--mute)}
-.sev-unk{border-style:dashed;border-color:var(--mute);color:var(--mute)}
 .kwrow{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
 .kwrow button{background:transparent;border:1px solid var(--ink);border-radius:999px;padding:5px 12px;font-size:13px}
 .kwrow button:hover{background:var(--ink);color:var(--paper)}
@@ -298,8 +279,7 @@ details.app .in{padding:2px 0 26px}
   .drawer-bg.open{display:block;position:fixed;inset:0;background:rgba(22,19,15,.45);z-index:19}
   .hero{grid-template-columns:minmax(0,1fr)}
   .seal{display:none}
-  .score-row{grid-template-columns:minmax(0,1fr)}
-  .dl .r{grid-template-columns:minmax(0,1fr)}
+    .dl .r{grid-template-columns:minmax(0,1fr)}
   .two{grid-template-columns:minmax(0,1fr)}
   .method .def{grid-template-columns:minmax(0,1fr)}
   .src li{grid-template-columns:40px minmax(0,1fr)}
@@ -400,12 +380,6 @@ const REGIONS={
  us:{en:"United States",uk:"США"},gb:{en:"United Kingdom",uk:"Велика Британія"},de:{en:"Germany",uk:"Німеччина"},
  ae:{en:"UAE",uk:"ОАЕ"},global:{en:"Global",uk:"Глобально"}
 };
-const VERDICTS=[
- {id:"learn",en:"Learn from",uk:"Вчимося",d:{en:"Not a target, but its model or tactics are worth borrowing.",uk:"Не ціль, але модель чи тактики варто запозичити."}},
- {id:"dig",en:"Dig deeper",uk:"Копати глибше",d:{en:"Worth a deeper research round: interviews, financials, direct contact.",uk:"Варто глибшого дослідження: інтерв’ю, фінанси, прямий контакт."}},
- {id:"track",en:"Track",uk:"Стежимо",d:{en:"Interesting, no action now. Check again at the next refresh.",uk:"Цікаво, але дій зараз немає. Повертаємось на наступному оновленні."}},
- {id:"pass",en:"Pass",uk:"Пропускаємо",d:{en:"Reviewed. Not relevant or not strong enough.",uk:"Переглянуто. Нерелевантно або недостатньо сильно."}}
-];
 const STATUSES=[
  {id:"queue",en:"In queue",uk:"У черзі",d:{en:"Listed for research, nothing written yet.",uk:"У списку на дослідження, тексту ще немає."}},
  {id:"research",en:"Researching",uk:"У роботі",d:{en:"Research under way, sections incomplete.",uk:"Дослідження триває, розділи неповні."}},
@@ -418,398 +392,2413 @@ const EVID={
  estimate:{en:"Our estimate",uk:"Наша оцінка",d:{en:"Calculated by us from stated inputs, with the math shown.",uk:"Розраховано нами із заявлених вхідних даних, розрахунок показано."}},
  unknown:{en:"Unknown",uk:"Невідомо",d:{en:"Looked for and not found. Never left blank.",uk:"Шукали й не знайшли. Ніколи не залишаємо порожнім."}}
 };
-const SEV={high:{en:"High",uk:"Високий"},med:{en:"Medium",uk:"Середній"},low:{en:"Low",uk:"Низький"},unk:{en:"Unknown",uk:"Невідомо"}};
-const CONF={low:{en:"Low",uk:"Низька"},med:{en:"Medium",uk:"Середня"},high:{en:"High",uk:"Висока"}};
-const GROW={up:{en:"Growing",uk:"Зростає"},flat:{en:"Flat",uk:"Стабільно"},down:{en:"Declining",uk:"Знижується"},unk:{en:"Unknown",uk:"Невідомо"}};
 const BANDS=[
  {id:"b0",en:"Under $1M",uk:"До $1 млн"},{id:"b1",en:"$1–10M",uk:"$1–10 млн"},
  {id:"b2",en:"$10–100M",uk:"$10–100 млн"},{id:"b3",en:"$100M+",uk:"$100 млн+"},{id:"bu",en:"Unknown",uk:"Невідомо"}
 ];
-const SCORE_KEYS=[
- {k:"model",en:"Business-model strength",uk:"Сила бізнес-моделі",d:{en:"Do the revenue streams fit together, repeat, and scale? 1 = single fragile stream, 5 = several recurring streams that reinforce each other.",uk:"Чи поєднуються джерела доходу, чи повторюються й масштабуються? 1 = одне крихке джерело, 5 = кілька регулярних джерел, що підсилюють одне одного."}},
- {k:"revenue",en:"Revenue quality & evidence",uk:"Якість доходу та доказів",d:{en:"How solid is the money, and how well can we show it? 1 = no usable data, 5 = reported figures that reconcile.",uk:"Наскільки надійні гроші і чи можемо ми це показати? 1 = немає придатних даних, 5 = підтверджені цифри, що сходяться."}},
- {k:"growth",en:"Growth momentum",uk:"Динаміка зростання",d:{en:"Direction and speed of customers, revenue or reach. 1 = shrinking, 5 = fast and sustained.",uk:"Напрям і швидкість росту клієнтів, доходу чи охоплення. 1 = скорочується, 5 = швидко й стабільно."}},
- {k:"moat",en:"Defensibility",uk:"Захищеність",d:{en:"What stops a competitor copying it? 1 = nothing, 5 = network effects, scale, or rights that compound.",uk:"Що заважає конкуренту повторити? 1 = нічого, 5 = мережеві ефекти, масштаб чи права, що накопичуються."}},
- {k:"relevance",en:"Relevance to us",uk:"Релевантність для нас",d:{en:"How directly it informs our ventures and work streams. 1 = tangential, 5 = a model we can test now.",uk:"Наскільки прямо це допомагає нашим проєктам і напрямам. 1 = дотично, 5 = модель, яку можна пробувати зараз."}}
-];
 
-const REVIEWS=[
-{
- id:"ybc", no:1,
- name:"Young Business Club",
- aka:"YBC · YBC HUMAN FESTIVAL",
- url:"https://ybc.club",
- category:"community",
- models:["membership","ticketing","franchise"],
- regions:["ua","pl","pt","cy","benelux","es"],
- founded:"2016",
- revenue:{lo:4.054,hi:5.180,cur:"$",tag:"estimate"},
- growth:"up", verdict:"learn", status:"refresh", confidence:"med",
- reviewer:"Team", reviewed:"2026-09", updated:"2026-11-19",
- relevantTo:[{en:"Clubs & communities stream",uk:"Напрям «Клуби та спільноти»"}],
- statusNote:{en:"Figures date from September 2026. The YBC HUMAN festival (18–20 Sep) has since taken place and the club turns ten this month, so the numbers need a refresh.",uk:"Цифри від вересня 2026. Фестиваль YBC HUMAN (18–20 вересня) уже відбувся, а клубу цього місяця виповнюється десять років, тож дані потрібно оновити."},
- keywords:[
-  {k:"business-club",en:"Business club",uk:"Бізнес-клуб"},
-  {k:"tiered-pricing",en:"Tiered pricing",uk:"Рівні за оборотом"},
-  {k:"gated-entry",en:"Gated entry",uk:"Відбір на вході"},
-  {k:"founder-led",en:"Founder-led",uk:"Засновницький бізнес"},
-  {k:"franchise-branches",en:"Franchise branches",uk:"Філії за франшизою"},
-  {k:"festival",en:"Festival",uk:"Фестиваль"},
-  {k:"peer-groups",en:"Peer groups",uk:"Peer-групи"},
-  {k:"mobile-app",en:"Mobile app",uk:"Мобільний застосунок"},
-  {k:"charity-auction",en:"Charity auctions",uk:"Благодійні аукціони"},
-  {k:"veterans",en:"Veterans programme",uk:"Ветеранська програма"}
+const REVIEWS=[{
+ "id": "ybc",
+ "no": 1,
+ "name": "Young Business Club",
+ "aka": "YBC · YBC HUMAN FESTIVAL",
+ "url": "https://ybc.club",
+ "category": "community",
+ "models": [
+  "membership",
+  "ticketing",
+  "franchise"
  ],
- tagline:{en:"A ten-year-old business club for company owners, with a paid festival and a branch network on top.",uk:"Десятирічний бізнес-клуб для власників компаній із платним фестивалем і мережею філій."},
- strip:{
-  why:{en:"The closest working model for our clubs & communities stream: tiers set by company turnover, a gated entry call, public prices, a paid festival on top, and a branch network that partly runs on franchise.",
-       uk:"Найближча робоча модель для нашого напряму «Клуби та спільноти»: рівні за оборотом компанії, вхід через відбірковий дзвінок, публічні ціни, платний фестиваль зверху та мережа філій, частина яких працює за франшизою."},
-  take:{en:"A founder-led membership business with several revenue layers on one audience. Nearly every figure is self-reported, so treat the numbers as directional. At list prices, memberships alone point to roughly $4–5M a year. The festival adds revenue at an unknown cost, because the package includes lodging, meals, transfers and two ships.",
-        uk:"Засновницький бізнес із членства з кількома шарами доходу на одну аудиторію. Майже всі цифри самозвітні, тож це орієнтири, а не факти. За прайсом лише членства дають приблизно $4–5 млн на рік. Фестиваль додає дохід з невідомими витратами, бо в пакет входять проживання, харчування, трансфери та два кораблі."},
-  next:{en:"Refresh the numbers after the September festival, reconcile the inconsistencies listed under Numbers, and benchmark pricing against two or three comparable clubs, for example EO and YPO.",
-        uk:"Оновити цифри після вересневого фестивалю, звірити розбіжності з розділу «Цифри» та порівняти ціни з двома-трьома схожими клубами, наприклад EO та YPO."}
+ "regions": [
+  "ua",
+  "pl",
+  "pt",
+  "cy",
+  "benelux",
+  "es"
+ ],
+ "founded": "2016",
+ "revenue": {
+  "lo": 4.054,
+  "hi": 5.18,
+  "cur": "$",
+  "tag": "estimate"
  },
- scores:[
-  {k:"model",v:4,note:{en:"Several revenue layers on one audience: prepaid memberships, paid cross-branch events, a festival and franchise branches.",uk:"Кілька шарів доходу на одну аудиторію: передплачені членства, платні події в інших філіях, фестиваль і франшизні філії."}},
-  {k:"revenue",v:2,note:{en:"Prices are public, but counts are self-reported, there are no financials and some figures conflict.",uk:"Ціни публічні, але кількості самозвітні, фінансів немає, а частина цифр суперечить одна одній."}},
-  {k:"growth",v:4,note:{en:"229 new members in H1 2026, a new branch and 500+ festival registrations, all company-reported.",uk:"229 нових учасників у першому півріччі 2026, нова філія і 500+ реєстрацій на фестиваль, усе зі слів компанії."}},
-  {k:"moat",v:3,note:{en:"A ten-year brand and a network of 1,000+ founders, but low switching costs and dependence on the founder.",uk:"Десятирічний бренд і мережа 1000+ засновників, але низькі витрати на перехід і залежність від засновника."}},
-  {k:"relevance",v:4,note:{en:"Pricing, tiering and peer-group formats map directly onto the clubs & communities stream.",uk:"Ціни, рівні та формат peer-груп прямо стосуються напряму «Клуби та спільноти»."}}
+ "status": "refresh",
+ "reviewer": "Team",
+ "reviewed": "2026-09",
+ "updated": "2026-11-19",
+ "statusNote": {
+  "en": "Figures date from September 2026. The YBC HUMAN festival (18–20 Sep) has since taken place and the club turns ten this month, so the numbers need a refresh.",
+  "uk": "Цифри від вересня 2026. Фестиваль YBC HUMAN (18–20 вересня) уже відбувся, а клубу цього місяця виповнюється десять років, тож дані потрібно оновити."
+ },
+ "keywords": [
+  {
+   "k": "business-club",
+   "en": "Business club",
+   "uk": "Бізнес-клуб"
+  },
+  {
+   "k": "tiered-pricing",
+   "en": "Tiered pricing",
+   "uk": "Рівні за оборотом"
+  },
+  {
+   "k": "gated-entry",
+   "en": "Gated entry",
+   "uk": "Відбір на вході"
+  },
+  {
+   "k": "founder-led",
+   "en": "Founder-led",
+   "uk": "Засновницький бізнес"
+  },
+  {
+   "k": "franchise-branches",
+   "en": "Franchise branches",
+   "uk": "Філії за франшизою"
+  },
+  {
+   "k": "festival",
+   "en": "Festival",
+   "uk": "Фестиваль"
+  },
+  {
+   "k": "peer-groups",
+   "en": "Peer groups",
+   "uk": "Peer-групи"
+  },
+  {
+   "k": "mobile-app",
+   "en": "Mobile app",
+   "uk": "Мобільний застосунок"
+  },
+  {
+   "k": "charity-auction",
+   "en": "Charity auctions",
+   "uk": "Благодійні аукціони"
+  },
+  {
+   "k": "veterans",
+   "en": "Veterans programme",
+   "uk": "Ветеранська програма"
+  }
  ],
- snapshot:[
-  {l:{en:"Founded",uk:"Засновано"},v:{en:"2016",uk:"2016"},tag:"claimed",src:["S1"],note:{en:"Another passage dates the start of community-building to 2017. To reconcile.",uk:"В іншому місці початок побудови спільноти датовано 2017 роком. Потрібно звірити."}},
-  {l:{en:"Lead",uk:"Керівник"},v:{en:"Andriy Ostapchuk, founder, co-owner and managing partner",uk:"Андрій Остапчук, засновник, співвласник і керуючий партнер"},tag:"claimed",src:["S1","S3"]},
-  {l:{en:"Structure",uk:"Структура"},v:{en:"11 branch locations listed, stated as “10+”. One branch, Cyprus, runs as a franchise; the rest are run directly. No central office: the large Kyiv office has closed.",uk:"11 локацій у списку, заявлено «10+». Одна філія, Кіпр, працює за франшизою, решта напряму. Центрального офісу немає: великий київський офіс закрито."},tag:"claimed",src:["S1"]},
-  {l:{en:"Footprint",uk:"Географія"},v:{en:"Ukraine (Kyiv, Lviv, Kharkiv, Odesa, Dnipro), Poland (Warsaw, Wrocław), Portugal (Lisbon), Cyprus, Benelux, Spain (Valencia). The club says 4 countries; the list covers at least 6.",uk:"Україна (Київ, Львів, Харків, Одеса, Дніпро), Польща (Варшава, Вроцлав), Португалія (Лісабон), Кіпр, Бенелюкс, Іспанія (Валенсія). Клуб заявляє 4 країни, у списку щонайменше 6."},tag:"claimed",src:["S1"]},
-  {l:{en:"Members",uk:"Учасники"},v:{en:"1,190 entrepreneurs in 2026: 612, 444 and 141 across three paid tiers, plus 31 honorary residents. The tiers sum to 1,197, or 1,228 with residents.",uk:"1 190 підприємців у 2026: 612, 444 і 141 у трьох платних рівнях плюс 31 почесний резидент. Рівні разом дають 1 197, а з резидентами 1 228."},tag:"claimed",src:["S1"]},
-  {l:{en:"Who joins",uk:"Хто вступає"},v:{en:"Founders and co-owners, usually under 40, though not strictly. Nominal bar is $100K annual turnover, in practice $500K+. Business at least 2 years old, no business with Russia. Entry is a call with a regional manager, then payment.",uk:"Засновники та співвласники, зазвичай до 40 років, але не жорстко. Номінальний поріг $100 тис. річного обороту, фактично від $500 тис. Бізнесу щонайменше 2 роки, без співпраці з РФ. Вступ: дзвінок із регіональним менеджером, потім оплата."},tag:"claimed",src:["S1"]},
-  {l:{en:"Entity, headcount, funding",uk:"Юрособа, штат, фінансування"},v:{en:"Not found in the sources reviewed.",uk:"Не знайдено в переглянутих джерелах."},tag:"unknown",src:[]}
+ "tagline": {
+  "en": "A business club for company owners, founded in 2016 in Ukraine, with paid membership tiers, a festival and branches in several countries.",
+  "uk": "Бізнес-клуб для власників компаній, заснований у 2016 році в Україні, з платними рівнями членства, фестивалем і філіями в кількох країнах."
+ },
+ "snapshot": [
+  {
+   "l": {
+    "en": "Founded",
+    "uk": "Засновано"
+   },
+   "v": {
+    "en": "2016",
+    "uk": "2016"
+   },
+   "tag": "claimed",
+   "src": [
+    "S1"
+   ],
+   "note": {
+    "en": "Another passage dates the start of community-building to 2017.",
+    "uk": "В іншому місці початок побудови спільноти датовано 2017 роком."
+   }
+  },
+  {
+   "l": {
+    "en": "Lead",
+    "uk": "Керівник"
+   },
+   "v": {
+    "en": "Andriy Ostapchuk, founder, co-owner and managing partner",
+    "uk": "Андрій Остапчук, засновник, співвласник і керуючий партнер"
+   },
+   "tag": "claimed",
+   "src": [
+    "S1",
+    "S3"
+   ]
+  },
+  {
+   "l": {
+    "en": "Structure",
+    "uk": "Структура"
+   },
+   "v": {
+    "en": "11 branch locations listed, stated as “10+”. One branch, Cyprus, runs as a franchise; the rest are run directly. No central office: the large Kyiv office has closed.",
+    "uk": "11 локацій у списку, заявлено «10+». Одна філія, Кіпр, працює за франшизою, решта напряму. Центрального офісу немає: великий київський офіс закрито."
+   },
+   "tag": "claimed",
+   "src": [
+    "S1"
+   ]
+  },
+  {
+   "l": {
+    "en": "Footprint",
+    "uk": "Географія"
+   },
+   "v": {
+    "en": "Ukraine (Kyiv, Lviv, Kharkiv, Odesa, Dnipro), Poland (Warsaw, Wrocław), Portugal (Lisbon), Cyprus, Benelux, Spain (Valencia). The club says 4 countries; the list covers at least 6.",
+    "uk": "Україна (Київ, Львів, Харків, Одеса, Дніпро), Польща (Варшава, Вроцлав), Португалія (Лісабон), Кіпр, Бенелюкс, Іспанія (Валенсія). Клуб заявляє 4 країни, у списку щонайменше 6."
+   },
+   "tag": "claimed",
+   "src": [
+    "S1"
+   ]
+  },
+  {
+   "l": {
+    "en": "Members",
+    "uk": "Учасники"
+   },
+   "v": {
+    "en": "1,190 entrepreneurs in 2026: 612, 444 and 141 across three paid tiers, plus 31 honorary residents. The tiers sum to 1,197, or 1,228 with residents.",
+    "uk": "1 190 підприємців у 2026: 612, 444 і 141 у трьох платних рівнях плюс 31 почесний резидент. Рівні разом дають 1 197, а з резидентами 1 228."
+   },
+   "tag": "claimed",
+   "src": [
+    "S1"
+   ]
+  },
+  {
+   "l": {
+    "en": "Who joins",
+    "uk": "Хто вступає"
+   },
+   "v": {
+    "en": "Founders and co-owners, usually under 40, though not strictly. Nominal bar is $100K annual turnover, in practice $500K+. Business at least 2 years old, no business with Russia. Entry is a call with a regional manager, then payment.",
+    "uk": "Засновники та співвласники, зазвичай до 40 років, але не жорстко. Номінальний поріг $100 тис. річного обороту, фактично від $500 тис. Бізнесу щонайменше 2 роки, без співпраці з РФ. Вступ: дзвінок із регіональним менеджером, потім оплата."
+   },
+   "tag": "claimed",
+   "src": [
+    "S1"
+   ]
+  },
+  {
+   "l": {
+    "en": "Entity, headcount, funding",
+    "uk": "Юрособа, штат, фінансування"
+   },
+   "v": {
+    "en": "Not found in the sources reviewed.",
+    "uk": "Не знайдено в переглянутих джерелах."
+   },
+   "tag": "unknown",
+   "src": []
+  }
  ],
- streams:{
-  head:[{en:"Stream",uk:"Джерело"},{en:"Price",uk:"Ціна"},{en:"Volume",uk:"Обсяг"},{en:"Est. revenue",uk:"Оцінка доходу"},{en:"Basis",uk:"Підстава"}],
-  rows:[
-   [{en:"Offline membership, 3 tiers",uk:"Офлайн-членство, 3 рівні"},{en:"$1,800–$4,400 per 6–12 months",uk:"$1 800–$4 400 за 6–12 місяців"},{en:"1,197 members (612 / 444 / 141)",uk:"1 197 учасників (612 / 444 / 141)"},{en:"$4.05–5.18M a year",uk:"$4,05–5,18 млн на рік"},{tag:"estimate",en:"List price × tier count",uk:"Прайс × кількість у рівні"}],
-   [{en:"Online membership",uk:"Онлайн-членство"},{en:"$1,200 (6 mo), $1,999 (12 mo)",uk:"$1 200 (6 міс.), $1 999 (12 міс.)"},{en:"Not disclosed",uk:"Не розкрито"},{en:"Not included",uk:"Не враховано"},{tag:"unknown",en:"Mix with offline unknown",uk:"Частка серед офлайн невідома"}],
-   [{en:"Event access in other cities",uk:"Участь у подіях інших міст"},{en:"$100–3,000 per event",uk:"$100–3 000 за подію"},{en:"Not disclosed",uk:"Не розкрито"},{en:"Unknown",uk:"Невідомо"},{tag:"unknown",en:"",uk:""}],
-   [{en:"YBC HUMAN festival",uk:"Фестиваль YBC HUMAN"},{en:"€2,500 Standard, €3,000 Private, €6,000 VIP",uk:"€2 500 Standard, €3 000 Private, €6 000 VIP"},{en:"500+ registered",uk:"500+ реєстрацій"},{en:"About €1.25M gross if all 500 bought the lowest ticket",uk:"Близько €1,25 млн валового, якщо всі 500 купили найдешевший квиток"},{tag:"estimate",en:"Illustration only: Cyprus-branch members enter free, ticket mix unknown",uk:"Лише ілюстрація: члени кіпрської філії входять безкоштовно, склад квитків невідомий"}],
-   [{en:"Franchise and branch fees",uk:"Франшиза та внески філій"},{en:"Not disclosed",uk:"Не розкрито"},{en:"1 franchise branch (Cyprus)",uk:"1 франшизна філія (Кіпр)"},{en:"Unknown",uk:"Невідомо"},{tag:"unknown",en:"",uk:""}],
-   [{en:"Sponsorship and partners",uk:"Спонсорство та партнери"},{en:"Not disclosed",uk:"Не розкрито"},{en:"—",uk:"—"},{en:"Unknown",uk:"Невідомо"},{tag:"unknown",en:"",uk:""}]
+ "streams": {
+  "head": [
+   {
+    "en": "Stream",
+    "uk": "Джерело"
+   },
+   {
+    "en": "Price",
+    "uk": "Ціна"
+   },
+   {
+    "en": "Volume",
+    "uk": "Обсяг"
+   },
+   {
+    "en": "Est. revenue",
+    "uk": "Оцінка доходу"
+   },
+   {
+    "en": "Basis",
+    "uk": "Підстава"
+   }
   ],
-  note:{en:"Charity auctions at club events are not revenue: the proceeds go to the Ukrainian army and veterans. Cost drivers we can see: an all-inclusive festival (lodging, meals, transfers, concierge, two ships), 100+ meetings a year in Kyiv, personal managers for members, a mobile app. The missing central office keeps fixed costs low.",
-        uk:"Благодійні аукціони на подіях клубу не є доходом: кошти йдуть на ЗСУ та ветеранів. Витрати, які ми бачимо: фестиваль «все включено» (проживання, харчування, трансфери, консьєрж, два кораблі), понад 100 зустрічей на рік у Києві, персональні менеджери для учасників, мобільний застосунок. Відсутність центрального офісу тримає постійні витрати низькими."}
+  "rows": [
+   [
+    {
+     "en": "Offline membership, 3 tiers",
+     "uk": "Офлайн-членство, 3 рівні"
+    },
+    {
+     "en": "$1,800–$4,400 per 6–12 months",
+     "uk": "$1 800–$4 400 за 6–12 місяців"
+    },
+    {
+     "en": "1,197 members (612 / 444 / 141)",
+     "uk": "1 197 учасників (612 / 444 / 141)"
+    },
+    {
+     "en": "$4.05–5.18M a year",
+     "uk": "$4,05–5,18 млн на рік"
+    },
+    {
+     "tag": "estimate",
+     "en": "List price × tier count",
+     "uk": "Прайс × кількість у рівні"
+    }
+   ],
+   [
+    {
+     "en": "Online membership",
+     "uk": "Онлайн-членство"
+    },
+    {
+     "en": "$1,200 (6 mo), $1,999 (12 mo)",
+     "uk": "$1 200 (6 міс.), $1 999 (12 міс.)"
+    },
+    {
+     "en": "Not disclosed",
+     "uk": "Не розкрито"
+    },
+    {
+     "en": "Not included",
+     "uk": "Не враховано"
+    },
+    {
+     "tag": "unknown",
+     "en": "Mix with offline unknown",
+     "uk": "Частка серед офлайн невідома"
+    }
+   ],
+   [
+    {
+     "en": "Event access in other cities",
+     "uk": "Участь у подіях інших міст"
+    },
+    {
+     "en": "$100–3,000 per event",
+     "uk": "$100–3 000 за подію"
+    },
+    {
+     "en": "Not disclosed",
+     "uk": "Не розкрито"
+    },
+    {
+     "en": "Unknown",
+     "uk": "Невідомо"
+    },
+    {
+     "tag": "unknown",
+     "en": "",
+     "uk": ""
+    }
+   ],
+   [
+    {
+     "en": "YBC HUMAN festival",
+     "uk": "Фестиваль YBC HUMAN"
+    },
+    {
+     "en": "€2,500 Standard, €3,000 Private, €6,000 VIP",
+     "uk": "€2 500 Standard, €3 000 Private, €6 000 VIP"
+    },
+    {
+     "en": "500+ registered",
+     "uk": "500+ реєстрацій"
+    },
+    {
+     "en": "About €1.25M gross if all 500 bought the lowest ticket",
+     "uk": "Близько €1,25 млн валового, якщо всі 500 купили найдешевший квиток"
+    },
+    {
+     "tag": "estimate",
+     "en": "Illustration only: Cyprus-branch members enter free, ticket mix unknown",
+     "uk": "Лише ілюстрація: члени кіпрської філії входять безкоштовно, склад квитків невідомий"
+    }
+   ],
+   [
+    {
+     "en": "Franchise and branch fees",
+     "uk": "Франшиза та внески філій"
+    },
+    {
+     "en": "Not disclosed",
+     "uk": "Не розкрито"
+    },
+    {
+     "en": "1 franchise branch (Cyprus)",
+     "uk": "1 франшизна філія (Кіпр)"
+    },
+    {
+     "en": "Unknown",
+     "uk": "Невідомо"
+    },
+    {
+     "tag": "unknown",
+     "en": "",
+     "uk": ""
+    }
+   ],
+   [
+    {
+     "en": "Sponsorship and partners",
+     "uk": "Спонсорство та партнери"
+    },
+    {
+     "en": "Not disclosed",
+     "uk": "Не розкрито"
+    },
+    {
+     "en": "—",
+     "uk": "—"
+    },
+    {
+     "en": "Unknown",
+     "uk": "Невідомо"
+    },
+    {
+     "tag": "unknown",
+     "en": "",
+     "uk": ""
+    }
+   ]
+  ],
+  "note": {
+   "en": "Charity auctions at club events are not revenue: the proceeds go to the Ukrainian army and veterans. Visible cost items: an all-inclusive festival (lodging, meals, transfers, concierge, two ships), 100+ meetings a year in Kyiv, personal managers for members, a mobile app. The club has no central office.",
+   "uk": "Благодійні аукціони на подіях клубу не є доходом: кошти йдуть на ЗСУ та ветеранів. Видимі статті витрат: фестиваль «все включено» (проживання, харчування, трансфери, консьєрж, два кораблі), 100+ зустрічей на рік у Києві, персональні менеджери для учасників, мобільний застосунок. Центрального офісу в клубу немає."
+  }
  },
- math:{
-  title:{en:"How the estimate is built",uk:"Як побудовано оцінку"},
-  a:{h:{en:"12-month list prices",uk:"Прайс на 12 місяців"},lines:["612 × $2,999 = $1,835,388","444 × $3,600 = $1,598,400","141 × $4,400 =   $620,400","Total         = $4,054,188"]},
-  b:{h:{en:"6-month list prices, doubled to a year",uk:"Прайс на 6 місяців, подвоєний до року"},lines:["612 × $3,600 = $2,203,200","444 × $4,800 = $2,131,200","141 × $6,000 =   $846,000","Total         = $5,180,400"]},
-  notes:[
-   {en:"Assumes every member pays list price and that the base-tier price applies to the $100K–$1M tier. Discounts, cheaper online members and non-renewals would lower it. The 31 residents pay nothing.",uk:"Припускає, що кожен учасник платить за прайсом, а ціна базового рівня діє для рівня $100 тис.–$1 млн. Знижки, дешевші онлайн-учасники та неподовження зменшать цифру. 31 резидент не платить."},
-   {en:"Festival illustration: 500 × €2,500 = €1,250,000 at the lowest ticket. Not a floor, because Cyprus-branch members enter free and the real ticket mix is unknown.",uk:"Ілюстрація для фестивалю: 500 × €2 500 = €1 250 000 за найдешевшим квитком. Це не нижня межа, бо члени кіпрської філії входять безкоштовно, а реальний склад квитків невідомий."},
-   {en:"Pricing signal: 12-month plans cost 17–27% less per month than 6-month plans (base $250 vs $300, Wise $300 vs $400, 10M $367 vs $500).",uk:"Цінова ознака: 12-місячні плани на 17–27% дешевші за місяць, ніж 6-місячні (базовий $250 проти $300, Wise $300 проти $400, 10M $367 проти $500)."}
+ "math": {
+  "title": {
+   "en": "How the estimate is built",
+   "uk": "Як побудовано оцінку"
+  },
+  "a": {
+   "h": {
+    "en": "12-month list prices",
+    "uk": "Прайс на 12 місяців"
+   },
+   "lines": [
+    "612 × $2,999 = $1,835,388",
+    "444 × $3,600 = $1,598,400",
+    "141 × $4,400 =   $620,400",
+    "Total         = $4,054,188"
+   ]
+  },
+  "b": {
+   "h": {
+    "en": "6-month list prices, doubled to a year",
+    "uk": "Прайс на 6 місяців, подвоєний до року"
+   },
+   "lines": [
+    "612 × $3,600 = $2,203,200",
+    "444 × $4,800 = $2,131,200",
+    "141 × $6,000 =   $846,000",
+    "Total         = $5,180,400"
+   ]
+  },
+  "notes": [
+   {
+    "en": "Assumes every member pays list price and that the base-tier price applies to the $100K–$1M tier. Discounts, cheaper online members and non-renewals would lower it. The 31 residents pay nothing.",
+    "uk": "Припускає, що кожен учасник платить за прайсом, а ціна базового рівня діє для рівня $100 тис.–$1 млн. Знижки, дешевші онлайн-учасники та неподовження зменшать цифру. 31 резидент не платить."
+   },
+   {
+    "en": "Festival illustration: 500 × €2,500 = €1,250,000 at the lowest ticket. Not a floor, because Cyprus-branch members enter free and the real ticket mix is unknown.",
+    "uk": "Ілюстрація для фестивалю: 500 × €2 500 = €1 250 000 за найдешевшим квитком. Це не нижня межа, бо члени кіпрської філії входять безкоштовно, а реальний склад квитків невідомий."
+   },
+   {
+    "en": "Pricing signal: 12-month plans cost 17–27% less per month than 6-month plans (base $250 vs $300, Wise $300 vs $400, 10M $367 vs $500).",
+    "uk": "Цінова ознака: 12-місячні плани на 17–27% дешевші за місяць, ніж 6-місячні (базовий $250 проти $300, Wise $300 проти $400, 10M $367 проти $500)."
+   }
   ]
  },
- numbers:{
-  head:[{en:"Metric",uk:"Показник"},{en:"Value",uk:"Значення"},{en:"Evidence",uk:"Докази"},{en:"As of",uk:"Станом на"},{en:"Note",uk:"Примітка"}],
-  rows:[
-   [{en:"Members",uk:"Учасники"},"1,190",{tag:"claimed"},{en:"2026",uk:"2026"},{en:"Tiers sum to 1,197 (1,228 with residents)",uk:"Рівні разом 1 197 (1 228 з резидентами)"}],
-   [{en:"New members, H1 2026",uk:"Нові учасники, 1-ше пів. 2026"},"229",{tag:"claimed"},{en:"H1 2026",uk:"1-ше пів. 2026"},{en:"About 19% of the member base (our calc). Churn unknown.",uk:"Близько 19% бази (наш розрахунок). Відтік невідомий."}],
-   [{en:"Events, H1 2026",uk:"Події, 1-ше пів. 2026"},"799",{tag:"claimed"},{en:"H1 2026",uk:"1-ше пів. 2026"},""],
-   [{en:"Kyiv meetings a year",uk:"Зустрічей у Києві на рік"},"100+",{tag:"claimed"},{en:"2026",uk:"2026"},""],
-   [{en:"Festival registrations",uk:"Реєстрації на фестиваль"},"500+",{tag:"claimed"},{en:"Sep 2026",uk:"вер. 2026"},{en:"Pre-event figure. Attendance unknown.",uk:"Дані до події. Фактична кількість невідома."}],
-   [{en:"Cyprus opening auction",uk:"Аукціон на відкритті Кіпру"},"€43,000",{tag:"claimed"},{en:"H1 2026",uk:"1-ше пів. 2026"},{en:"Conflicts with $60,000 stated elsewhere",uk:"Суперечить $60 000 в іншому місці"}],
-   [{en:"Membership revenue at list price",uk:"Дохід від членств за прайсом"},"$4.05–5.18M",{tag:"estimate"},{en:"Sep 2026",uk:"вер. 2026"},{en:"Ceiling scenario. See the math above.",uk:"Сценарій верхньої межі. Див. розрахунок вище."}],
-   [{en:"Profit, funding, valuation",uk:"Прибуток, фінансування, оцінка"},{en:"—",uk:"—"},{tag:"unknown"},{en:"—",uk:"—"},""]
+ "numbers": {
+  "head": [
+   {
+    "en": "Metric",
+    "uk": "Показник"
+   },
+   {
+    "en": "Value",
+    "uk": "Значення"
+   },
+   {
+    "en": "Evidence",
+    "uk": "Докази"
+   },
+   {
+    "en": "As of",
+    "uk": "Станом на"
+   },
+   {
+    "en": "Note",
+    "uk": "Примітка"
+   }
+  ],
+  "rows": [
+   [
+    {
+     "en": "Members",
+     "uk": "Учасники"
+    },
+    "1,190",
+    {
+     "tag": "claimed"
+    },
+    {
+     "en": "2026",
+     "uk": "2026"
+    },
+    {
+     "en": "Tiers sum to 1,197 (1,228 with residents)",
+     "uk": "Рівні разом 1 197 (1 228 з резидентами)"
+    }
+   ],
+   [
+    {
+     "en": "New members, H1 2026",
+     "uk": "Нові учасники, 1-ше пів. 2026"
+    },
+    "229",
+    {
+     "tag": "claimed"
+    },
+    {
+     "en": "H1 2026",
+     "uk": "1-ше пів. 2026"
+    },
+    {
+     "en": "About 19% of the member base (our calc). Churn unknown.",
+     "uk": "Близько 19% бази (наш розрахунок). Відтік невідомий."
+    }
+   ],
+   [
+    {
+     "en": "Events, H1 2026",
+     "uk": "Події, 1-ше пів. 2026"
+    },
+    "799",
+    {
+     "tag": "claimed"
+    },
+    {
+     "en": "H1 2026",
+     "uk": "1-ше пів. 2026"
+    },
+    ""
+   ],
+   [
+    {
+     "en": "Kyiv meetings a year",
+     "uk": "Зустрічей у Києві на рік"
+    },
+    "100+",
+    {
+     "tag": "claimed"
+    },
+    {
+     "en": "2026",
+     "uk": "2026"
+    },
+    ""
+   ],
+   [
+    {
+     "en": "Festival registrations",
+     "uk": "Реєстрації на фестиваль"
+    },
+    "500+",
+    {
+     "tag": "claimed"
+    },
+    {
+     "en": "Sep 2026",
+     "uk": "вер. 2026"
+    },
+    {
+     "en": "Pre-event figure. Attendance unknown.",
+     "uk": "Дані до події. Фактична кількість невідома."
+    }
+   ],
+   [
+    {
+     "en": "Cyprus opening auction",
+     "uk": "Аукціон на відкритті Кіпру"
+    },
+    "€43,000",
+    {
+     "tag": "claimed"
+    },
+    {
+     "en": "H1 2026",
+     "uk": "1-ше пів. 2026"
+    },
+    {
+     "en": "Conflicts with $60,000 stated elsewhere",
+     "uk": "Суперечить $60 000 в іншому місці"
+    }
+   ],
+   [
+    {
+     "en": "Membership revenue at list price",
+     "uk": "Дохід від членств за прайсом"
+    },
+    "$4.05–5.18M",
+    {
+     "tag": "estimate"
+    },
+    {
+     "en": "Sep 2026",
+     "uk": "вер. 2026"
+    },
+    {
+     "en": "List-price scenario. See the math above.",
+     "uk": "Сценарій за прайсом. Див. розрахунок вище."
+    }
+   ],
+   [
+    {
+     "en": "Profit, funding, valuation",
+     "uk": "Прибуток, фінансування, оцінка"
+    },
+    {
+     "en": "—",
+     "uk": "—"
+    },
+    {
+     "tag": "unknown"
+    },
+    {
+     "en": "—",
+     "uk": "—"
+    },
+    ""
+   ]
   ]
  },
- reconcile:[
-  {en:"Founded 2016, but community-building is dated to 2017 elsewhere.",uk:"Засновано 2016, але в іншому місці побудову спільноти датовано 2017."},
-  {en:"Cyprus opening auction: €43,000 in one place, $60,000 in another.",uk:"Аукціон на відкритті Кіпру: €43 000 в одному місці, $60 000 в іншому."},
-  {en:"Members: 1,190 stated, tiers sum to 1,197 (1,228 with residents).",uk:"Учасники: заявлено 1 190, рівні разом 1 197 (1 228 з резидентами)."},
-  {en:"Countries: “4” stated, the branch list covers at least 6.",uk:"Країни: заявлено «4», у списку філій щонайменше 6."}
+ "reconcile": [
+  {
+   "en": "Founded 2016, but community-building is dated to 2017 elsewhere.",
+   "uk": "Засновано 2016, але в іншому місці побудову спільноти датовано 2017."
+  },
+  {
+   "en": "Cyprus opening auction: €43,000 in one place, $60,000 in another.",
+   "uk": "Аукціон на відкритті Кіпру: €43 000 в одному місці, $60 000 в іншому."
+  },
+  {
+   "en": "Members: 1,190 stated, tiers sum to 1,197 (1,228 with residents).",
+   "uk": "Учасники: заявлено 1 190, рівні разом 1 197 (1 228 з резидентами)."
+  },
+  {
+   "en": "Countries: “4” stated, the branch list covers at least 6.",
+   "uk": "Країни: заявлено «4», у списку філій щонайменше 6."
+  }
  ],
- market:{
-  position:{en:"The club describes itself as the largest business club in Europe and as a space for entrepreneurs and their AI agents. Both are company descriptions, not verified rankings.",uk:"Клуб називає себе найбільшим бізнес-клубом Європи та простором для підприємців і їхніх AI-агентів. Обидва твердження є описом від компанії, а не перевіреним рейтингом."},
-  comps:[
-   {n:"EO (Entrepreneurs’ Organization)",note:{en:"Benchmark pending: entry criteria, fees, chapter model.",uk:"Порівняння попереду: критерії вступу, внески, модель чаптерів."}},
-   {n:"YPO",note:{en:"Benchmark pending: entry criteria, fees, forum format.",uk:"Порівняння попереду: критерії вступу, внески, формат форумів."}}
-  ],
-  moat:{en:"A network of 1,000+ founders, a ten-year brand, cross-branch access and a peer-group format. Switching costs are low: the value sits in the people, and another club can try to recruit them.",uk:"Мережа 1000+ засновників, десятирічний бренд, доступ між філіями та формат peer-груп. Витрати на перехід низькі: цінність у людях, і інший клуб може спробувати їх залучити."}
+ "market": {
+  "position": {
+   "en": "The club describes itself as the largest business club in Europe and as a space for entrepreneurs and their AI agents. Both are company descriptions, not verified rankings.",
+   "uk": "Клуб називає себе найбільшим бізнес-клубом Європи та простором для підприємців і їхніх AI-агентів. Обидва твердження — опис від компанії, а не перевірені рейтинги."
+  },
+  "comps": []
  },
- strengths:[
-  {en:"Recurring, prepaid revenue from a base segmented by company turnover.",uk:"Регулярний передплачений дохід від бази, сегментованої за оборотом компаній."},
-  {en:"Several revenue layers on one audience: membership, paid cross-branch events, a festival, franchise.",uk:"Кілька шарів доходу на одну аудиторію: членство, платні події в інших філіях, фестиваль, франшиза."},
-  {en:"Asset-light distribution through branches, with no central office.",uk:"Легке за активами розповсюдження через філії, без центрального офісу."},
-  {en:"Clear entry gate (turnover, 2+ years in business, no Russia ties) that protects peer quality.",uk:"Чіткий вхідний фільтр (оборот, 2+ роки бізнесу, без зв’язків із РФ), що береже якість середовища."},
-  {en:"Rich product around the membership: peer groups, sub-clubs, a mobile app, a personal manager with a monthly one-to-one.",uk:"Багатий продукт навколо членства: peer-групи, підклуби, мобільний застосунок, персональний менеджер із щомісячним one-to-one."}
- ],
- risks:[
-  {sev:"high",t:{en:"Data reliability. Nearly all figures come from the club’s own materials and several contradict each other.",uk:"Достовірність даних. Майже всі цифри з власних матеріалів клубу, і кілька з них суперечать одна одній."}},
-  {sev:"med",t:{en:"Founder and partner dependence. The brand is tied to its founder, and each branch has its own local partners, so quality may vary by city.",uk:"Залежність від засновника та партнерів. Бренд пов’язаний із засновником, а кожна філія має власних місцевих партнерів, тож якість може відрізнятися за містами."}},
-  {sev:"med",t:{en:"Reputation. A public internal conflict and change of partners in 2023. The original dossier says it no longer affects the structure, and no source was recorded for that.",uk:"Репутація. Публічний внутрішній конфлікт і зміна партнерів у 2023 році. В оригінальному досьє сказано, що це більше не впливає на структуру, але джерела для цього не зафіксовано."}},
-  {sev:"med",t:{en:"Geographic concentration. 5 of 11 branches are in Ukraine, and the dossier does not say what share of members or revenue they represent.",uk:"Географічна концентрація. 5 з 11 філій в Україні, а в досьє не сказано, яку частку учасників чи доходу вони дають."}},
-  {sev:"low",t:{en:"Low switching costs. Value rests on member quality, which a rival can try to attract.",uk:"Низькі витрати на перехід. Цінність тримається на якості учасників, яких конкурент може спробувати залучити."}},
-  {sev:"unk",t:{en:"Not known: retention, margin, cost base, franchise terms.",uk:"Невідомо: утримання, маржа, структура витрат, умови франшизи."}}
- ],
- steal:[
-  {en:"Tier by company turnover, not by service level. Pricing and peer groups follow the size of the business.",uk:"Рівні за оборотом компанії, а не за рівнем сервісу. Ціни й peer-групи відповідають розміру бізнесу."},
-  {en:"Publish prices with a 6/12-month toggle and make the longer plan 17–27% cheaper per month.",uk:"Публікувати ціни з перемикачем 6/12 місяців і робити довший план на 17–27% дешевшим за місяць."},
-  {en:"Gate entry with a call with a regional manager before payment.",uk:"Відбирати на вході через дзвінок із регіональним менеджером до оплати."},
-  {en:"Offer a cheaper online tier ($1,200 / $1,999) with offline events paid separately.",uk:"Мати дешевший онлайн-рівень ($1 200 / $1 999), де офлайн-події оплачуються окремо."},
-  {en:"Run the festival as its own product open to non-members, free for the newest branch’s members as a launch incentive.",uk:"Робити фестиваль окремим продуктом, відкритим для нечленів, і безкоштовним для учасників наймолодшої філії як стимул запуску."},
-  {en:"Peer groups of 10–12 people with a professional moderator, one two-hour meeting a month.",uk:"Peer-групи по 10–12 людей із професійним модератором, одна дворічна зустріч на місяць."},
-  {en:"Ban direct advertising in member chats to keep the signal high.",uk:"Забороняти пряму рекламу в чатах учасників, щоб зберігати цінність."}
- ],
- questions:[
-  {en:"Real revenue and margin by stream, and the split between online and offline members.",uk:"Реальний дохід і маржа за джерелами та частка онлайн проти офлайн-учасників."},
-  {en:"Renewal and retention rate: how many of the 1,190 are active and paying.",uk:"Рівень поновлення й утримання: скільки з 1 190 активні й платять."},
-  {en:"Which branches are franchises, and what are the fee and revenue-share terms.",uk:"Які філії працюють за франшизою та які умови внесків і розподілу доходу."},
-  {en:"Festival 2026 actuals: attendance, gross, cost, and whether the $100,000 auction target was met.",uk:"Фактичні підсумки фестивалю 2026: відвідуваність, дохід, витрати і чи досягнуто цілі аукціону $100 000."},
-  {en:"Sponsorship and partner income, if any.",uk:"Спонсорський і партнерський дохід, якщо є."},
-  {en:"What happened in 2023, with sources, and the current partner structure.",uk:"Що сталося у 2023 році, з джерелами, і поточна структура партнерів."},
-  {en:"Reconcile the four inconsistencies listed under Numbers.",uk:"Звірити чотири розбіжності з розділу «Цифри»."}
- ],
- appendix:[
-  {title:{en:"Membership tiers",uk:"Рівні членства"},type:"table",
-   head:[{en:"Tier",uk:"Рівень"},{en:"Company turnover",uk:"Оборот компанії"},{en:"Members",uk:"Учасники"},{en:"6 months",uk:"6 місяців"},{en:"12 months",uk:"12 місяців"}],
-   rows:[
-    ["YBC","$100K–$1M","612","$1,800","$2,999"],
-    ["YBC Wise","$1M–$10M","444","$2,400","$3,600"],
-    ["The 10 million club","$10M–$100M","141","$3,000","$4,400"],
-    ["YBC Residence",{en:"Honorary: mentors, speakers, guests",uk:"Почесні: ментори, спікери, гості"},"31",{en:"Free",uk:"Безкоштовно"},{en:"Free",uk:"Безкоштовно"}]
+ "appendix": [
+  {
+   "title": {
+    "en": "Membership tiers",
+    "uk": "Рівні членства"
+   },
+   "type": "table",
+   "head": [
+    {
+     "en": "Tier",
+     "uk": "Рівень"
+    },
+    {
+     "en": "Company turnover",
+     "uk": "Оборот компанії"
+    },
+    {
+     "en": "Members",
+     "uk": "Учасники"
+    },
+    {
+     "en": "6 months",
+     "uk": "6 місяців"
+    },
+    {
+     "en": "12 months",
+     "uk": "12 місяців"
+    }
    ],
-   foot:{en:"Offline prices are the same in every branch city. Events in other cities cost $100–3,000 extra at any tier.",uk:"Офлайн-ціни однакові в усіх містах. Події в інших містах коштують додатково $100–3 000 на будь-якому рівні."}},
-  {title:{en:"Festival formats",uk:"Формати фестивалю"},type:"table",
-   head:[{en:"Format",uk:"Формат"},{en:"Dates",uk:"Дати"},{en:"Price",uk:"Ціна"},{en:"What differs",uk:"Відмінність"}],
-   rows:[
-    ["Standard",{en:"18–20 Sep, 3 days",uk:"18–20 вер., 3 дні"},"€2,500",{en:"Shared room",uk:"Проживання з підселенням"}],
-    ["Private",{en:"18–20 Sep, 3 days",uk:"18–20 вер., 3 дні"},"€3,000",{en:"Own room",uk:"Окремий номер"}],
-    ["VIP",{en:"17–22 Sep, 5 days",uk:"17–22 вер., 5 днів"},"€6,000",{en:"Premium hotel, time with speakers outside the programme, sea trip with speakers on NAPA BLUE",uk:"Готель преміум-класу, час зі спікерами поза програмою, вихід у море зі спікерами на NAPA BLUE"}]
+   "rows": [
+    [
+     "YBC",
+     "$100K–$1M",
+     "612",
+     "$1,800",
+     "$2,999"
+    ],
+    [
+     "YBC Wise",
+     "$1M–$10M",
+     "444",
+     "$2,400",
+     "$3,600"
+    ],
+    [
+     "The 10 million club",
+     "$10M–$100M",
+     "141",
+     "$3,000",
+     "$4,400"
+    ],
+    [
+     "YBC Residence",
+     {
+      "en": "Honorary: mentors, speakers, guests",
+      "uk": "Почесні: ментори, спікери, гості"
+     },
+     "31",
+     {
+      "en": "Free",
+      "uk": "Безкоштовно"
+     },
+     {
+      "en": "Free",
+      "uk": "Безкоштовно"
+     }
+    ]
    ],
-   foot:{en:"All formats include lodging, meals, airport transfers, the full programme and a concierge from arrival. Cyprus-branch members enter free. Membership is not required.",uk:"У всіх форматах: проживання, харчування, трансфери з/до аеропорту, повна програма та консьєрж із моменту прильоту. Члени кіпрської філії входять безкоштовно. Членство не потрібне."}},
-  {title:{en:"Club meeting formats",uk:"Формати клубних зустрічей"},type:"table",
-   head:[{en:"Format",uk:"Формат"},{en:"Size",uk:"Розмір"},{en:"What it is",uk:"Що це"}],
-   rows:[
-    [{en:"Monthly intro dinners",uk:"Щомісячні зустрічі-знайомства"},"10–15",{en:"Shared lunches or dinners for meeting and exchanging experience",uk:"Спільні обіди чи вечері для знайомства й обміну досвідом"}],
-    [{en:"Monthly themed meeting",uk:"Щомісячна тематична зустріч"},"20–25",{en:"Invited expert speaker, member questions",uk:"Запрошений спікер-експерт, питання учасників"}],
-    ["Fuck Up Night","40–80",{en:"Founders talk openly about their mistakes",uk:"Підприємці відверто розповідають про власні помилки"}],
-    [{en:"Monthly large meeting",uk:"Щомісячна велика зустріч"},"100–150",{en:"Speakers from the country’s largest businesses, buffet networking",uk:"Спікери з найбільших бізнесів країни, фуршет і нетворкінг"}],
-    ["Peer to Peer","10–12",{en:"Closed group, monthly, 2 hours, professional moderator",uk:"Закрита група, раз на місяць, 2 години, професійний модератор"}],
-    ["Company Visit","30–50",{en:"Visits inside well-known companies",uk:"Візити всередину відомих компаній"}],
-    [{en:"Informal meetings",uk:"Неформальні зустрічі"},"10–50",{en:"Leisure with members and families, at least monthly",uk:"Дозвілля з учасниками та їхніми сім’ями, щонайменше раз на місяць"}],
-    [{en:"Sub-clubs: AI, Padel, Psychology, Shooting",uk:"Підклуби: AI, Падел, Психологія, Стрільба"},"10–20",{en:"Monthly interest groups; the AI sub-club shares tools and cases",uk:"Щомісячні групи за інтересами; підклуб AI ділиться інструментами та кейсами"}]
+   "foot": {
+    "en": "Offline prices are the same in every branch city. Events in other cities cost $100–3,000 extra at any tier.",
+    "uk": "Офлайн-ціни однакові в усіх містах. Події в інших містах коштують додатково $100–3 000 на будь-якому рівні."
+   }
+  },
+  {
+   "title": {
+    "en": "Festival formats",
+    "uk": "Формати фестивалю"
+   },
+   "type": "table",
+   "head": [
+    {
+     "en": "Format",
+     "uk": "Формат"
+    },
+    {
+     "en": "Dates",
+     "uk": "Дати"
+    },
+    {
+     "en": "Price",
+     "uk": "Ціна"
+    },
+    {
+     "en": "What differs",
+     "uk": "Відмінність"
+    }
    ],
-   foot:{en:"Also: 40+ Telegram chats with direct advertising banned, and a mobile app with profiles of 1,000+ founders and the event calendar.",uk:"Також: 40+ Telegram-чатів із забороною прямої реклами та мобільний застосунок із профілями 1000+ підприємців і календарем подій."}},
-  {title:{en:"Festival programme in brief",uk:"Програма фестивалю коротко"},type:"table",
-   head:[{en:"Day",uk:"День"},{en:"Theme",uk:"Тема"},{en:"Main elements",uk:"Основні елементи"}],
-   rows:[
-    [{en:"Day 1",uk:"День 1"},{en:"Take off the mask",uk:"Зніми маску"},{en:"Airport welcome, mask ritual, opening dinner, fire show, Wild Resonance night, afterparty",uk:"Зустріч в аеропорту, ритуал масок, вечеря відкриття, фаєр-шоу, ніч Wild Resonance, афтерпаті"}],
-    [{en:"Day 2",uk:"День 2"},{en:"Live",uk:"Живи"},{en:"06:00 morning formats, about 30 formats in Human Space, Sea Party on two ships of 120 guests each, main stage, charity auction with a $100,000 target",uk:"Ранкові формати з 06:00, близько 30 форматів у Human Space, Sea Party на двох кораблях по 120 гостей, головна сцена, благодійний аукціон із ціллю $100 000"}],
-    [{en:"Day 3",uk:"День 3"},{en:"Laugh",uk:"Смійся"},{en:"Open air, Greek welcome, Human Comedy, Greek lunch and show, official closing, plate breaking",uk:"Open Air, Greek Welcome, Human Comedy, грецький обід і шоу, офіційне закриття, розбивання тарілок"}]
+   "rows": [
+    [
+     "Standard",
+     {
+      "en": "18–20 Sep, 3 days",
+      "uk": "18–20 вер., 3 дні"
+     },
+     "€2,500",
+     {
+      "en": "Shared room",
+      "uk": "Проживання з підселенням"
+     }
+    ],
+    [
+     "Private",
+     {
+      "en": "18–20 Sep, 3 days",
+      "uk": "18–20 вер., 3 дні"
+     },
+     "€3,000",
+     {
+      "en": "Own room",
+      "uk": "Окремий номер"
+     }
+    ],
+    [
+     "VIP",
+     {
+      "en": "17–22 Sep, 5 days",
+      "uk": "17–22 вер., 5 днів"
+     },
+     "€6,000",
+     {
+      "en": "Premium hotel, time with speakers outside the programme, sea trip with speakers on NAPA BLUE",
+      "uk": "Готель преміум-класу, час зі спікерами поза програмою, вихід у море зі спікерами на NAPA BLUE"
+     }
+    ]
    ],
-   foot:{en:"Full schedule with timings: ybc.com.cy/checkin/schedule",uk:"Повний розклад із таймінгом: ybc.com.cy/checkin/schedule"}},
-  {title:{en:"People and speakers",uk:"Люди та спікери"},type:"table",
-   head:[{en:"Role",uk:"Роль"},{en:"Names",uk:"Імена"}],
-   rows:[
-    [{en:"Founder",uk:"Засновник"},{en:"Andriy Ostapchuk (leads a morning run, speaks on the main stage)",uk:"Андрій Остапчук (веде ранкову пробіжку, виступає на головній сцені)"}],
-    [{en:"Business Zone and MasterMind",uk:"Business Zone і MasterMind"},{en:"Mykhailo Slobodianiuk, Yevgeny Chichvarkin, Lilya Bagirova, M. Drozdovskyi, Andriy Ostapchuk",uk:"Михайло Слободянюк, Євген Чичваркін, Ліля Багірова, М. Дроздовський, Андрій Остапчук"}],
-    [{en:"Women’s Circle",uk:"Women’s Circle"},{en:"Kateryna Osadcha (host), Svitlana Kerimova",uk:"Катерина Осадча (ведуча), Світлана Керімова"}],
-    [{en:"Main stage",uk:"Головна сцена"},{en:"Andriy Fediv, Garik Korogodsky; interviews by Maria Yefrosynina",uk:"Андрій Федорів, Гарік Корогодський; інтерв’ю веде Марія Єфросиніна"}],
-    [{en:"Entertainment",uk:"Розваги"},{en:"S.V.E.T. (band), Volodymyr Shumko (Human Comedy)",uk:"Гурт S.V.E.T., Володимир Шумко (Human Comedy)"}]
+   "foot": {
+    "en": "All formats include lodging, meals, airport transfers, the full programme and a concierge from arrival. Cyprus-branch members enter free. Membership is not required.",
+    "uk": "У всіх форматах: проживання, харчування, трансфери з/до аеропорту, повна програма та консьєрж із моменту прильоту. Члени кіпрської філії входять безкоштовно. Членство не потрібне."
+   }
+  },
+  {
+   "title": {
+    "en": "Club meeting formats",
+    "uk": "Формати клубних зустрічей"
+   },
+   "type": "table",
+   "head": [
+    {
+     "en": "Format",
+     "uk": "Формат"
+    },
+    {
+     "en": "Size",
+     "uk": "Розмір"
+    },
+    {
+     "en": "What it is",
+     "uk": "Що це"
+    }
    ],
-   foot:{en:"What it tells us: business names sit beside wellness and entertainment, which positions the festival as an experience rather than a conference.",uk:"Що це говорить: бізнес-імена стоять поруч із велнесом і розвагами, тож фестиваль позиціонується як досвід, а не конференція."}},
-  {title:{en:"Timeline",uk:"Хронологія"},type:"table",
-   head:[{en:"When",uk:"Коли"},{en:"What",uk:"Що"},{en:"Evidence",uk:"Докази"}],
-   rows:[
-    ["2016",{en:"Club founded in Ukraine",uk:"Клуб заснований в Україні"},{tag:"claimed"}],
-    ["2017",{en:"Founder starts building the community (conflicts with 2016)",uk:"Засновник починає будувати спільноту (суперечить 2016)"},{tag:"claimed"}],
-    ["2023",{en:"Public internal conflict and change of partners",uk:"Публічний внутрішній конфлікт і зміна партнерів"},{tag:"claimed"}],
-    [{en:"H1 2026",uk:"1-ше пів. 2026"},{en:"Cyprus branch opens, charity auction at the opening",uk:"Відкриття кіпрської філії, благодійний аукціон на відкритті"},{tag:"claimed"}],
-    [{en:"18–20 Sep 2026",uk:"18–20 вер. 2026"},{en:"YBC HUMAN festival, Cyprus",uk:"Фестиваль YBC HUMAN, Кіпр"},{tag:"claimed"}],
-    [{en:"Nov 2026",uk:"лист. 2026"},{en:"Club’s tenth anniversary",uk:"Десятиріччя клубу"},{tag:"claimed"}]
-   ]}
+   "rows": [
+    [
+     {
+      "en": "Monthly intro dinners",
+      "uk": "Щомісячні зустрічі-знайомства"
+     },
+     "10–15",
+     {
+      "en": "Shared lunches or dinners for meeting and exchanging experience",
+      "uk": "Спільні обіди чи вечері для знайомства й обміну досвідом"
+     }
+    ],
+    [
+     {
+      "en": "Monthly themed meeting",
+      "uk": "Щомісячна тематична зустріч"
+     },
+     "20–25",
+     {
+      "en": "Invited expert speaker, member questions",
+      "uk": "Запрошений спікер-експерт, питання учасників"
+     }
+    ],
+    [
+     "Fuck Up Night",
+     "40–80",
+     {
+      "en": "Founders talk openly about their mistakes",
+      "uk": "Підприємці відверто розповідають про власні помилки"
+     }
+    ],
+    [
+     {
+      "en": "Monthly large meeting",
+      "uk": "Щомісячна велика зустріч"
+     },
+     "100–150",
+     {
+      "en": "Speakers from the country’s largest businesses, buffet networking",
+      "uk": "Спікери з найбільших бізнесів країни, фуршет і нетворкінг"
+     }
+    ],
+    [
+     "Peer to Peer",
+     "10–12",
+     {
+      "en": "Closed group, monthly, 2 hours, professional moderator",
+      "uk": "Закрита група, раз на місяць, 2 години, професійний модератор"
+     }
+    ],
+    [
+     "Company Visit",
+     "30–50",
+     {
+      "en": "Visits inside well-known companies",
+      "uk": "Візити всередину відомих компаній"
+     }
+    ],
+    [
+     {
+      "en": "Informal meetings",
+      "uk": "Неформальні зустрічі"
+     },
+     "10–50",
+     {
+      "en": "Leisure with members and families, at least monthly",
+      "uk": "Дозвілля з учасниками та їхніми сім’ями, щонайменше раз на місяць"
+     }
+    ],
+    [
+     {
+      "en": "Sub-clubs: AI, Padel, Psychology, Shooting",
+      "uk": "Підклуби: AI, Падел, Психологія, Стрільба"
+     },
+     "10–20",
+     {
+      "en": "Monthly interest groups; the AI sub-club shares tools and cases",
+      "uk": "Щомісячні групи за інтересами; підклуб AI ділиться інструментами та кейсами"
+     }
+    ]
+   ],
+   "foot": {
+    "en": "Also: 40+ Telegram chats with direct advertising banned, and a mobile app with profiles of 1,000+ founders and the event calendar.",
+    "uk": "Також: 40+ Telegram-чатів із забороною прямої реклами та мобільний застосунок із профілями 1000+ підприємців і календарем подій."
+   }
+  },
+  {
+   "title": {
+    "en": "Festival programme in brief",
+    "uk": "Програма фестивалю коротко"
+   },
+   "type": "table",
+   "head": [
+    {
+     "en": "Day",
+     "uk": "День"
+    },
+    {
+     "en": "Theme",
+     "uk": "Тема"
+    },
+    {
+     "en": "Main elements",
+     "uk": "Основні елементи"
+    }
+   ],
+   "rows": [
+    [
+     {
+      "en": "Day 1",
+      "uk": "День 1"
+     },
+     {
+      "en": "Take off the mask",
+      "uk": "Зніми маску"
+     },
+     {
+      "en": "Airport welcome, mask ritual, opening dinner, fire show, Wild Resonance night, afterparty",
+      "uk": "Зустріч в аеропорту, ритуал масок, вечеря відкриття, фаєр-шоу, ніч Wild Resonance, афтерпаті"
+     }
+    ],
+    [
+     {
+      "en": "Day 2",
+      "uk": "День 2"
+     },
+     {
+      "en": "Live",
+      "uk": "Живи"
+     },
+     {
+      "en": "06:00 morning formats, about 30 formats in Human Space, Sea Party on two ships of 120 guests each, main stage, charity auction with a $100,000 target",
+      "uk": "Ранкові формати з 06:00, близько 30 форматів у Human Space, Sea Party на двох кораблях по 120 гостей, головна сцена, благодійний аукціон із ціллю $100 000"
+     }
+    ],
+    [
+     {
+      "en": "Day 3",
+      "uk": "День 3"
+     },
+     {
+      "en": "Laugh",
+      "uk": "Смійся"
+     },
+     {
+      "en": "Open air, Greek welcome, Human Comedy, Greek lunch and show, official closing, plate breaking",
+      "uk": "Open Air, Greek Welcome, Human Comedy, грецький обід і шоу, офіційне закриття, розбивання тарілок"
+     }
+    ]
+   ],
+   "foot": {
+    "en": "Full schedule with timings: ybc.com.cy/checkin/schedule",
+    "uk": "Повний розклад із таймінгом: ybc.com.cy/checkin/schedule"
+   }
+  },
+  {
+   "title": {
+    "en": "People and speakers",
+    "uk": "Люди та спікери"
+   },
+   "type": "table",
+   "head": [
+    {
+     "en": "Role",
+     "uk": "Роль"
+    },
+    {
+     "en": "Names",
+     "uk": "Імена"
+    }
+   ],
+   "rows": [
+    [
+     {
+      "en": "Founder",
+      "uk": "Засновник"
+     },
+     {
+      "en": "Andriy Ostapchuk (leads a morning run, speaks on the main stage)",
+      "uk": "Андрій Остапчук (веде ранкову пробіжку, виступає на головній сцені)"
+     }
+    ],
+    [
+     {
+      "en": "Business Zone and MasterMind",
+      "uk": "Business Zone і MasterMind"
+     },
+     {
+      "en": "Mykhailo Slobodianiuk, Yevgeny Chichvarkin, Lilya Bagirova, M. Drozdovskyi, Andriy Ostapchuk",
+      "uk": "Михайло Слободянюк, Євген Чичваркін, Ліля Багірова, М. Дроздовський, Андрій Остапчук"
+     }
+    ],
+    [
+     {
+      "en": "Women’s Circle",
+      "uk": "Women’s Circle"
+     },
+     {
+      "en": "Kateryna Osadcha (host), Svitlana Kerimova",
+      "uk": "Катерина Осадча (ведуча), Світлана Керімова"
+     }
+    ],
+    [
+     {
+      "en": "Main stage",
+      "uk": "Головна сцена"
+     },
+     {
+      "en": "Andriy Fediv, Garik Korogodsky; interviews by Maria Yefrosynina",
+      "uk": "Андрій Федорів, Гарік Корогодський; інтерв’ю веде Марія Єфросиніна"
+     }
+    ],
+    [
+     {
+      "en": "Entertainment",
+      "uk": "Розваги"
+     },
+     {
+      "en": "S.V.E.T. (band), Volodymyr Shumko (Human Comedy)",
+      "uk": "Гурт S.V.E.T., Володимир Шумко (Human Comedy)"
+     }
+    ]
+   ]
+  },
+  {
+   "title": {
+    "en": "Timeline",
+    "uk": "Хронологія"
+   },
+   "type": "table",
+   "head": [
+    {
+     "en": "When",
+     "uk": "Коли"
+    },
+    {
+     "en": "What",
+     "uk": "Що"
+    },
+    {
+     "en": "Evidence",
+     "uk": "Докази"
+    }
+   ],
+   "rows": [
+    [
+     "2016",
+     {
+      "en": "Club founded in Ukraine",
+      "uk": "Клуб заснований в Україні"
+     },
+     {
+      "tag": "claimed"
+     }
+    ],
+    [
+     "2017",
+     {
+      "en": "Founder starts building the community (conflicts with 2016)",
+      "uk": "Засновник починає будувати спільноту (суперечить 2016)"
+     },
+     {
+      "tag": "claimed"
+     }
+    ],
+    [
+     "2023",
+     {
+      "en": "Public internal conflict and change of partners",
+      "uk": "Публічний внутрішній конфлікт і зміна партнерів"
+     },
+     {
+      "tag": "claimed"
+     }
+    ],
+    [
+     {
+      "en": "H1 2026",
+      "uk": "1-ше пів. 2026"
+     },
+     {
+      "en": "Cyprus branch opens, charity auction at the opening",
+      "uk": "Відкриття кіпрської філії, благодійний аукціон на відкритті"
+     },
+     {
+      "tag": "claimed"
+     }
+    ],
+    [
+     {
+      "en": "18–20 Sep 2026",
+      "uk": "18–20 вер. 2026"
+     },
+     {
+      "en": "YBC HUMAN festival, Cyprus",
+      "uk": "Фестиваль YBC HUMAN, Кіпр"
+     },
+     {
+      "tag": "claimed"
+     }
+    ],
+    [
+     {
+      "en": "Nov 2026",
+      "uk": "лист. 2026"
+     },
+     {
+      "en": "Club’s tenth anniversary",
+      "uk": "Десятиріччя клубу"
+     },
+     {
+      "tag": "claimed"
+     }
+    ]
+   ]
+  }
  ],
- sources:[
-  {id:"S1",t:"ybc.club",u:"https://ybc.club",ty:{en:"Primary",uk:"Первинне"},use:{en:"Club structure, tiers, prices, statistics",uk:"Структура клубу, рівні, ціни, статистика"}},
-  {id:"S2",t:"ybc.com.cy",u:"https://ybc.com.cy",ty:{en:"Primary",uk:"Первинне"},use:{en:"Festival formats, prices, programme",uk:"Формати, ціни та програма фестивалю"}},
-  {id:"S3",t:"Forbes Ukraine",u:"",ty:{en:"Press",uk:"Преса"},use:{en:"Background and 2023 context. Article not recorded in the original dossier.",uk:"Історія та контекст 2023 року. Конкретна стаття в оригінальному досьє не зафіксована."}},
-  {id:"S4",t:"ybc.club/calendar",u:"https://www.ybc.club/calendar",ty:{en:"Primary",uk:"Первинне"},use:{en:"Event calendar",uk:"Календар подій"}},
-  {id:"S5",t:"ybc.com.cy/checkin/schedule",u:"https://ybc.com.cy/checkin/schedule",ty:{en:"Primary",uk:"Первинне"},use:{en:"Festival schedule with timings",uk:"Розклад фестивалю з таймінгом"}}
+ "sources": [
+  {
+   "id": "S1",
+   "t": "ybc.club",
+   "u": "https://ybc.club",
+   "ty": {
+    "en": "Primary",
+    "uk": "Первинне"
+   },
+   "use": {
+    "en": "Club structure, tiers, prices, statistics",
+    "uk": "Структура клубу, рівні, ціни, статистика"
+   }
+  },
+  {
+   "id": "S2",
+   "t": "ybc.com.cy",
+   "u": "https://ybc.com.cy",
+   "ty": {
+    "en": "Primary",
+    "uk": "Первинне"
+   },
+   "use": {
+    "en": "Festival formats, prices, programme",
+    "uk": "Формати, ціни та програма фестивалю"
+   }
+  },
+  {
+   "id": "S3",
+   "t": "Forbes Ukraine",
+   "u": "",
+   "ty": {
+    "en": "Press",
+    "uk": "Преса"
+   },
+   "use": {
+    "en": "Background and 2023 context. Article not recorded in the original dossier.",
+    "uk": "Історія та контекст 2023 року. Конкретна стаття в оригінальному досьє не зафіксована."
+   }
+  },
+  {
+   "id": "S4",
+   "t": "ybc.club/calendar",
+   "u": "https://www.ybc.club/calendar",
+   "ty": {
+    "en": "Primary",
+    "uk": "Первинне"
+   },
+   "use": {
+    "en": "Event calendar",
+    "uk": "Календар подій"
+   }
+  },
+  {
+   "id": "S5",
+   "t": "ybc.com.cy/checkin/schedule",
+   "u": "https://ybc.com.cy/checkin/schedule",
+   "ty": {
+    "en": "Primary",
+    "uk": "Первинне"
+   },
+   "use": {
+    "en": "Festival schedule with timings",
+    "uk": "Розклад фестивалю з таймінгом"
+   }
+  }
  ],
- sourceNote:{en:"The original dossier listed sources per page, not per claim. Source tags in this review are mapped by topic. Accessed September 2026.",uk:"Оригінальне досьє вказувало джерела для сторінки, а не для кожного твердження. Позначки джерел тут прив’язані за темою. Переглянуто у вересні 2026."},
- log:[
-  {d:"2026-09",t:{en:"Original dossier “YBC & YBC HUMAN: research” written by the team, in Ukrainian.",uk:"Команда написала оригінальне досьє «YBC & YBC HUMAN: рісерч» українською."}},
-  {d:"2026-11-19",t:{en:"Rebuilt into template v1: added the revenue estimate, evidence tags, scores, risks and an inconsistency check. No figure was re-verified. Status set to Needs refresh because the festival has taken place.",uk:"Перероблено за шаблоном v1: додано оцінку доходу, позначки доказів, оцінки, ризики та перевірку розбіжностей. Жодну цифру не перевіряли повторно. Статус «Потребує оновлення», бо фестиваль уже відбувся."}}
+ "sourceNote": {
+  "en": "The original dossier listed sources per page, not per claim. Source tags in this review are mapped by topic. Accessed September 2026.",
+  "uk": "Оригінальне досьє вказувало джерела для сторінки, а не для кожного твердження. Позначки джерел тут прив’язані за темою. Переглянуто у вересні 2026."
+ },
+ "log": [
+  {
+   "d": "2026-09",
+   "t": {
+    "en": "Original dossier “YBC & YBC HUMAN: research” written by the team, in Ukrainian.",
+    "uk": "Команда написала оригінальне досьє «YBC & YBC HUMAN: рісерч» українською."
+   }
+  },
+  {
+   "d": "2026-11-19",
+   "t": {
+    "en": "Rebuilt into template v1: added the revenue estimate, evidence tags and an inconsistency check. No figure was re-verified. Status set to Needs refresh because the festival has taken place.",
+    "uk": "Перероблено за шаблоном v1: додано оцінку доходу, позначки доказів і перевірку розбіжностей. Жодну цифру не перевіряли повторно. Статус «Потребує оновлення», бо фестиваль уже відбувся."
+   }
+  },
+  {
+   "d": "2026-11-19",
+   "t": {
+    "en": "Template v2: evaluations removed from the archive. Facts and figures unchanged. Added the Core section and the Not disclosed list.",
+    "uk": "Шаблон v2: з архіву прибрано оцінки. Факти й цифри без змін. Додано розділ «Суть» і перелік нерозкритого."
+   }
+  }
+ ],
+ "strip": {
+  "what": {
+   "en": "A paid-membership business club for company owners, with branches in Ukraine, Poland, Portugal, Cyprus, Benelux and Spain, and an annual festival in Cyprus (YBC HUMAN, 18–20 Sep 2026).",
+   "uk": "Бізнес-клуб із платним членством для власників компаній, з філіями в Україні, Польщі, Португалії, на Кіпрі, в Бенелюксі та Іспанії й щорічним фестивалем на Кіпрі (YBC HUMAN, 18–20 вер. 2026)."
+  },
+  "money": {
+   "en": "Prepaid memberships in three turnover-based tiers, $1,800–$4,400 per 6–12 months, plus online membership, paid events in other cities, festival tickets (€2,500–€6,000) and a franchise branch. At list prices, memberships come to about $4.05–5.18M a year (our calculation).",
+   "uk": "Передплачені членства у трьох рівнях за оборотом, $1 800–$4 400 за 6–12 місяців, а також онлайн-членство, платні події в інших містах, квитки на фестиваль (€2 500–€6 000) і франшизна філія. За прайсом членства дають приблизно $4,05–5,18 млн на рік (наш розрахунок)."
+  },
+  "core": {
+   "en": "Describes itself as the largest business club in Europe and a space for entrepreneurs and their AI agents. Stated rules: no members with business ties to Russia; charity auction proceeds go to the Ukrainian army and veterans; direct advertising is banned in member chats.",
+   "uk": "Називає себе найбільшим бізнес-клубом Європи та простором для підприємців і їхніх AI-агентів. Заявлені правила: без учасників із бізнес-зв’язками з РФ; кошти благодійних аукціонів ідуть на ЗСУ та ветеранів; пряма реклама в чатах учасників заборонена."
+  }
+ },
+ "core": {
+  "mission": {
+   "t": {
+    "en": "No mission statement found in the sources reviewed. Self-description: the largest business club in Europe and a space for entrepreneurs and their AI agents.",
+    "uk": "Формулювання місії в переглянутих джерелах не знайдено. Самоопис: найбільший бізнес-клуб Європи та простір для підприємців і їхніх AI-агентів."
+   },
+   "tag": "claimed",
+   "src": [
+    "S1"
+   ]
+  },
+  "values": [
+   {
+    "t": {
+     "en": "Entry excludes businesses with ties to Russia.",
+     "uk": "Вступ закритий для бізнесу, пов’язаного з РФ."
+    },
+    "tag": "claimed",
+    "src": [
+     "S1"
+    ]
+   },
+   {
+    "t": {
+     "en": "Charity auctions at club events send the proceeds to the Ukrainian army and veterans.",
+     "uk": "Благодійні аукціони на подіях клубу спрямовують кошти на ЗСУ та ветеранів."
+    },
+    "tag": "claimed",
+    "src": [
+     "S1",
+     "S2"
+    ]
+   },
+   {
+    "t": {
+     "en": "Direct advertising is banned in the 40+ member Telegram chats.",
+     "uk": "Пряма реклама заборонена в 40+ Telegram-чатах учасників."
+    },
+    "tag": "claimed",
+    "src": [
+     "S1"
+    ]
+   }
+  ],
+  "goals": [
+   {
+    "t": {
+     "en": "Charity auction target of $100,000 at the 2026 festival.",
+     "uk": "Ціль благодійного аукціону фестивалю 2026: $100 000."
+    },
+    "tag": "claimed",
+    "src": [
+     "S2",
+     "S5"
+    ]
+   },
+   {
+    "t": {
+     "en": "No other stated goals or targets found.",
+     "uk": "Інших заявлених цілей чи показників не знайдено."
+    },
+    "tag": "unknown",
+    "src": []
+   }
+  ]
+ },
+ "unknowns": [
+  {
+   "en": "Revenue and margin by stream, and the split between online and offline members.",
+   "uk": "Дохід і маржа за джерелами та частка онлайн проти офлайн-учасників."
+  },
+  {
+   "en": "Renewal and retention rate: how many of the 1,190 members are active and paying.",
+   "uk": "Рівень поновлення й утримання: скільки з 1 190 учасників активні й платять."
+  },
+  {
+   "en": "Which branches are franchises, and the fee and revenue-share terms.",
+   "uk": "Які філії працюють за франшизою та умови внесків і розподілу доходу."
+  },
+  {
+   "en": "Festival 2026 actuals: attendance, gross, cost, and whether the $100,000 auction target was met.",
+   "uk": "Фактичні підсумки фестивалю 2026: відвідуваність, дохід, витрати і чи досягнуто цілі аукціону $100 000."
+  },
+  {
+   "en": "Sponsorship and partner income, if any.",
+   "uk": "Спонсорський і партнерський дохід, якщо є."
+  },
+  {
+   "en": "The 2023 internal conflict and change of partners: no source recorded, current partner structure not described.",
+   "uk": "Внутрішній конфлікт і зміна партнерів у 2023: джерела не зафіксовано, поточну структуру партнерів не описано."
+  },
+  {
+   "en": "Legal entity, headcount, profit, funding.",
+   "uk": "Юрособа, штат, прибуток, фінансування."
+  }
  ]
-}
-,{
- id:"instinct", no:2,
- name:"Instinct",
- aka:"SPEAR STREET TECHNOLOGY, INC. · PERSONAL AI AGENT",
- url:"https://instinct.com",
- category:"ai",
- models:["takerate","sponsorship"],
- regions:["us"],
- founded:"2025–2026",
- revenue:null,
- growth:"up", verdict:"track", status:"reviewed", confidence:"med",
- reviewer:"Team", reviewed:"2026-11", updated:"2026-11-19",
- relevantTo:[{en:"AI agents & assistants",uk:"Напрям «AI-агенти та асистенти»"}],
- keywords:[
-  {k:"ai-agent",en:"AI agent",uk:"AI-агент"},
-  {k:"personal-assistant",en:"Personal assistant",uk:"Персональний асистент"},
-  {k:"sms-interface",en:"Text-message interface",uk:"Інтерфейс через SMS"},
-  {k:"invite-only",en:"Invite-only",uk:"Лише за запрошенням"},
-  {k:"pre-revenue",en:"Pre-revenue",uk:"Без доходу"},
-  {k:"venture-backed",en:"Venture-backed",uk:"Венчурне фінансування"},
-  {k:"young-founder",en:"Young founder",uk:"Молодий засновник"},
-  {k:"data-privacy",en:"Data & privacy risk",uk:"Ризик даних і приватності"},
-  {k:"concierge",en:"Concierge calls",uk:"Дзвінки-консьєрж"},
-  {k:"travel",en:"Travel bookings",uk:"Бронювання подорожей"}
+},
+{
+ "id": "instinct",
+ "no": 2,
+ "name": "Instinct",
+ "aka": "SPEAR STREET TECHNOLOGY, INC. · PERSONAL AI AGENT",
+ "url": "https://instinct.com",
+ "category": "ai",
+ "models": [
+  "takerate",
+  "sponsorship"
  ],
- tagline:{en:"A personal AI agent that acts on your behalf by text and phone, valued at $10B within about five months of the company being registered, with no reported revenue.",uk:"Персональний AI-агент, що діє від вашого імені через SMS і дзвінки, оцінений у $10 млрд приблизно за п’ять місяців після реєстрації компанії, без повідомленого доходу."},
- strip:{
-  why:{en:"The fastest-funded consumer AI agent right now. It shows what investors pay for an agent that actually completes tasks, and which trust and data questions come with it.",
-       uk:"Найшвидше профінансований споживчий AI-агент зараз. Показує, скільки інвестори платять за агента, що справді виконує завдання, і які питання довіри та даних із цим пов’язані."},
-  take:{en:"The valuation is far ahead of anything we can verify. No revenue, no public pricing and no company-stated user count; one outlet reports 100,000+ invited users. Money so far rests on the founder's pedigree, speed and the size of the opportunity. The business model is still open: subscription, advertising and referral income have all been floated, and none is confirmed. We track it rather than copy it.",
-        uk:"Оцінка набагато випереджає те, що ми можемо перевірити. Немає доходу, публічних цін і заявленої компанією кількості користувачів; одне видання повідомляє про 100 000+ запрошених користувачів. Гроші поки тримаються на репутації засновника, швидкості та розмірі можливості. Бізнес-модель відкрита: називали підписку, рекламу й реферальний дохід, і жодне не підтверджено. Ми стежимо, а не копіюємо."},
-  next:{en:"Refresh at the next funding or pricing announcement. Look for: public pricing, a company-stated user number, retention, and how the referral and recommendations stream is structured. Benchmark against Meta's Muse and Lindy.",
-        uk:"Оновити після наступного раунду чи оголошення цін. Шукати: публічні ціни, заявлену компанією кількість користувачів, утримання та структуру реферального й рекомендаційного потоку. Порівняти з Muse від Meta та Lindy."}
+ "regions": [
+  "us"
+ ],
+ "founded": "2025–2026",
+ "revenue": null,
+ "status": "reviewed",
+ "reviewer": "Team",
+ "reviewed": "2026-11",
+ "updated": "2026-11-19",
+ "keywords": [
+  {
+   "k": "ai-agent",
+   "en": "AI agent",
+   "uk": "AI-агент"
+  },
+  {
+   "k": "personal-assistant",
+   "en": "Personal assistant",
+   "uk": "Персональний асистент"
+  },
+  {
+   "k": "sms-interface",
+   "en": "Text-message interface",
+   "uk": "Інтерфейс через SMS"
+  },
+  {
+   "k": "invite-only",
+   "en": "Invite-only",
+   "uk": "Лише за запрошенням"
+  },
+  {
+   "k": "pre-revenue",
+   "en": "Pre-revenue",
+   "uk": "Без доходу"
+  },
+  {
+   "k": "venture-backed",
+   "en": "Venture-backed",
+   "uk": "Венчурне фінансування"
+  },
+  {
+   "k": "young-founder",
+   "en": "Young founder",
+   "uk": "Молодий засновник"
+  },
+  {
+   "k": "data-terms",
+   "en": "Data terms",
+   "uk": "Умови щодо даних"
+  },
+  {
+   "k": "concierge",
+   "en": "Concierge calls",
+   "uk": "Дзвінки-консьєрж"
+  },
+  {
+   "k": "travel",
+   "en": "Travel bookings",
+   "uk": "Бронювання подорожей"
+  }
+ ],
+ "tagline": {
+  "en": "A personal AI agent that acts for its user by text and phone. Invite-only, no reported revenue, valued at $10B in September 2026.",
+  "uk": "Персональний AI-агент, який діє за користувача через SMS і дзвінки. Лише за запрошеннями, без повідомленого доходу, оцінка $10 млрд у вересні 2026."
  },
- scores:[
-  {k:"model",v:2,note:{en:"Subscription, ads and referral income were all floated, but none is confirmed. The product is free today.",uk:"Підписку, рекламу й реферальний дохід називали, але жодне не підтверджено. Зараз продукт безкоштовний."}},
-  {k:"revenue",v:1,note:{en:"Reported as pre-revenue, with no public pricing. Nothing to verify.",uk:"Повідомляється як такий, що не має доходу, без публічних цін. Перевіряти нічого."}},
-  {k:"growth",v:4,note:{en:"100,000+ invited users reported within weeks, and three rounds in about five months. The user figure comes from one outlet.",uk:"100 000+ запрошених користувачів за тижні та три раунди приблизно за п’ять місяців. Цифра користувачів — з одного видання."}},
-  {k:"moat",v:2,note:{en:"Capital, brand and speed, but the underlying models are shared, Meta competes directly and the data terms draw criticism.",uk:"Капітал, бренд і швидкість, але базові моделі спільні, Meta конкурує напряму, а умови щодо даних критикують."}},
-  {k:"relevance",v:3,note:{en:"Useful as a signal of where agents are heading and how trust is handled. Not a model we can test now.",uk:"Корисно як сигнал, куди рухаються агенти і як вирішують довіру. Не модель, яку можна пробувати зараз."}}
- ],
- snapshot:[
-  {l:{en:"Founded",uk:"Засновано"},v:{en:"2025 per Sequoia and one tear sheet; entity registered in California in April 2026 per TechFundingNews",uk:"2025 за Sequoia та одним профілем; юрособу зареєстровано в Каліфорнії у квітні 2026 за TechFundingNews"},tag:"claimed",src:["S11","S7"],note:{en:"Sources conflict. To reconcile.",uk:"Джерела суперечать одне одному. Потрібно звірити."}},
-  {l:{en:"Legal entity",uk:"Юрособа"},v:{en:"Spear Street Technology, Inc. d/b/a Instinct, San Francisco",uk:"Spear Street Technology, Inc. d/b/a Instinct, Сан-Франциско"},tag:"reported",src:["S12","S5"]},
-  {l:{en:"Lead",uk:"Керівник"},v:{en:"Noah Shinn, founder and CEO, 23. Previously a research scientist at Sierra; co-author of the 2023 Reflexion paper.",uk:"Ноа Шинн, засновник і CEO, 23 роки. Раніше науковий співробітник у Sierra; співавтор статті Reflexion (2023)."},tag:"reported",src:["S12","S5","S15"]},
-  {l:{en:"Product",uk:"Продукт"},v:{en:"An agent with its own phone number and computer that books travel and tables, buys, pays bills, cancels subscriptions and orders groceries. Users reach it by SMS; no mobile app yet.",uk:"Агент із власним номером і комп’ютером, який бронює подорожі та столики, купує, платить рахунки, скасовує підписки й замовляє продукти. Користувачі пишуть через SMS; мобільного застосунку ще немає."},tag:"reported",src:["S1"]},
-  {l:{en:"Access",uk:"Доступ"},v:{en:"Invite-only since August 2026, soft-launched through venture investors. Concierge (phone calls) and a trusted-person network added in September.",uk:"Лише за запрошенням з серпня 2026, м’який запуск через венчурних інвесторів. У вересні додано Concierge (дзвінки) та мережу довірених осіб."},tag:"reported",src:["S1","S7","S17"]},
-  {l:{en:"Users",uk:"Користувачі"},v:{en:"100,000+ invited users per The Information, repeated by Dealroom. The company has shared no user numbers.",uk:"100 000+ запрошених користувачів за The Information, повторено Dealroom. Компанія не ділилася кількістю користувачів."},tag:"claimed",src:["S11","S10","S1"]},
-  {l:{en:"Headcount",uk:"Штат"},v:{en:"Not found in the sources reviewed.",uk:"Не знайдено в переглянутих джерелах."},tag:"unknown",src:[]}
- ],
- streams:{
-  head:[{en:"Stream",uk:"Джерело"},{en:"Price",uk:"Ціна"},{en:"Volume",uk:"Обсяг"},{en:"Est. revenue",uk:"Оцінка доходу"},{en:"Basis",uk:"Підстава"}],
-  rows:[
-   [{en:"Subscription",uk:"Підписка"},{en:"None published. One competitor guesses $200–500 a month.",uk:"Не опубліковано. Один конкурент припускає $200–500 на місяць."},{en:"Product is free today",uk:"Зараз продукт безкоштовний"},{en:"Unknown",uk:"Невідомо"},{tag:"unknown",en:"The competitor's figure is unsourced and conflicts with the CEO saying he does not want to charge.",uk:"Цифра конкурента без джерела й суперечить словам CEO, що він не хоче брати плату."}],
-   [{en:"Product recommendations",uk:"Рекомендації товарів"},{en:"Not disclosed",uk:"Не розкрито"},{en:"Launched 30 Sep 2026, with partners such as local chefs and designers",uk:"Запущено 30 вер. 2026, із партнерами на кшталт місцевих шефів і дизайнерів"},{en:"Unknown",uk:"Невідомо"},{tag:"claimed",en:"Announced by the founder as a possible revenue stream.",uk:"Засновник оголосив як можливе джерело доходу."}],
-   [{en:"Referral commissions",uk:"Реферальні комісії"},{en:"Third-party illustration: about $3,000 per home purchase, about $1.50 per dinner booking",uk:"Ілюстрація стороннього автора: близько $3 000 за купівлю житла, близько $1,50 за бронювання вечері"},{en:"Travel is half of transaction volume per the founder",uk:"Подорожі — половина обсягу транзакцій за словами засновника"},{en:"Unknown",uk:"Невідомо"},{tag:"unknown",en:"Single commentary source. Not confirmed by the company.",uk:"Одне джерело-коментар. Компанія не підтвердила."}],
-   [{en:"Advertising",uk:"Реклама"},{en:"Not disclosed",uk:"Не розкрито"},{en:"—",uk:"—"},{en:"Unknown",uk:"Невідомо"},{tag:"unknown",en:"The CEO has said advertising is a possibility.",uk:"CEO казав, що реклама можлива."}]
-  ],
-  note:{en:"Cost drivers we can infer: a dedicated cloud computer and phone line per task, vision-language model calls, and compute that Dealroom says is already strained. The company reports no cost data.",
-        uk:"Витрати, які ми можемо припустити: окремий хмарний комп’ютер і телефонна лінія на завдання, виклики мультимодальних моделей і обчислювальні потужності, які за Dealroom уже перевантажені. Дані про витрати компанія не наводить."}
- },
- math:{
-  title:{en:"What the valuation implies",uk:"Що означає оцінка"},
-  a:{h:{en:"Value per invited user",uk:"Вартість на запрошеного користувача"},lines:["$10,000,000,000 / 100,000 users","= $100,000 per user"]},
-  b:{h:{en:"Capital history",uk:"Історія капіталу"},lines:["Series C   $1,000M","Series B     $250M","Series A      $75M","Early round ~$25M  (350 − 250 − 75)","Total   ≈ $1.35B  (a tear sheet says $1.3B+)"]},
-  notes:[
-   {en:"The $100,000 per user is our calculation on a user figure reported by one outlet. It shows how far the price rests on future potential, not on current usage.",uk:"$100 000 на користувача — наш розрахунок на цифрі одного видання. Він показує, наскільки ціна тримається на майбутньому потенціалі, а не на поточному використанні."},
-   {en:"The early round of about $25M is our subtraction, not a reported figure.",uk:"Ранній раунд близько $25 млн — наше віднімання, а не повідомлена цифра."}
-  ]
- },
- numbers:{
-  head:[{en:"Metric",uk:"Показник"},{en:"Value",uk:"Значення"},{en:"Evidence",uk:"Докази"},{en:"As of",uk:"Станом на"},{en:"Note",uk:"Примітка"}],
-  rows:[
-   [{en:"Series C",uk:"Раунд C"},"$1B at $10B",{tag:"reported"},{en:"28 Sep 2026",uk:"28 вер. 2026"},{en:"Led by Sequoia, Coatue and Benchmark. Dealroom lists $6.47B for the same round.",uk:"Лідери: Sequoia, Coatue і Benchmark. Dealroom наводить $6,47 млрд для цього ж раунду."}],
-   [{en:"Series B",uk:"Раунд B"},"$250M at $2.5B",{tag:"reported"},{en:"26 Aug 2026",uk:"26 серп. 2026"},{en:"Co-led by Index Ventures and Benchmark. Total raised then: $350M.",uk:"Співлідери: Index Ventures і Benchmark. Загалом залучено на той момент: $350 млн."}],
-   [{en:"Series A",uk:"Раунд A"},"$75M",{tag:"reported"},{en:"Aug 2026",uk:"серп. 2026"},{en:"Led by Kleiner Perkins, per Forbes.",uk:"Лідер: Kleiner Perkins, за Forbes."}],
-   [{en:"Valuation steps",uk:"Кроки оцінки"},"$500M → $2.5B → $10B",{tag:"reported"},{en:"Aug–Sep 2026",uk:"серп.–вер. 2026"},{en:"Four times in about a month between the last two.",uk:"Чотирикратне зростання приблизно за місяць між останніми двома."}],
-   [{en:"Invited users",uk:"Запрошені користувачі"},"100,000+",{tag:"claimed"},{en:"Sep 2026",uk:"вер. 2026"},{en:"One outlet, The Information. Not stated by the company.",uk:"Одне видання, The Information. Компанія не заявляла."}],
-   [{en:"Travel share of transactions",uk:"Частка подорожей у транзакціях"},"≈50%",{tag:"claimed"},{en:"Sep 2026",uk:"вер. 2026"},{en:"Founder statement to Skift.",uk:"Заява засновника для Skift."}],
-   [{en:"Revenue",uk:"Дохід"},{en:"Pre-revenue",uk:"Без доходу"},{tag:"claimed"},{en:"2026",uk:"2026"},{en:"Per Sacra; no company figure.",uk:"За Sacra; цифри від компанії немає."}],
-   [{en:"Pricing, retention, margin",uk:"Ціни, утримання, маржа"},{en:"—",uk:"—"},{tag:"unknown"},{en:"—",uk:"—"},""]
-  ]
- },
- reconcile:[
-  {en:"Series C valuation: $10B in company and TechCrunch reporting, $6.47B on Dealroom.",uk:"Оцінка раунду C: $10 млрд у повідомленнях компанії та TechCrunch, $6,47 млрд на Dealroom."},
-  {en:"Founding: 2025 on Sequoia's listing, April 2026 for the registered entity.",uk:"Заснування: 2025 у лістингу Sequoia, квітень 2026 для зареєстрованої юрособи."},
-  {en:"The Spinnable article calls the $350M a Series B. The Series B was $250M; $350M is total funding at that point.",uk:"Стаття Spinnable називає $350 млн раундом B. Раунд B був $250 млн; $350 млн — загальні залучені кошти на той момент."},
-  {en:"Pricing: Spinnable cites $200–500 a month, while Sacra says the product is free and the CEO has said he does not want to charge.",uk:"Ціни: Spinnable називає $200–500 на місяць, тоді як Sacra пише, що продукт безкоштовний, а CEO казав, що не хоче брати плату."}
- ],
- market:{
-  position:{en:"Instinct is the best-funded of the new consumer agents that act through a phone and a computer. It is reached by text and is not yet open to the public.",uk:"Instinct — найкраще профінансований серед нових споживчих агентів, що діють через телефон і комп’ютер. Доступ через SMS, для всіх ще не відкритий."},
-  comps:[
-   {n:"Meta Muse",note:{en:"Similar task features, built into Meta's social products, top of US app stores, millions of downloads.",uk:"Подібні можливості, вбудований у соцпродукти Meta, на вершині магазинів застосунків США, мільйони завантажень."}},
-   {n:"Lindy",note:{en:"Email and calendar assistant with public pricing. A narrower device story.",uk:"Асистент для пошти й календаря з публічними цінами. Вужчий сценарій використання пристроїв."}},
-   {n:"OpenClaw",note:{en:"Self-hosted and user-operated, while Instinct is a managed cloud service.",uk:"Self-hosted і керований користувачем, тоді як Instinct — керований хмарний сервіс."}}
-  ],
-  moat:{en:"Capital, brand and an early lead with technologists. Against that: shared underlying models, a direct rival with a huge distribution base, low switching costs, and data terms that early users have criticised.",uk:"Капітал, бренд і рання перевага серед технарів. Проти цього: спільні базові моделі, прямий конкурент із величезною базою розповсюдження, низькі витрати на перехід і умови щодо даних, які критикують перші користувачі."}
- },
- strengths:[
-  {en:"Founder with a research record at Sierra and the Reflexion paper, which opened funding quickly.",uk:"Засновник із науковим доробком у Sierra та статтею Reflexion, що швидко відкрило фінансування."},
-  {en:"Strong investor line-up: Sequoia, Benchmark, Index, Kleiner Perkins, Coatue.",uk:"Сильний склад інвесторів: Sequoia, Benchmark, Index, Kleiner Perkins, Coatue."},
-  {en:"Simple interface: text a number, no app to install.",uk:"Простий інтерфейс: написати на номер, застосунок не потрібен."},
-  {en:"Distribution through venture investors gave a dense early user group of technologists.",uk:"Розповсюдження через венчурних інвесторів дало щільну ранню групу користувачів-технарів."},
-  {en:"Real task completion, with travel reported as about half of transaction volume.",uk:"Реальне виконання завдань, а подорожі — приблизно половина обсягу транзакцій за повідомленнями."}
- ],
- risks:[
-  {sev:"high",t:{en:"Data and trust. Terms allow training on user data and the agent needs deep account access. The first privacy policy drew criticism and has been updated.",uk:"Дані та довіра. Умови дозволяють навчання на даних користувачів, а агенту потрібен глибокий доступ до акаунтів. Першу політику приватності критикували, її оновлено."}},
-  {sev:"high",t:{en:"No proven revenue. The $10B valuation depends on a model that has not been chosen or shown.",uk:"Немає доведеного доходу. Оцінка $10 млрд залежить від моделі, яку ще не обрано й не показано."}},
-  {sev:"med",t:{en:"Compute strain. Dealroom reports the user base is straining capacity.",uk:"Навантаження на обчислення. Dealroom повідомляє, що користувачі перевантажують потужності."}},
-  {sev:"med",t:{en:"Agent errors. A competitor's review lists a non-refundable flight and duplicate purchases; this is unverified and from a rival.",uk:"Помилки агента. В огляді конкурента згадано невозвратний переліт і дублі покупок; це не перевірено й від суперника."}},
-  {sev:"med",t:{en:"Reaction to monetisation. Product recommendations drew complaints from some users on launch.",uk:"Реакція на монетизацію. Рекомендації товарів на запуску викликали невдоволення частини користувачів."}},
-  {sev:"low",t:{en:"Dependence on one young founder who declines interviews.",uk:"Залежність від одного молодого засновника, який відмовляється від інтерв’ю."}},
-  {sev:"unk",t:{en:"Not known: headcount, costs, retention, real pricing.",uk:"Невідомо: штат, витрати, утримання, реальні ціни."}}
- ],
- steal:[
-  {en:"Distribute first through a dense, trusted group (investors and their networks), then widen.",uk:"Спершу розповсюджувати через щільну довірену групу (інвестори та їхні мережі), потім розширювати."},
-  {en:"Use an interface people already have, such as text, and ask for no new app.",uk:"Використовувати інтерфейс, який у людей уже є, наприклад SMS, і не просити нового застосунку."},
-  {en:"Announce the new capability with a concrete job (phone calls for bookings) rather than a general claim.",uk:"Оголошувати нову можливість через конкретне завдання (дзвінки для бронювань), а не загальне твердження."},
-  {en:"Update the privacy policy openly when criticism arrives, and say so.",uk:"Відкрито оновлювати політику приватності, коли з’являється критика, і казати про це."}
- ],
- questions:[
-  {en:"Which revenue model will they pick, and when does pricing go public?",uk:"Яку модель доходу оберуть і коли ціни стануть публічними?"},
-  {en:"A company-stated user count, usage per user, and retention.",uk:"Заявлена компанією кількість користувачів, використання на користувача та утримання."},
-  {en:"Why Dealroom lists $6.47B for a round reported at $10B.",uk:"Чому Dealroom наводить $6,47 млрд для раунду, про який повідомлено $10 млрд."},
-  {en:"The cost of a task: compute and phone per completed booking.",uk:"Вартість завдання: обчислення й телефонія на одне виконане бронювання."},
-  {en:"Primary-source text of the terms of service, instead of the competitor's reading of clauses 4, 6 and 12.",uk:"Первинний текст умов користування замість прочитання конкурентом пунктів 4, 6 і 12."},
-  {en:"Headcount and team structure.",uk:"Кількість людей і структура команди."}
- ],
- appendix:[
-  {title:{en:"Funding timeline",uk:"Хронологія фінансування"},type:"table",
-   head:[{en:"When",uk:"Коли"},{en:"Round",uk:"Раунд"},{en:"Amount",uk:"Сума"},{en:"Valuation",uk:"Оцінка"},{en:"Lead investors",uk:"Основні інвестори"}],
-   rows:[
-    [{en:"Date not found",uk:"Дату не знайдено"},{en:"Early round",uk:"Ранній раунд"},"≈$25M (our calc)",{en:"—",uk:"—"},"Conviction (Pranav Reddy)"],
-    [{en:"Aug 2026",uk:"серп. 2026"},"Series A","$75M","$500M","Kleiner Perkins (Mamoon Hamid)"],
-    [{en:"26 Aug 2026",uk:"26 серп. 2026"},"Series B","$250M","$2.5B","Index Ventures, Benchmark"],
-    [{en:"28 Sep 2026",uk:"28 вер. 2026"},"Series C","$1B","$10B","Sequoia, Coatue, Benchmark"]
+ "snapshot": [
+  {
+   "l": {
+    "en": "Founded",
+    "uk": "Засновано"
+   },
+   "v": {
+    "en": "2025 per Sequoia and one tear sheet; entity registered in California in April 2026 per TechFundingNews",
+    "uk": "2025 за Sequoia та одним профілем; юрособу зареєстровано в Каліфорнії у квітні 2026 за TechFundingNews"
+   },
+   "tag": "claimed",
+   "src": [
+    "S11",
+    "S7"
    ],
-   foot:{en:"Valuation at Series A is the $500M round reported five weeks before Series B; the exact link to the $75M is our reading.",uk:"Оцінка на раунді A — це $500 млн, про які повідомлялося за п’ять тижнів до раунду B; точний зв’язок із $75 млн — наше прочитання."}},
-  {title:{en:"Product timeline",uk:"Хронологія продукту"},type:"table",
-   head:[{en:"When",uk:"Коли"},{en:"What",uk:"Що"},{en:"Evidence",uk:"Докази"}],
-   rows:[
-    [{en:"Apr 2026",uk:"квіт. 2026"},{en:"Spear Street Technology registered in California",uk:"Spear Street Technology зареєстровано в Каліфорнії"},{tag:"claimed"}],
-    [{en:"Aug 2026",uk:"серп. 2026"},{en:"Invite-only launch",uk:"Запуск лише за запрошеннями"},{tag:"reported"}],
-    [{en:"16–17 Sep 2026",uk:"16–17 вер. 2026"},{en:"Concierge phone calls in early access",uk:"Дзвінки Concierge у ранньому доступі"},{tag:"reported"}],
-    [{en:"30 Sep 2026",uk:"30 вер. 2026"},{en:"Product recommendations announced",uk:"Оголошено рекомендації товарів"},{tag:"reported"}]
-   ]}
+   "note": {
+    "en": "Sources conflict.",
+    "uk": "Джерела суперечать одне одному."
+   }
+  },
+  {
+   "l": {
+    "en": "Legal entity",
+    "uk": "Юрособа"
+   },
+   "v": {
+    "en": "Spear Street Technology, Inc. d/b/a Instinct, San Francisco",
+    "uk": "Spear Street Technology, Inc. d/b/a Instinct, Сан-Франциско"
+   },
+   "tag": "reported",
+   "src": [
+    "S12",
+    "S5"
+   ]
+  },
+  {
+   "l": {
+    "en": "Lead",
+    "uk": "Керівник"
+   },
+   "v": {
+    "en": "Noah Shinn, founder and CEO, 23. Previously a research scientist at Sierra; co-author of the 2023 Reflexion paper.",
+    "uk": "Ноа Шинн, засновник і CEO, 23 роки. Раніше науковий співробітник у Sierra; співавтор статті Reflexion (2023)."
+   },
+   "tag": "reported",
+   "src": [
+    "S12",
+    "S5",
+    "S15"
+   ]
+  },
+  {
+   "l": {
+    "en": "Product",
+    "uk": "Продукт"
+   },
+   "v": {
+    "en": "An agent with its own phone number and computer that books travel and tables, buys, pays bills, cancels subscriptions and orders groceries. Users reach it by SMS; no mobile app yet.",
+    "uk": "Агент із власним номером і комп’ютером, який бронює подорожі та столики, купує, платить рахунки, скасовує підписки й замовляє продукти. Користувачі пишуть через SMS; мобільного застосунку ще немає."
+   },
+   "tag": "reported",
+   "src": [
+    "S1"
+   ]
+  },
+  {
+   "l": {
+    "en": "Access",
+    "uk": "Доступ"
+   },
+   "v": {
+    "en": "Invite-only since August 2026, soft-launched through venture investors. Concierge (phone calls) and a trusted-person network added in September.",
+    "uk": "Лише за запрошенням з серпня 2026, м’який запуск через венчурних інвесторів. У вересні додано Concierge (дзвінки) та мережу довірених осіб."
+   },
+   "tag": "reported",
+   "src": [
+    "S1",
+    "S7",
+    "S17"
+   ]
+  },
+  {
+   "l": {
+    "en": "Users",
+    "uk": "Користувачі"
+   },
+   "v": {
+    "en": "100,000+ invited users per The Information, repeated by Dealroom. The company has shared no user numbers.",
+    "uk": "100 000+ запрошених користувачів за The Information, повторено Dealroom. Компанія не ділилася кількістю користувачів."
+   },
+   "tag": "claimed",
+   "src": [
+    "S11",
+    "S10",
+    "S1"
+   ]
+  },
+  {
+   "l": {
+    "en": "Data terms",
+    "uk": "Умови щодо даних"
+   },
+   "v": {
+    "en": "Terms of service allow user data to be used to train models. The first privacy policy was criticised and has since been updated.",
+    "uk": "Умови користування дозволяють використовувати дані користувачів для навчання моделей. Першу політику приватності критикували, її відтоді оновлено."
+   },
+   "tag": "reported",
+   "src": [
+    "S4",
+    "S5",
+    "S1"
+   ]
+  },
+  {
+   "l": {
+    "en": "Headcount",
+    "uk": "Штат"
+   },
+   "v": {
+    "en": "Not found in the sources reviewed.",
+    "uk": "Не знайдено в переглянутих джерелах."
+   },
+   "tag": "unknown",
+   "src": []
+  }
  ],
- sources:[
-  {id:"S1",t:"TechCrunch, 28 Sep 2026",u:"https://techcrunch.com/?p=3170483",ty:{en:"Press",uk:"Преса"},use:{en:"Series C, product, Concierge, privacy, Muse",uk:"Раунд C, продукт, Concierge, приватність, Muse"}},
-  {id:"S2",t:"Verdict",u:"https://www.verdict.co.uk/newsletters/instinct-raises-1bn-series-c",ty:{en:"Press",uk:"Преса"},use:{en:"Series C investors",uk:"Інвестори раунду C"}},
-  {id:"S3",t:"KSL (Reuters wire)",u:"https://www.ksl.com/article/51629454",ty:{en:"Press",uk:"Преса"},use:{en:"Series C announcement",uk:"Оголошення раунду C"}},
-  {id:"S4",t:"SiliconANGLE, 27 Aug 2026",u:"https://siliconangle.com/2026/08/27/consumer-focused-ai-assistant-startup-instinct-reportedly-raising-250m/",ty:{en:"Press",uk:"Преса"},use:{en:"Series B, data terms",uk:"Раунд B, умови щодо даних"}},
-  {id:"S5",t:"Pulse 2.0",u:"https://pulse2.com/instinct-raises-250-million-at-2-5-billion-valuation-as-ai-assistant-goes-viral-in-silicon-valley/",ty:{en:"Press",uk:"Преса"},use:{en:"Series B, founder background",uk:"Раунд B, досвід засновника"}},
-  {id:"S6",t:"Sacra",u:"https://sacra.com/c/instinct/",ty:{en:"Analyst",uk:"Аналітик"},use:{en:"Pre-revenue, free product",uk:"Без доходу, безкоштовний продукт"}},
-  {id:"S7",t:"Layer3Labs guides",u:"https://www.layer3labs.io/guides/is-instinct-ai-free",ty:{en:"Secondary",uk:"Вторинне"},use:{en:"Pricing stance, registration date, Concierge",uk:"Позиція щодо цін, дата реєстрації, Concierge"}},
-  {id:"S8",t:"Skift, 28 Sep 2026",u:"https://skift.com/2026/09/28/instincts-app-is-fueled-by-travel-founder-says-its-half-of-volume/",ty:{en:"Press",uk:"Преса"},use:{en:"Travel share of volume",uk:"Частка подорожей в обсязі"}},
-  {id:"S9",t:"TechCrunch, 30 Sep 2026",u:"https://techcrunch.com/2026/09/30/instincts-new-product-recommendations-are-giving-some-users-the-ick/",ty:{en:"Press",uk:"Преса"},use:{en:"Product recommendations stream",uk:"Потік рекомендацій товарів"}},
-  {id:"S10",t:"Dealroom",u:"https://dealroom.co/news/157240-ai-startup-instinct-raises-1b-series-c-at-10b-valuation/",ty:{en:"Data provider",uk:"Постачальник даних"},use:{en:"Alternative valuation, user count, compute strain",uk:"Інша оцінка, кількість користувачів, навантаження"}},
-  {id:"S11",t:"Silicon Valley Invest Club tear sheet",u:"https://siliconvalleyinvestclub.com/pl/companies/instinct-co/tear-sheet.pdf",ty:{en:"Secondary",uk:"Вторинне"},use:{en:"Founding year, user count, total funding",uk:"Рік заснування, користувачі, загальне фінансування"}},
-  {id:"S12",t:"rywalker.com research",u:"https://rywalker.com/research/instinct",ty:{en:"Analyst",uk:"Аналітик"},use:{en:"Entity, founder, competitors",uk:"Юрособа, засновник, конкуренти"}},
-  {id:"S13",t:"Spinnable, “What is Instinct AI”",u:"https://www.spinnable.ai/blog/what-is-instinct-ai-guide",ty:{en:"Competitor",uk:"Конкурент"},use:{en:"Starting article. Used for pricing guess and terms-of-service claims, both unverified.",uk:"Стартова стаття. Використано для припущення про ціни та тверджень щодо умов користування, обидва не перевірені."}},
-  {id:"S14",t:"Runtime Wire (Forbes)",u:"https://runtimewire.com/article/noah-shinn-instinct-seeks-200m-2-5b-valuation",ty:{en:"Press",uk:"Преса"},use:{en:"Series A and early-round leads",uk:"Лідери раунду A і раннього раунду"}},
-  {id:"S15",t:"ValueAdd VC",u:"https://valueaddvc.com/blog/instinct-ai-valuation-2026-250m-series-b-2-5b-noah-shinns-viral-assistant",ty:{en:"Secondary",uk:"Вторинне"},use:{en:"Series B date, $500M round",uk:"Дата раунду B, раунд на $500 млн"}},
-  {id:"S16",t:"Business Model Analyst",u:"https://businessmodelanalyst.com/instinct-ai-assistant-referral-fee-business-model/",ty:{en:"Commentary",uk:"Коментар"},use:{en:"Referral-fee illustration",uk:"Ілюстрація реферальних комісій"}},
-  {id:"S17",t:"Business Insider via AI Weekly",u:"https://aiweekly.co/alerts/business-insider-profiles-noah-shinn-as-instinct-ai-talks-10b-valuation-invite",ty:{en:"Press",uk:"Преса"},use:{en:"Soft launch via investors",uk:"М’який запуск через інвесторів"}}
+ "streams": {
+  "head": [
+   {
+    "en": "Stream",
+    "uk": "Джерело"
+   },
+   {
+    "en": "Price",
+    "uk": "Ціна"
+   },
+   {
+    "en": "Volume",
+    "uk": "Обсяг"
+   },
+   {
+    "en": "Est. revenue",
+    "uk": "Оцінка доходу"
+   },
+   {
+    "en": "Basis",
+    "uk": "Підстава"
+   }
+  ],
+  "rows": [
+   [
+    {
+     "en": "Subscription",
+     "uk": "Підписка"
+    },
+    {
+     "en": "None published. One competitor guesses $200–500 a month.",
+     "uk": "Не опубліковано. Один конкурент припускає $200–500 на місяць."
+    },
+    {
+     "en": "Product is free today",
+     "uk": "Зараз продукт безкоштовний"
+    },
+    {
+     "en": "Unknown",
+     "uk": "Невідомо"
+    },
+    {
+     "tag": "unknown",
+     "en": "The competitor's figure is unsourced and conflicts with the CEO saying he does not want to charge.",
+     "uk": "Цифра конкурента без джерела й суперечить словам CEO, що він не хоче брати плату."
+    }
+   ],
+   [
+    {
+     "en": "Product recommendations",
+     "uk": "Рекомендації товарів"
+    },
+    {
+     "en": "Not disclosed",
+     "uk": "Не розкрито"
+    },
+    {
+     "en": "Launched 30 Sep 2026, with partners such as local chefs and designers",
+     "uk": "Запущено 30 вер. 2026, із партнерами на кшталт місцевих шефів і дизайнерів"
+    },
+    {
+     "en": "Unknown",
+     "uk": "Невідомо"
+    },
+    {
+     "en": "Announced by the founder as a possible revenue stream. Drew complaints from some users at launch.",
+     "uk": "Засновник оголосив як можливе джерело доходу. Частина користувачів поскаржилася на запуску."
+    }
+   ],
+   [
+    {
+     "en": "Referral commissions",
+     "uk": "Реферальні комісії"
+    },
+    {
+     "en": "Third-party illustration: about $3,000 per home purchase, about $1.50 per dinner booking",
+     "uk": "Ілюстрація стороннього автора: близько $3 000 за купівлю житла, близько $1,50 за бронювання вечері"
+    },
+    {
+     "en": "Travel is half of transaction volume per the founder",
+     "uk": "Подорожі — половина обсягу транзакцій за словами засновника"
+    },
+    {
+     "en": "Unknown",
+     "uk": "Невідомо"
+    },
+    {
+     "tag": "unknown",
+     "en": "Single commentary source. Not confirmed by the company.",
+     "uk": "Одне джерело-коментар. Компанія не підтвердила."
+    }
+   ],
+   [
+    {
+     "en": "Advertising",
+     "uk": "Реклама"
+    },
+    {
+     "en": "Not disclosed",
+     "uk": "Не розкрито"
+    },
+    {
+     "en": "—",
+     "uk": "—"
+    },
+    {
+     "en": "Unknown",
+     "uk": "Невідомо"
+    },
+    {
+     "tag": "unknown",
+     "en": "The CEO has said advertising is a possibility.",
+     "uk": "CEO казав, що реклама можлива."
+    }
+   ]
+  ],
+  "note": {
+   "en": "Cost items visible from the product description: a cloud computer and a phone line used per task, vision-language model calls. Dealroom reports the user base is straining compute capacity. The company reports no cost data.",
+   "uk": "Статті витрат, видимі з опису продукту: хмарний комп’ютер і телефонна лінія на завдання, виклики мультимодальних моделей. Dealroom повідомляє, що користувачі перевантажують обчислювальні потужності. Дані про витрати компанія не наводить."
+  }
+ },
+ "math": {
+  "title": {
+   "en": "Valuation per invited user and capital raised",
+   "uk": "Оцінка на запрошеного користувача та залучений капітал"
+  },
+  "a": {
+   "h": {
+    "en": "Value per invited user",
+    "uk": "Вартість на запрошеного користувача"
+   },
+   "lines": [
+    "$10,000,000,000 / 100,000 users",
+    "= $100,000 per user"
+   ]
+  },
+  "b": {
+   "h": {
+    "en": "Capital history",
+    "uk": "Історія капіталу"
+   },
+   "lines": [
+    "Series C   $1,000M",
+    "Series B     $250M",
+    "Series A      $75M",
+    "Early round ~$25M  (350 − 250 − 75)",
+    "Total   ≈ $1.35B  (a tear sheet says $1.3B+)"
+   ]
+  },
+  "notes": [
+   {
+    "en": "The $100,000 per user is our calculation on a user figure reported by one outlet.",
+    "uk": "$100 000 на користувача — наш розрахунок на цифрі одного видання."
+   },
+   {
+    "en": "The early round of about $25M is our subtraction, not a reported figure.",
+    "uk": "Ранній раунд близько $25 млн — наше віднімання, а не повідомлена цифра."
+   }
+  ]
+ },
+ "numbers": {
+  "head": [
+   {
+    "en": "Metric",
+    "uk": "Показник"
+   },
+   {
+    "en": "Value",
+    "uk": "Значення"
+   },
+   {
+    "en": "Evidence",
+    "uk": "Докази"
+   },
+   {
+    "en": "As of",
+    "uk": "Станом на"
+   },
+   {
+    "en": "Note",
+    "uk": "Примітка"
+   }
+  ],
+  "rows": [
+   [
+    {
+     "en": "Series C",
+     "uk": "Раунд C"
+    },
+    "$1B at $10B",
+    {
+     "tag": "reported"
+    },
+    {
+     "en": "28 Sep 2026",
+     "uk": "28 вер. 2026"
+    },
+    {
+     "en": "Led by Sequoia, Coatue and Benchmark. Dealroom lists $6.47B for the same round.",
+     "uk": "Лідери: Sequoia, Coatue і Benchmark. Dealroom наводить $6,47 млрд для цього ж раунду."
+    }
+   ],
+   [
+    {
+     "en": "Series B",
+     "uk": "Раунд B"
+    },
+    "$250M at $2.5B",
+    {
+     "tag": "reported"
+    },
+    {
+     "en": "26 Aug 2026",
+     "uk": "26 серп. 2026"
+    },
+    {
+     "en": "Co-led by Index Ventures and Benchmark. Total raised then: $350M.",
+     "uk": "Співлідери: Index Ventures і Benchmark. Загалом залучено на той момент: $350 млн."
+    }
+   ],
+   [
+    {
+     "en": "Series A",
+     "uk": "Раунд A"
+    },
+    "$75M",
+    {
+     "tag": "reported"
+    },
+    {
+     "en": "Aug 2026",
+     "uk": "серп. 2026"
+    },
+    {
+     "en": "Led by Kleiner Perkins, per Forbes.",
+     "uk": "Лідер: Kleiner Perkins, за Forbes."
+    }
+   ],
+   [
+    {
+     "en": "Valuation steps",
+     "uk": "Кроки оцінки"
+    },
+    "$500M → $2.5B → $10B",
+    {
+     "tag": "reported"
+    },
+    {
+     "en": "Aug–Sep 2026",
+     "uk": "серп.–вер. 2026"
+    },
+    {
+     "en": "Four times in about a month between the last two.",
+     "uk": "Чотирикратне зростання приблизно за місяць між останніми двома."
+    }
+   ],
+   [
+    {
+     "en": "Invited users",
+     "uk": "Запрошені користувачі"
+    },
+    "100,000+",
+    {
+     "tag": "claimed"
+    },
+    {
+     "en": "Sep 2026",
+     "uk": "вер. 2026"
+    },
+    {
+     "en": "One outlet, The Information. Not stated by the company.",
+     "uk": "Одне видання, The Information. Компанія не заявляла."
+    }
+   ],
+   [
+    {
+     "en": "Travel share of transactions",
+     "uk": "Частка подорожей у транзакціях"
+    },
+    "≈50%",
+    {
+     "tag": "claimed"
+    },
+    {
+     "en": "Sep 2026",
+     "uk": "вер. 2026"
+    },
+    {
+     "en": "Founder statement to Skift.",
+     "uk": "Заява засновника для Skift."
+    }
+   ],
+   [
+    {
+     "en": "Capacity",
+     "uk": "Потужності"
+    },
+    {
+     "en": "User base straining compute",
+     "uk": "Користувачі перевантажують обчислення"
+    },
+    {
+     "tag": "claimed"
+    },
+    {
+     "en": "Sep 2026",
+     "uk": "вер. 2026"
+    },
+    {
+     "en": "Reported by Dealroom.",
+     "uk": "Повідомляє Dealroom."
+    }
+   ],
+   [
+    {
+     "en": "Revenue",
+     "uk": "Дохід"
+    },
+    {
+     "en": "Pre-revenue",
+     "uk": "Без доходу"
+    },
+    {
+     "tag": "claimed"
+    },
+    {
+     "en": "2026",
+     "uk": "2026"
+    },
+    {
+     "en": "Per Sacra; no company figure.",
+     "uk": "За Sacra; цифри від компанії немає."
+    }
+   ],
+   [
+    {
+     "en": "Pricing, retention, margin",
+     "uk": "Ціни, утримання, маржа"
+    },
+    {
+     "en": "—",
+     "uk": "—"
+    },
+    {
+     "tag": "unknown"
+    },
+    {
+     "en": "—",
+     "uk": "—"
+    },
+    ""
+   ]
+  ]
+ },
+ "reconcile": [
+  {
+   "en": "Series C valuation: $10B in company and TechCrunch reporting, $6.47B on Dealroom.",
+   "uk": "Оцінка раунду C: $10 млрд у повідомленнях компанії та TechCrunch, $6,47 млрд на Dealroom."
+  },
+  {
+   "en": "Founding: 2025 on Sequoia's listing, April 2026 for the registered entity.",
+   "uk": "Заснування: 2025 у лістингу Sequoia, квітень 2026 для зареєстрованої юрособи."
+  },
+  {
+   "en": "The Spinnable article calls the $350M a Series B. The Series B was $250M; $350M is total funding at that point.",
+   "uk": "Стаття Spinnable називає $350 млн раундом B. Раунд B був $250 млн; $350 млн — загальні залучені кошти на той момент."
+  },
+  {
+   "en": "Pricing: Spinnable cites $200–500 a month, while Sacra says the product is free and the CEO has said he does not want to charge.",
+   "uk": "Ціни: Spinnable називає $200–500 на місяць, тоді як Sacra пише, що продукт безкоштовний, а CEO казав, що не хоче брати плату."
+  }
  ],
- sourceNote:{en:"Accessed 19 November 2026. Most figures come from press reports and the company has published little itself. The Spinnable article is written by a competitor and is used only where marked.",uk:"Переглянуто 19 листопада 2026. Більшість цифр — із преси, власних даних компанія опублікувала мало. Стаття Spinnable написана конкурентом і використана лише там, де позначено."},
- log:[
-  {d:"2026-11-19",t:{en:"First review, started from the Spinnable article and checked against about 15 other sources. Status Reviewed, evidence confidence Medium.",uk:"Перший огляд, початий зі статті Spinnable та звірений приблизно з 15 іншими джерелами. Статус «Готово», впевненість у доказах середня."}}
+ "market": {
+  "position": {
+   "en": "Instinct is an agent reached by text that acts through its own phone and computer. Access is invite-only.",
+   "uk": "Instinct — агент, з яким спілкуються через SMS і який діє через власний телефон і комп’ютер. Доступ лише за запрошеннями."
+  },
+  "comps": [
+   {
+    "n": "Meta Muse",
+    "note": {
+     "en": "Similar task features, built into Meta's products. Reached the top of US app stores and has millions of downloads.",
+     "uk": "Подібні можливості, вбудований у продукти Meta. Дійшов до вершини магазинів застосунків США, мільйони завантажень."
+    }
+   },
+   {
+    "n": "Lindy",
+    "note": {
+     "en": "Email and calendar assistant with public pricing.",
+     "uk": "Асистент для пошти й календаря з публічними цінами."
+    }
+   },
+   {
+    "n": "OpenClaw",
+    "note": {
+     "en": "Self-hosted and user-operated; Instinct is a managed cloud service.",
+     "uk": "Self-hosted і керований користувачем; Instinct — керований хмарний сервіс."
+    }
+   }
+  ]
+ },
+ "appendix": [
+  {
+   "title": {
+    "en": "Funding timeline",
+    "uk": "Хронологія фінансування"
+   },
+   "type": "table",
+   "head": [
+    {
+     "en": "When",
+     "uk": "Коли"
+    },
+    {
+     "en": "Round",
+     "uk": "Раунд"
+    },
+    {
+     "en": "Amount",
+     "uk": "Сума"
+    },
+    {
+     "en": "Valuation",
+     "uk": "Оцінка"
+    },
+    {
+     "en": "Lead investors",
+     "uk": "Основні інвестори"
+    }
+   ],
+   "rows": [
+    [
+     {
+      "en": "Date not found",
+      "uk": "Дату не знайдено"
+     },
+     {
+      "en": "Early round",
+      "uk": "Ранній раунд"
+     },
+     "≈$25M (our calc)",
+     {
+      "en": "—",
+      "uk": "—"
+     },
+     "Conviction (Pranav Reddy)"
+    ],
+    [
+     {
+      "en": "Aug 2026",
+      "uk": "серп. 2026"
+     },
+     "Series A",
+     "$75M",
+     "$500M",
+     "Kleiner Perkins (Mamoon Hamid)"
+    ],
+    [
+     {
+      "en": "26 Aug 2026",
+      "uk": "26 серп. 2026"
+     },
+     "Series B",
+     "$250M",
+     "$2.5B",
+     "Index Ventures, Benchmark"
+    ],
+    [
+     {
+      "en": "28 Sep 2026",
+      "uk": "28 вер. 2026"
+     },
+     "Series C",
+     "$1B",
+     "$10B",
+     "Sequoia, Coatue, Benchmark"
+    ]
+   ],
+   "foot": {
+    "en": "Valuation at Series A is the $500M round reported five weeks before Series B; the exact link to the $75M is our reading.",
+    "uk": "Оцінка на раунді A — це $500 млн, про які повідомлялося за п’ять тижнів до раунду B; точний зв’язок із $75 млн — наше прочитання."
+   }
+  },
+  {
+   "title": {
+    "en": "Product timeline",
+    "uk": "Хронологія продукту"
+   },
+   "type": "table",
+   "head": [
+    {
+     "en": "When",
+     "uk": "Коли"
+    },
+    {
+     "en": "What",
+     "uk": "Що"
+    },
+    {
+     "en": "Evidence",
+     "uk": "Докази"
+    }
+   ],
+   "rows": [
+    [
+     {
+      "en": "Apr 2026",
+      "uk": "квіт. 2026"
+     },
+     {
+      "en": "Spear Street Technology registered in California",
+      "uk": "Spear Street Technology зареєстровано в Каліфорнії"
+     },
+     {
+      "tag": "claimed"
+     }
+    ],
+    [
+     {
+      "en": "Aug 2026",
+      "uk": "серп. 2026"
+     },
+     {
+      "en": "Invite-only launch",
+      "uk": "Запуск лише за запрошеннями"
+     },
+     {
+      "tag": "reported"
+     }
+    ],
+    [
+     {
+      "en": "16–17 Sep 2026",
+      "uk": "16–17 вер. 2026"
+     },
+     {
+      "en": "Concierge phone calls in early access",
+      "uk": "Дзвінки Concierge у ранньому доступі"
+     },
+     {
+      "tag": "reported"
+     }
+    ],
+    [
+     {
+      "en": "30 Sep 2026",
+      "uk": "30 вер. 2026"
+     },
+     {
+      "en": "Product recommendations announced",
+      "uk": "Оголошено рекомендації товарів"
+     },
+     {
+      "tag": "reported"
+     }
+    ]
+   ]
+  }
+ ],
+ "sources": [
+  {
+   "id": "S1",
+   "t": "TechCrunch, 28 Sep 2026",
+   "u": "https://techcrunch.com/?p=3170483",
+   "ty": {
+    "en": "Press",
+    "uk": "Преса"
+   },
+   "use": {
+    "en": "Series C, product, Concierge, privacy, Muse",
+    "uk": "Раунд C, продукт, Concierge, приватність, Muse"
+   }
+  },
+  {
+   "id": "S2",
+   "t": "Verdict",
+   "u": "https://www.verdict.co.uk/newsletters/instinct-raises-1bn-series-c",
+   "ty": {
+    "en": "Press",
+    "uk": "Преса"
+   },
+   "use": {
+    "en": "Series C investors",
+    "uk": "Інвестори раунду C"
+   }
+  },
+  {
+   "id": "S3",
+   "t": "KSL (Reuters wire)",
+   "u": "https://www.ksl.com/article/51629454",
+   "ty": {
+    "en": "Press",
+    "uk": "Преса"
+   },
+   "use": {
+    "en": "Series C announcement",
+    "uk": "Оголошення раунду C"
+   }
+  },
+  {
+   "id": "S4",
+   "t": "SiliconANGLE, 27 Aug 2026",
+   "u": "https://siliconangle.com/2026/08/27/consumer-focused-ai-assistant-startup-instinct-reportedly-raising-250m/",
+   "ty": {
+    "en": "Press",
+    "uk": "Преса"
+   },
+   "use": {
+    "en": "Series B, data terms",
+    "uk": "Раунд B, умови щодо даних"
+   }
+  },
+  {
+   "id": "S5",
+   "t": "Pulse 2.0",
+   "u": "https://pulse2.com/instinct-raises-250-million-at-2-5-billion-valuation-as-ai-assistant-goes-viral-in-silicon-valley/",
+   "ty": {
+    "en": "Press",
+    "uk": "Преса"
+   },
+   "use": {
+    "en": "Series B, founder background",
+    "uk": "Раунд B, досвід засновника"
+   }
+  },
+  {
+   "id": "S6",
+   "t": "Sacra",
+   "u": "https://sacra.com/c/instinct/",
+   "ty": {
+    "en": "Analyst",
+    "uk": "Аналітик"
+   },
+   "use": {
+    "en": "Pre-revenue, free product",
+    "uk": "Без доходу, безкоштовний продукт"
+   }
+  },
+  {
+   "id": "S7",
+   "t": "Layer3Labs guides",
+   "u": "https://www.layer3labs.io/guides/is-instinct-ai-free",
+   "ty": {
+    "en": "Secondary",
+    "uk": "Вторинне"
+   },
+   "use": {
+    "en": "Pricing stance, registration date, Concierge",
+    "uk": "Позиція щодо цін, дата реєстрації, Concierge"
+   }
+  },
+  {
+   "id": "S8",
+   "t": "Skift, 28 Sep 2026",
+   "u": "https://skift.com/2026/09/28/instincts-app-is-fueled-by-travel-founder-says-its-half-of-volume/",
+   "ty": {
+    "en": "Press",
+    "uk": "Преса"
+   },
+   "use": {
+    "en": "Travel share of volume",
+    "uk": "Частка подорожей в обсязі"
+   }
+  },
+  {
+   "id": "S9",
+   "t": "TechCrunch, 30 Sep 2026",
+   "u": "https://techcrunch.com/2026/09/30/instincts-new-product-recommendations-are-giving-some-users-the-ick/",
+   "ty": {
+    "en": "Press",
+    "uk": "Преса"
+   },
+   "use": {
+    "en": "Product recommendations stream",
+    "uk": "Потік рекомендацій товарів"
+   }
+  },
+  {
+   "id": "S10",
+   "t": "Dealroom",
+   "u": "https://dealroom.co/news/157240-ai-startup-instinct-raises-1b-series-c-at-10b-valuation/",
+   "ty": {
+    "en": "Data provider",
+    "uk": "Постачальник даних"
+   },
+   "use": {
+    "en": "Alternative valuation, user count, compute strain",
+    "uk": "Інша оцінка, кількість користувачів, навантаження"
+   }
+  },
+  {
+   "id": "S11",
+   "t": "Silicon Valley Invest Club tear sheet",
+   "u": "https://siliconvalleyinvestclub.com/pl/companies/instinct-co/tear-sheet.pdf",
+   "ty": {
+    "en": "Secondary",
+    "uk": "Вторинне"
+   },
+   "use": {
+    "en": "Founding year, user count, total funding",
+    "uk": "Рік заснування, користувачі, загальне фінансування"
+   }
+  },
+  {
+   "id": "S12",
+   "t": "rywalker.com research",
+   "u": "https://rywalker.com/research/instinct",
+   "ty": {
+    "en": "Analyst",
+    "uk": "Аналітик"
+   },
+   "use": {
+    "en": "Entity, founder, competitors",
+    "uk": "Юрособа, засновник, конкуренти"
+   }
+  },
+  {
+   "id": "S13",
+   "t": "Spinnable, “What is Instinct AI”",
+   "u": "https://www.spinnable.ai/blog/what-is-instinct-ai-guide",
+   "ty": {
+    "en": "Competitor",
+    "uk": "Конкурент"
+   },
+   "use": {
+    "en": "Starting article. Used for pricing guess and terms-of-service claims, both unverified.",
+    "uk": "Стартова стаття. Використано для припущення про ціни та тверджень щодо умов користування, обидва не перевірені."
+   }
+  },
+  {
+   "id": "S14",
+   "t": "Runtime Wire (Forbes)",
+   "u": "https://runtimewire.com/article/noah-shinn-instinct-seeks-200m-2-5b-valuation",
+   "ty": {
+    "en": "Press",
+    "uk": "Преса"
+   },
+   "use": {
+    "en": "Series A and early-round leads",
+    "uk": "Лідери раунду A і раннього раунду"
+   }
+  },
+  {
+   "id": "S15",
+   "t": "ValueAdd VC",
+   "u": "https://valueaddvc.com/blog/instinct-ai-valuation-2026-250m-series-b-2-5b-noah-shinns-viral-assistant",
+   "ty": {
+    "en": "Secondary",
+    "uk": "Вторинне"
+   },
+   "use": {
+    "en": "Series B date, $500M round",
+    "uk": "Дата раунду B, раунд на $500 млн"
+   }
+  },
+  {
+   "id": "S16",
+   "t": "Business Model Analyst",
+   "u": "https://businessmodelanalyst.com/instinct-ai-assistant-referral-fee-business-model/",
+   "ty": {
+    "en": "Commentary",
+    "uk": "Коментар"
+   },
+   "use": {
+    "en": "Referral-fee illustration",
+    "uk": "Ілюстрація реферальних комісій"
+   }
+  },
+  {
+   "id": "S17",
+   "t": "Business Insider via AI Weekly",
+   "u": "https://aiweekly.co/alerts/business-insider-profiles-noah-shinn-as-instinct-ai-talks-10b-valuation-invite",
+   "ty": {
+    "en": "Press",
+    "uk": "Преса"
+   },
+   "use": {
+    "en": "Soft launch via investors",
+    "uk": "М’який запуск через інвесторів"
+   }
+  },
+  {
+   "id": "S18",
+   "t": "The Ascendants",
+   "u": "https://ascendants.in/the-ascendants/instinct-raises-250m-series-b-2-5-billion-valuation/",
+   "ty": {
+    "en": "Secondary",
+    "uk": "Вторинне"
+   },
+   "use": {
+    "en": "Product approach: access and context to act",
+    "uk": "Підхід до продукту: доступ і контекст для дій"
+   }
+  }
+ ],
+ "sourceNote": {
+  "en": "Accessed 19 November 2026. Most figures come from press reports and the company has published little itself. The Spinnable article is written by a competitor and is used only where marked.",
+  "uk": "Переглянуто 19 листопада 2026. Більшість цифр — із преси, власних даних компанія опублікувала мало. Стаття Spinnable написана конкурентом і використана лише там, де позначено."
+ },
+ "log": [
+  {
+   "d": "2026-11-19",
+   "t": {
+    "en": "First review, started from the Spinnable article and checked against about 15 other sources. Facts and figures only, no evaluations.",
+    "uk": "Перший огляд, початий зі статті Spinnable та звірений приблизно з 15 іншими джерелами. Лише факти й цифри, без оцінок."
+   }
+  }
+ ],
+ "strip": {
+  "what": {
+   "en": "A personal AI agent from Spear Street Technology, Inc. Users text it and it acts with its own phone number and computer: travel, reservations, purchases, bills, subscriptions, groceries. Invite-only since August 2026; no mobile app.",
+   "uk": "Персональний AI-агент від Spear Street Technology, Inc. Користувачі пишуть йому в SMS, а він діє зі своїм номером і комп’ютером: подорожі, резервації, покупки, рахунки, підписки, продукти. Лише за запрошеннями з серпня 2026; мобільного застосунку немає."
+  },
+  "money": {
+   "en": "No revenue reported and no public pricing; the product is free today. Subscription, advertising and product recommendations have been mentioned as possible income. Funding: $1B Series C at a $10B valuation (28 Sep 2026), after a $250M Series B at $2.5B in August.",
+   "uk": "Дохід не повідомлено, публічних цін немає; зараз продукт безкоштовний. Як можливий дохід згадували підписку, рекламу та рекомендації товарів. Фінансування: раунд C на $1 млрд за оцінки $10 млрд (28 вер. 2026) після раунду B на $250 млн за $2,5 млрд у серпні."
+  },
+  "core": {
+   "en": "Stated aim: bring Instinct to more people and keep building personal AI. Product approach: give the assistant access and context to act, not only to answer. The founder says security and controls are being improved; the first privacy policy was criticised and has been updated.",
+   "uk": "Заявлена мета: донести Instinct до більшої кількості людей і розвивати персональний AI. Підхід до продукту: дати асистенту доступ і контекст, щоб діяти, а не лише відповідати. Засновник каже, що безпеку й контроль покращують; першу політику приватності критикували, її оновлено."
+  }
+ },
+ "core": {
+  "mission": {
+   "t": {
+    "en": "Bring Instinct to more people and continue building personal AI, per the founder's statement on the Series C.",
+    "uk": "Донести Instinct до більшої кількості людей і далі розвивати персональний AI, за заявою засновника щодо раунду C."
+   },
+   "tag": "claimed",
+   "src": [
+    "S2",
+    "S3"
+   ]
+  },
+  "values": [
+   {
+    "t": {
+     "en": "The assistant acts on the user's behalf instead of only answering questions; it is given access and context to take action.",
+     "uk": "Асистент діє від імені користувача, а не лише відповідає на запитання; йому дають доступ і контекст для дій."
+    },
+    "tag": "claimed",
+    "src": [
+     "S18"
+    ]
+   },
+   {
+    "t": {
+     "en": "Human taste: product recommendations built with partners such as local chefs, designers, architects and travel guides.",
+     "uk": "«Людський смак»: рекомендації товарів із партнерами на кшталт місцевих шефів, дизайнерів, архітекторів і гідів."
+    },
+    "tag": "claimed",
+    "src": [
+     "S9"
+    ]
+   },
+   {
+    "t": {
+     "en": "Security and controls are being improved as the product evolves, per the founder.",
+     "uk": "Безпеку й контроль покращують в міру розвитку продукту, за словами засновника."
+    },
+    "tag": "claimed",
+    "src": [
+     "S5"
+    ]
+   }
+  ],
+  "goals": [
+   {
+    "t": {
+     "en": "Widen access beyond the current early-access group; the Series C money is meant to expand the agent's reach.",
+     "uk": "Розширити доступ за межі нинішньої групи раннього доступу; кошти раунду C призначено для розширення охоплення агента."
+    },
+    "tag": "claimed",
+    "src": [
+     "S2"
+    ]
+   },
+   {
+    "t": {
+     "en": "New capabilities in September 2026: Concierge phone calls and a trusted-person network for coordinating plans between users' agents.",
+     "uk": "Нові можливості у вересні 2026: дзвінки Concierge і мережа довірених осіб для узгодження планів між агентами користувачів."
+    },
+    "tag": "reported",
+    "src": [
+     "S1",
+     "S7"
+    ]
+   },
+   {
+    "t": {
+     "en": "No public targets for users, revenue or pricing found.",
+     "uk": "Публічних цілей щодо користувачів, доходу чи цін не знайдено."
+    },
+    "tag": "unknown",
+    "src": []
+   }
+  ]
+ },
+ "unknowns": [
+  {
+   "en": "Public pricing, and which revenue model the company will use.",
+   "uk": "Публічні ціни та яку модель доходу використає компанія."
+  },
+  {
+   "en": "A company-stated user count, usage per user and retention.",
+   "uk": "Заявлена компанією кількість користувачів, використання на користувача та утримання."
+  },
+  {
+   "en": "Headcount and team structure.",
+   "uk": "Кількість людей і структура команди."
+  },
+  {
+   "en": "Cost of a completed task (compute and phone) and margin.",
+   "uk": "Вартість виконаного завдання (обчислення й телефонія) і маржа."
+  },
+  {
+   "en": "Primary text of the terms of service: the clause descriptions in the Spinnable article are a competitor's reading and are not verified.",
+   "uk": "Первинний текст умов користування: описи пунктів у статті Spinnable — це прочитання конкурента, не перевірене."
+  },
+  {
+   "en": "Why Dealroom lists $6.47B for a round reported at $10B.",
+   "uk": "Чому Dealroom наводить $6,47 млрд для раунду, про який повідомлено $10 млрд."
+  }
  ]
 }
 /*__NEW_REVIEWS_ABOVE__*/
@@ -817,22 +2806,19 @@ const REVIEWS=[
 
 const METHOD={
  title:{en:["How","reviews work"],uk:["Як","працюють огляди"]},
- lead:{en:"Every company goes through the same template, so reviews can be compared and filtered. Money comes first, evidence is labelled, and our opinion is kept apart from what the company says.",uk:"Кожна компанія проходить один шаблон, тому огляди можна порівнювати й фільтрувати. Спершу гроші, докази позначені, а наша думка відокремлена від слів компанії."},
+ lead:{en:"Every company goes through the same template, so reviews can be compared and filtered. The archive records facts about the company: what it is, how it makes money, the numbers, and what it says it stands for. Each figure carries an evidence tag. There are no ratings or recommendations.",uk:"Кожна компанія проходить один шаблон, тому огляди можна порівнювати й фільтрувати. Архів фіксує факти про компанію: що це, як вона заробляє, які цифри і що вона заявляє про свою суть. Кожна цифра має позначку доказу. Оцінок і рекомендацій немає."},
  order:{h:{en:"Review order",uk:"Порядок огляду"},items:[
-  {n:{en:"Verdict and score",uk:"Вердикт і оцінка"},d:{en:"Top of every page: why it matters to us, our take, the next step, and five scores.",uk:"Угорі кожної сторінки: чому це важливо для нас, наш висновок, наступний крок і п’ять оцінок."}},
-  {n:{en:"1 Snapshot",uk:"1 Зведення"},d:{en:"Founding, leadership, structure, members, entry rules. Each fact tagged and sourced.",uk:"Заснування, керівництво, структура, учасники, правила вступу. Кожен факт позначений і має джерело."}},
-  {n:{en:"2 Business model",uk:"2 Бізнес-модель"},d:{en:"Who pays whom for what. A table of revenue streams with price, volume, estimated revenue and basis.",uk:"Хто, кому й за що платить. Таблиця джерел доходу з ціною, обсягом, оцінкою доходу та підставою."}},
-  {n:{en:"3 Numbers",uk:"3 Цифри"},d:{en:"Metrics with evidence tag and date, a “show the math” block for estimates, and a list of contradictions.",uk:"Показники з позначкою доказу та датою, блок «покажи розрахунок» для оцінок і список розбіжностей."}},
-  {n:{en:"4 Market and competition",uk:"4 Ринок і конкуренти"},d:{en:"Position, comparables to benchmark, moat.",uk:"Позиція, з ким порівняти, захищеність."}},
-  {n:{en:"5 Strengths and risks",uk:"5 Сильні сторони та ризики"},d:{en:"Risks carry a severity. This section is our assessment.",uk:"Ризики мають рівень серйозності. Цей розділ є нашою оцінкою."}},
-  {n:{en:"6 Worth stealing",uk:"6 Що варто взяти"},d:{en:"Concrete tactics we could copy or adapt.",uk:"Конкретні тактики, які можна скопіювати чи адаптувати."}},
-  {n:{en:"7 Open questions",uk:"7 Відкриті питання"},d:{en:"What the next research round should answer.",uk:"На що має відповісти наступний раунд дослідження."}},
-  {n:{en:"8 Appendix",uk:"8 Додатки"},d:{en:"Programme detail, people, timelines. Collapsed so the main flow stays short.",uk:"Деталі програм, люди, хронології. Згорнуто, щоб основний текст лишався коротким."}},
-  {n:{en:"9 Sources and log",uk:"9 Джерела та журнал"},d:{en:"Numbered sources with type and access date, plus a refresh log.",uk:"Пронумеровані джерела з типом і датою перегляду та журнал оновлень."}}
+  {n:{en:"At a glance",uk:"Коротко"},d:{en:"Top of every page: what the company is, how it makes money, and its stated core.",uk:"Угорі кожної сторінки: що це за компанія, як вона заробляє і її заявлена суть."}},
+  {n:{en:"1 Snapshot",uk:"1 Зведення"},d:{en:"Founding, leadership, structure, product, scale. Each fact tagged and sourced.",uk:"Заснування, керівництво, структура, продукт, масштаб. Кожен факт позначений і має джерело."}},
+  {n:{en:"2 Business model",uk:"2 Бізнес-модель"},d:{en:"Who pays whom for what. A table of revenue streams with price, volume, estimated revenue and basis, plus the math behind any estimate.",uk:"Хто, кому й за що платить. Таблиця джерел доходу з ціною, обсягом, оцінкою доходу та підставою, а також розрахунок за будь-якою оцінкою."}},
+  {n:{en:"3 Numbers",uk:"3 Цифри"},d:{en:"Metrics with evidence tag and date, and a list of figures that contradict each other across sources.",uk:"Показники з позначкою доказу та датою і список цифр, що суперечать одна одній у різних джерелах."}},
+  {n:{en:"4 Core",uk:"4 Суть"},d:{en:"Mission, values and goals as the company states them, each tagged and sourced. Where none is found, it says so.",uk:"Місія, цінності й цілі так, як їх заявляє компанія, кожна з позначкою та джерелом. Якщо нічого не знайдено, так і написано."}},
+  {n:{en:"5 Market",uk:"5 Ринок"},d:{en:"The company's stated position and the competitors named in sources.",uk:"Заявлена позиція компанії та конкуренти, названі в джерелах."}},
+  {n:{en:"6 Not disclosed",uk:"6 Не розкрито"},d:{en:"What the company has not published or we could not find.",uk:"Що компанія не опублікувала або ми не змогли знайти."}},
+  {n:{en:"7 Appendix",uk:"7 Додатки"},d:{en:"Programme detail, people, timelines. Collapsed so the main flow stays short.",uk:"Деталі програм, люди, хронології. Згорнуто, щоб основний текст лишався коротким."}},
+  {n:{en:"8 Sources and log",uk:"8 Джерела та журнал"},d:{en:"Numbered sources with type and access date, plus a refresh log.",uk:"Пронумеровані джерела з типом і датою перегляду та журнал оновлень."}}
  ]},
  evid:{h:{en:"Evidence tags",uk:"Позначки доказів"}},
- score:{h:{en:"Scores, 1 to 5",uk:"Оцінки від 1 до 5"},foot:{en:"Evidence confidence (low, medium, high) is rated separately, so thin data never lowers a score silently.",uk:"Достовірність даних (низька, середня, висока) оцінюється окремо, щоб брак даних не знижував оцінку непомітно."}},
- verd:{h:{en:"Verdicts",uk:"Вердикти"}},
  stat:{h:{en:"Statuses",uk:"Статуси"}},
  find:{h:{en:"Search and filters",uk:"Пошук і фільтри"},items:[
   {n:{en:"Search",uk:"Пошук"},d:{en:"Looks through English and Ukrainian text of every review. Every word you type must match. Best matches come first.",uk:"Шукає в англійському й українському тексті всіх оглядів. Кожне введене слово має збігатися. Найближчі збіги першими."}},
@@ -852,47 +2838,47 @@ const METHOD={
 const UI={
  en:{wordmark:"Company<em>/Archive</em>",navArchive:"Archive",navMethod:"Method",
   kicker:"Team only / since 2026",h1a:"Company",h1b:"Archive",
-  sub:"Outside companies worth our attention: how they make money, what the numbers are worth, and what we can borrow.",
+  sub:"Outside companies: how they make money, the numbers behind them, and what they say they stand for.",
   sReviews:"Reviews",sCats:"Categories in use",sRefresh:"Need refresh",sUpdated:"Last change",
   ph:"Search by company, keyword or number…",help:"Searches English and Ukrainian text. Every word must match. Press / to jump here.",
   clearQ:"Clear",kwQuick:"Keywords",
   filters:"Filters",clearAll:"Clear all",showN:"Show {n}",close:"Close",
-  fCategory:"Category",fVerdict:"Verdict",fStatus:"Status",fModel:"Business model",fRegion:"Region",fBand:"Revenue (est.)",fConf:"Evidence confidence",fGrowth:"Growth",fKw:"Keywords",
+  fCategory:"Category",fStatus:"Status",fModel:"Business model",fRegion:"Region",fBand:"Revenue (est.)",fKw:"Keywords",
   kwHint:"Pick several: results must match all.",
   selA:"Selected",selB:"reviews",countOf:"{n} of {t}",
-  sort:"Sort",sRel:"Best match",sUpd:"Recently updated",sScore:"Score, high to low",sRev:"Revenue, high to low",sName:"Name A–Z",
+  sort:"Sort",sRel:"Best match",sUpd:"Recently updated",sRev:"Revenue, high to low",sName:"Name A–Z",
   list:"List",cards:"Cards",
   emptyT:"No review matches this search",emptyB:"Try fewer words or clear a filter. Only companies already reviewed appear here.",emptyBtn:"Clear search and filters",
-  lRev:"Revenue (est.)",lScore:"Score",lReviewed:"Reviewed",lVerdict:"Verdict",lStatus:"Status",lFounded:"Founded",lMatch:"Match in",
+  lRev:"Revenue (est.)",lReviewed:"Reviewed",lStatus:"Status",lFounded:"Founded",lMatch:"Match in",
   back:"Back to archive",no:"No.",onPage:"On this page",
-  wWhy:"Why it matters to us",wTake:"Our take",wNext:"Next step",
-  secScore:"Score",total:"Total",conf:"Evidence confidence",scoreNote:"First-pass scores, to be confirmed by the team.",
-  s1:"Snapshot",s2:"Business model",s3:"Numbers",s4:"Market & competition",s5:"Strengths & risks",s6:"Worth stealing",s7:"Open questions",s8:"Appendix",s9:"Sources & log",
-  hStreams:"Revenue streams",hReconcile:"Reconcile before relying on these",hPosition:"Position",hComps:"Comparables to benchmark",hMoat:"Moat",hStrengths:"Strengths",hRisks:"Risks (our assessment)",hSources:"Sources",hLog:"Review log",
-  relTo:"Relevant to",reviewer:"Reviewer",reviewedL:"Reviewed",rebuilt:"Rebuilt",visit:"Open",prev:"Previous",next:"Next",
-  footL:"Company Review Archive · team only",footR:"Template v1",
+  wWhat:"What it is",wMoney:"How it earns",wCore:"Core",
+  
+  s1:"Snapshot",s2:"Business model",s3:"Numbers",s4:"Core: mission, values, goals",s5:"Market",s6:"Not disclosed",s7:"Appendix",s8:"Sources & log",
+  hStreams:"Revenue streams",hReconcile:"Figures that conflict across sources",hPosition:"Position",hComps:"Competitors named in sources",hMission:"Mission",hValues:"Values and principles",hGoals:"Goals",noComps:"No competitors named in the sources reviewed.",hSources:"Sources",hLog:"Review log",
+  reviewer:"Reviewer",reviewedL:"Reviewed",rebuilt:"Updated",visit:"Open",prev:"Previous",next:"Next",
+  footL:"Company Review Archive · team only",footR:"Template v2",
   months:"",langSwitch:"Language"},
  uk:{wordmark:"Компанії<em>/Архів</em>",navArchive:"Архів",navMethod:"Метод",
   kicker:"Лише для команди / з 2026",h1a:"Компанії",h1b:"Архів",
-  sub:"Зовнішні компанії, на які варто звернути увагу: як вони заробляють, чого варті цифри і що ми можемо запозичити.",
+  sub:"Зовнішні компанії: як вони заробляють, які за ними цифри і що вони заявляють про свою суть.",
   sReviews:"Огляди",sCats:"Категорій у роботі",sRefresh:"Потребують оновлення",sUpdated:"Остання зміна",
   ph:"Пошук за компанією, словом чи цифрою…",help:"Шукає в англійському й українському тексті. Усі слова мають збігатися. Натисніть /, щоб перейти сюди.",
   clearQ:"Очистити",kwQuick:"Ключові слова",
   filters:"Фільтри",clearAll:"Скинути все",showN:"Показати {n}",close:"Закрити",
-  fCategory:"Категорія",fVerdict:"Вердикт",fStatus:"Статус",fModel:"Бізнес-модель",fRegion:"Регіон",fBand:"Дохід (оцінка)",fConf:"Достовірність даних",fGrowth:"Зростання",fKw:"Ключові слова",
+  fCategory:"Категорія",fStatus:"Статус",fModel:"Бізнес-модель",fRegion:"Регіон",fBand:"Дохід (оцінка)",fKw:"Ключові слова",
   kwHint:"Оберіть кілька: результат має містити всі.",
   selA:"Обрані",selB:"огляди",countOf:"{n} з {t}",
-  sort:"Сортування",sRel:"Найближчі збіги",sUpd:"Нещодавно оновлені",sScore:"Оцінка: від вищої",sRev:"Дохід: від більшого",sName:"Назва А–Я",
+  sort:"Сортування",sRel:"Найближчі збіги",sUpd:"Нещодавно оновлені",sRev:"Дохід: від більшого",sName:"Назва А–Я",
   list:"Список",cards:"Картки",
   emptyT:"За цим запитом оглядів немає",emptyB:"Спробуйте менше слів або скиньте фільтр. Тут лише компанії, які вже розглянуто.",emptyBtn:"Скинути пошук і фільтри",
-  lRev:"Дохід (оцінка)",lScore:"Оцінка",lReviewed:"Огляд",lVerdict:"Вердикт",lStatus:"Статус",lFounded:"Засновано",lMatch:"Збіг у тексті",
+  lRev:"Дохід (оцінка)",lReviewed:"Огляд",lStatus:"Статус",lFounded:"Засновано",lMatch:"Збіг у тексті",
   back:"До архіву",no:"№",onPage:"На сторінці",
-  wWhy:"Чому це важливо для нас",wTake:"Наш висновок",wNext:"Наступний крок",
-  secScore:"Оцінка",total:"Разом",conf:"Достовірність даних",scoreNote:"Попередні оцінки, команда має підтвердити.",
-  s1:"Зведення",s2:"Бізнес-модель",s3:"Цифри",s4:"Ринок і конкуренти",s5:"Сильні сторони та ризики",s6:"Що варто взяти",s7:"Відкриті питання",s8:"Додатки",s9:"Джерела та журнал",
-  hStreams:"Джерела доходу",hReconcile:"Звірити перед використанням",hPosition:"Позиція",hComps:"З ким порівняти",hMoat:"Захищеність",hStrengths:"Сильні сторони",hRisks:"Ризики (наша оцінка)",hSources:"Джерела",hLog:"Журнал огляду",
-  relTo:"Релевантно для",reviewer:"Автор огляду",reviewedL:"Огляд",rebuilt:"Перероблено",visit:"Відкрити",prev:"Попередній",next:"Наступний",
-  footL:"Архів оглядів компаній · лише для команди",footR:"Шаблон v1",
+  wWhat:"Що це",wMoney:"Як заробляє",wCore:"Суть",
+  
+  s1:"Зведення",s2:"Бізнес-модель",s3:"Цифри",s4:"Суть: місія, цінності, цілі",s5:"Ринок",s6:"Не розкрито",s7:"Додатки",s8:"Джерела та журнал",
+  hStreams:"Джерела доходу",hReconcile:"Цифри, що суперечать одна одній у джерелах",hPosition:"Позиція",hComps:"Конкуренти, названі в джерелах",hMission:"Місія",hValues:"Цінності та принципи",hGoals:"Цілі",noComps:"У переглянутих джерелах конкурентів не названо.",hSources:"Джерела",hLog:"Журнал огляду",
+  reviewer:"Автор огляду",reviewedL:"Огляд",rebuilt:"Оновлено",visit:"Відкрити",prev:"Попередній",next:"Наступний",
+  footL:"Архів оглядів компаній · лише для команди",footR:"Шаблон v2",
   months:"",langSwitch:"Мова"}
 };
 
@@ -900,7 +2886,7 @@ const UI={
    HELPERS
    ================================================================ */
 const state={lang:"en",q:"",sort:"updated",sortUser:false,open:{},view:"list",drawer:false,
- f:{category:new Set(),verdict:new Set(),status:new Set(),model:new Set(),region:new Set(),band:new Set(),conf:new Set(),growth:new Set(),kw:new Set()}};
+ f:{category:new Set(),status:new Set(),model:new Set(),region:new Set(),band:new Set(),kw:new Set()}};
 let lastIndexScroll=0, currentRoute="";
 const $=s=>document.querySelector(s);
 const T=k=>UI[state.lang][k]??UI.en[k]??k;
@@ -928,11 +2914,8 @@ function bandOf(r){
   const m=(v.lo+v.hi)/2;
   return m<1?"b0":m<10?"b1":m<100?"b2":"b3";
 }
-const scoreOf=r=>r.scores.reduce((a,s)=>a+s.v,0);
 const revMid=r=>r.revenue?(r.revenue.lo+r.revenue.hi)/2:-1;
 const evTag=t=>t?`<span class="ev ev-${t}"><i></i>${esc(L(EVID[t]))}</span>`:"";
-const bars=v=>`<span class="bars" aria-hidden="true">${[1,2,3,4,5].map(i=>`<i class="${i<=v?"on":""}"></i>`).join("")}</span>`;
-const verdictPill=id=>`<span class="pill v-${id}">${esc(L(byId(VERDICTS,id)))}</span>`;
 const statusPill=id=>`<span class="pill s-${id}">${id==="refresh"?"↻ ":""}${esc(L(byId(STATUSES,id)))}</span>`;
 const catName=id=>L(byId(CATS,id));
 const modelName=id=>L(byId(MODELS,id));
@@ -948,9 +2931,9 @@ function strings(o,out){
 }
 REVIEWS.forEach(r=>{
   r.keywords.forEach(k=>{if(!KW[k.k])KW[k.k]={en:k.en,uk:k.uk}});
-  const extra=[byId(CATS,r.category),...r.models.map(m=>byId(MODELS,m)),byId(VERDICTS,r.verdict),byId(STATUSES,r.status),...r.regions.map(x=>REGIONS[x])]
+  const extra=[byId(CATS,r.category),...r.models.map(m=>byId(MODELS,m)),byId(STATUSES,r.status),...r.regions.map(x=>REGIONS[x])]
     .flatMap(o=>[o.en,o.uk]);
-  r._strings=strings({name:r.name,aka:r.aka,url:r.url,founded:r.founded,tagline:r.tagline,keywords:r.keywords,strip:r.strip,snapshot:r.snapshot,streams:r.streams,math:r.math,numbers:r.numbers,reconcile:r.reconcile,market:r.market,strengths:r.strengths,risks:r.risks,steal:r.steal,questions:r.questions,appendix:r.appendix,sources:r.sources,statusNote:r.statusNote,relevantTo:r.relevantTo,scores:r.scores},[]).concat(extra);
+  r._strings=strings({name:r.name,aka:r.aka,url:r.url,founded:r.founded,tagline:r.tagline,keywords:r.keywords,strip:r.strip,core:r.core,unknowns:r.unknowns,snapshot:r.snapshot,streams:r.streams,math:r.math,numbers:r.numbers,reconcile:r.reconcile,market:r.market,appendix:r.appendix,sources:r.sources,statusNote:r.statusNote},[]).concat(extra);
   const joined=norm(r._strings.join(" \n "));
   r._blob=joined+" \n "+joined.replace(/(\d)[,\s](?=\d)/g,"$1");
   r._name=norm(r.name+" "+r.aka);
@@ -964,13 +2947,10 @@ function L2(x){return x.en+" "+x.uk}
    ================================================================ */
 const FACETS=[
  {key:"category",label:"fCategory",open:true,style:"list",all:true,get:r=>[r.category],opts:()=>CATS,name:id=>catName(id)},
- {key:"verdict",label:"fVerdict",open:true,style:"chips",all:true,get:r=>[r.verdict],opts:()=>VERDICTS,name:id=>L(byId(VERDICTS,id))},
  {key:"status",label:"fStatus",open:true,style:"chips",all:true,get:r=>[r.status],opts:()=>STATUSES,name:id=>L(byId(STATUSES,id))},
  {key:"model",label:"fModel",open:false,style:"chips",get:r=>r.models,opts:()=>MODELS,name:id=>modelName(id)},
  {key:"region",label:"fRegion",open:false,style:"chips",get:r=>r.regions,opts:()=>Object.keys(REGIONS).map(id=>({id})),name:id=>L(REGIONS[id])},
- {key:"band",label:"fBand",open:false,style:"chips",get:r=>[bandOf(r)],opts:()=>BANDS,name:id=>L(byId(BANDS,id))},
- {key:"conf",label:"fConf",open:false,style:"chips",get:r=>[r.confidence],opts:()=>Object.keys(CONF).map(id=>({id})),name:id=>L(CONF[id])},
- {key:"growth",label:"fGrowth",open:false,style:"chips",get:r=>[r.growth],opts:()=>Object.keys(GROW).map(id=>({id})),name:id=>L(GROW[id])}
+ {key:"band",label:"fBand",open:false,style:"chips",get:r=>[bandOf(r)],opts:()=>BANDS,name:id=>L(byId(BANDS,id))}
 ];
 function tokens(){return norm(state.q).split(/\s+/).filter(Boolean)}
 function visible(skip){
@@ -1002,7 +2982,6 @@ function sorted(list){
   const s=effSort();
   if(s==="relevance") a.sort((x,y)=>relevance(y)-relevance(x));
   else if(s==="updated") a.sort((x,y)=>y.updated.localeCompare(x.updated)||x.no-y.no);
-  else if(s==="score") a.sort((x,y)=>scoreOf(y)-scoreOf(x));
   else if(s==="revenue") a.sort((x,y)=>revMid(y)-revMid(x));
   else if(s==="name") a.sort((x,y)=>x.name.localeCompare(y.name));
   return a;
@@ -1127,7 +3106,7 @@ function updateIndex(){
   const act=[];
   FACETS.forEach(f=>state.f[f.key].forEach(v=>act.push({f:f.key,v,t:T(f.label)+": "+f.name(v)})));
   state.f.kw.forEach(v=>act.push({f:"kw",v,t:T("fKw")+": "+L(KW[v]||{en:v})}));
-  const sortOpts=[["relevance",T("sRel")],["updated",T("sUpd")],["score",T("sScore")],["revenue",T("sRev")],["name",T("sName")]]
+  const sortOpts=[["relevance",T("sRel")],["updated",T("sUpd")],["revenue",T("sRev")],["name",T("sName")]]
     .filter(o=>o[0]!=="relevance"||state.q);
   const curSort=effSort();
   let body;
@@ -1170,8 +3149,7 @@ function rowHtml(r){
     </div>
     <div class="aside">
       <div class="cell"><small>${esc(T("lRev"))}</small><b>${esc(fmtRev(r))}</b>${evTag(r.revenue&&r.revenue.tag)}</div>
-      <div class="cell"><small>${esc(T("lScore"))}</small><b>${scoreOf(r)}/25</b>${bars(Math.round(scoreOf(r)/5))}</div>
-      <div class="cell">${verdictPill(r.verdict)}<div style="margin-top:8px">${statusPill(r.status)}</div></div>
+      <div class="cell">${statusPill(r.status)}</div>
     </div>
   </a></li>`;
 }
@@ -1180,10 +3158,9 @@ function cardHtml(r){
     <span class="no">${pad(r.no)}.</span>
     <h3>${hl(r.name)}</h3>
     <p class="tag">${hl(L(r.tagline))}</p>
-    <div class="pills">${verdictPill(r.verdict)}${statusPill(r.status)}</div>
+    <div class="pills">${statusPill(r.status)}</div>
     <dl>
       <dt>${esc(T("lRev"))}</dt><dd>${esc(fmtRev(r))} ${evTag(r.revenue&&r.revenue.tag)}</dd>
-      <dt>${esc(T("lScore"))}</dt><dd>${scoreOf(r)}/25</dd>
       <dt>${esc(T("lReviewed"))}</dt><dd>${esc(fmtDate(r.reviewed))}</dd>
     </dl>
   </a></li>`;
@@ -1208,7 +3185,7 @@ function sec(n,id,title,inner){
 }
 function renderReview(r){
   const idx=REVIEWS.indexOf(r), prev=REVIEWS[idx-1], next=REVIEWS[idx+1];
-  const SECS=[["1","snap",T("s1")],["2","model",T("s2")],["3","nums",T("s3")],["4","mkt",T("s4")],["5","risk",T("s5")],["6","steal",T("s6")],["7","qs",T("s7")],["8","app",T("s8")],["9","src",T("s9")]];
+  const SECS=[["1","snap",T("s1")],["2","model",T("s2")],["3","nums",T("s3")],["4","core",T("s4")],["5","mkt",T("s5")],["6","unk",T("s6")],["7","app",T("s7")],["8","src",T("s8")]];
   const snap=`<dl class="dl">${r.snapshot.map(s=>`<div class="r"><dt>${esc(L(s.l))}</dt><dd>${esc(L(s.v))}${s.note?`<span class="note">${esc(L(s.note))}</span>`:""}</dd><div>${evTag(s.tag)}${s.src.length?`<span class="refs">${s.src.join(" ")}</span>`:""}</div></div>`).join("")}</dl>`;
   const mathBlock=`<div class="math"><h3>${esc(L(r.math.title))}</h3>
     <div class="two"><div><div class="mono" style="margin-bottom:8px;color:var(--mute)">${esc(L(r.math.a.h))}</div><pre>${esc(r.math.a.lines.join("\n"))}</pre></div>
@@ -1217,16 +3194,15 @@ function renderReview(r){
   const model=`<h3>${esc(T("hStreams"))}</h3>${tableHtml(r.streams.head,r.streams.rows)}<p style="margin-top:14px;font-size:14.5px;color:var(--ink-soft)">${esc(L(r.streams.note))}</p>${mathBlock}`;
   const nums=tableHtml(r.numbers.head,r.numbers.rows)+`<div class="callout"><h3>${esc(T("hReconcile"))}</h3><ul>${r.reconcile.map(x=>`<li>${esc(L(x))}</li>`).join("")}</ul></div>`;
   const mkt=`<h3>${esc(T("hPosition"))}</h3><p>${esc(L(r.market.position))}</p>
-    <div class="two"><div><h3>${esc(T("hComps"))}</h3><ul class="list">${r.market.comps.map(c=>`<li><span><b>${esc(c.n)}</b><br><span style="font-size:14px;color:var(--mute)">${esc(L(c.note))}</span></span></li>`).join("")}</ul></div>
-    <div><h3>${esc(T("hMoat"))}</h3><p>${esc(L(r.market.moat))}</p></div></div>`;
-  const risk=`<div class="two"><div><h3 style="margin-top:0">${esc(T("hStrengths"))}</h3><ul class="list plus">${r.strengths.map(s=>`<li><span>${esc(L(s))}</span></li>`).join("")}</ul></div>
-    <div><h3 style="margin-top:0">${esc(T("hRisks"))}</h3><ul class="list">${r.risks.map(s=>`<li><span class="sev sev-${s.sev}">${esc(L(SEV[s.sev]))}</span><span>${esc(L(s.t))}</span></li>`).join("")}</ul></div></div>`;
-  const steal=`<ul class="list num">${r.steal.map(s=>`<li><span>${esc(L(s))}</span></li>`).join("")}</ul>`;
-  const qs=`<ul class="list q">${r.questions.map(s=>`<li><span>${esc(L(s))}</span></li>`).join("")}</ul>`;
+    <h3>${esc(T("hComps"))}</h3>${r.market.comps.length?`<ul class="list">${r.market.comps.map(c=>`<li><span><b>${esc(c.n)}</b><br><span style="font-size:14px;color:var(--mute)">${esc(L(c.note))}</span></span></li>`).join("")}</ul>`:`<p>${esc(T("noComps"))}</p>`}`;
+  const coreItem=c=>`<li><span>${esc(L(c.t))}</span><span class="tg">${evTag(c.tag)}${c.src&&c.src.length?`<span class="refs">${c.src.join(" ")}</span>`:""}</span></li>`;
+  const core=`<h3 style="margin-top:0">${esc(T("hMission"))}</h3><ul class="list core">${coreItem(r.core.mission)}</ul>
+    <h3>${esc(T("hValues"))}</h3><ul class="list core">${r.core.values.map(coreItem).join("")}</ul>
+    <h3>${esc(T("hGoals"))}</h3><ul class="list core">${r.core.goals.map(coreItem).join("")}</ul>`;
+  const unk=`<ul class="list q">${r.unknowns.map(x=>`<li><span>${esc(L(x))}</span></li>`).join("")}</ul>`;
   const app=r.appendix.map(a=>`<details class="app"><summary>${esc(L(a.title))}</summary><div class="in">${tableHtml(a.head,a.rows,a.foot)}</div></details>`).join("");
   const src=`<h3 style="margin-top:0">${esc(T("hSources"))}</h3><ul class="list src" style="border-top:1px solid var(--ink)">${r.sources.map(s=>`<li><span class="id">${s.id}</span><span><span class="t">${s.u?`<a href="${esc(s.u)}" target="_blank" rel="noopener">${esc(s.t)}</a>`:esc(s.t)}</span><br><span class="u">${esc(L(s.use))}</span></span><span class="ty">${esc(L(s.ty))}</span></li>`).join("")}</ul><p class="hint">${esc(L(r.sourceNote))}</p>
     <h3>${esc(T("hLog"))}</h3><ul class="list log" style="border-top:1px solid var(--ink)">${r.log.map(l=>`<li><span class="d">${esc(fmtDate(l.d))}</span><span>${esc(L(l.t))}</span></li>`).join("")}</ul>`;
-  const total=scoreOf(r);
   $("#app").innerHTML=`
   <div class="wrap">
     <div class="crumbs mono"><a href="#archive">← ${esc(T("back"))}</a><span>/</span><button type="button" data-act="catgo" data-v="${r.category}">${esc(catName(r.category))}</button></div>
@@ -1235,35 +3211,29 @@ function renderReview(r){
       <h1 id="rh" tabindex="-1">${esc(r.name)}</h1>
       <p class="tag">${esc(L(r.tagline))}</p>
       <p class="aka mono">${esc(r.aka)} · <a href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.url.replace("https://",""))}</a></p>
-      <div class="badges">${verdictPill(r.verdict)}${statusPill(r.status)}<span class="mono" style="color:var(--mute)">${esc(T("lReviewed"))} ${esc(fmtDate(r.reviewed))} · ${esc(T("rebuilt"))} ${esc(fmtDate(r.updated))} · ${esc(T("reviewer"))}: ${esc(r.reviewer)}</span></div>
+      <div class="badges">${statusPill(r.status)}<span class="mono" style="color:var(--mute)">${esc(T("lReviewed"))} ${esc(fmtDate(r.reviewed))} · ${esc(T("rebuilt"))} ${esc(fmtDate(r.updated))} · ${esc(T("reviewer"))}: ${esc(r.reviewer)}</span></div>
       ${r.status==="refresh"&&r.statusNote?`<p class="statusnote">↻ ${esc(L(r.statusNote))}</p>`:""}
       <div class="kwrow">${r.keywords.map(k=>`<button type="button" data-act="kwgo" data-v="${esc(k.k)}">${esc(L(k))}</button>`).join("")}</div>
     </header>
   </div>
   <div class="wrap">
-    <section class="strip" aria-label="Verdict">
-      <div><h2>${esc(T("wWhy"))}</h2><p>${esc(L(r.strip.why))}</p></div>
-      <div><h2>${esc(T("wTake"))}</h2><p>${esc(L(r.strip.take))}</p></div>
-      <div><h2>${esc(T("wNext"))}</h2><p>${esc(L(r.strip.next))}</p></div>
+    <section class="strip" aria-label="At a glance">
+      <div><h2>${esc(T("wWhat"))}</h2><p>${esc(L(r.strip.what))}</p></div>
+      <div><h2>${esc(T("wMoney"))}</h2><p>${esc(L(r.strip.money))}</p></div>
+      <div><h2>${esc(T("wCore"))}</h2><p>${esc(L(r.strip.core))}</p></div>
     </section>
     <div class="doc">
       <nav class="toc" aria-label="${esc(T("onPage"))}"><h2 class="mono">${esc(T("onPage"))}</h2><ol>
-        <li><button type="button" data-act="toc" data-v="score"><i>00</i>${esc(T("secScore"))}</button></li>
         ${SECS.map(s=>`<li><button type="button" data-act="toc" data-v="${s[1]}"><i>0${s[0]}</i>${esc(s[2])}</button></li>`).join("")}</ol></nav>
       <div>
-        <section class="sec" id="sec-score" data-sec="score" style="margin-top:0;border-top:0;padding-top:34px">
-          <div class="score">${r.scores.map(s=>{const k=byId(SCORE_KEYS.map(x=>({...x,id:x.k})),s.k);return `<div class="score-row"><b>${esc(L(k))}</b><span>${bars(s.v)} <span class="mono" style="margin-left:8px">${s.v}/5</span></span><p>${esc(L(s.note))}</p></div>`}).join("")}</div>
-          <div class="score-total"><span class="big">${total}<small>/25</small></span><span><span class="mono" style="color:var(--mute)">${esc(T("conf"))}</span><br><b style="font:600 20px var(--f-display);text-transform:uppercase">${esc(L(CONF[r.confidence]))}</b></span><span style="color:var(--mute);font-size:13.5px;max-width:34ch">${esc(T("scoreNote"))}</span></div>
-        </section>
         ${sec("01","snap",T("s1"),snap)}
         ${sec("02","model",T("s2"),model)}
         ${sec("03","nums",T("s3"),nums)}
-        ${sec("04","mkt",T("s4"),mkt)}
-        ${sec("05","risk",T("s5"),risk)}
-        ${sec("06","steal",T("s6"),steal)}
-        ${sec("07","qs",T("s7"),qs)}
-        ${sec("08","app",T("s8"),app)}
-        ${sec("09","src",T("s9"),src)}
+        ${sec("04","core",T("s4"),core)}
+        ${sec("05","mkt",T("s5"),mkt)}
+        ${sec("06","unk",T("s6"),unk)}
+        ${sec("07","app",T("s7"),app)}
+        ${sec("08","src",T("s8"),src)}
         <div class="pn">${prev?`<a href="#${prev.id}">← ${esc(prev.name)}</a>`:`<a href="#archive">← ${esc(T("back"))}</a>`}${next?`<a href="#${next.id}">${esc(next.name)} →</a>`:""}</div>
       </div>
     </div>
@@ -1299,15 +3269,11 @@ function renderMethod(){
       ${defs(m.order.items,x=>({a:esc(L(x.n)),b:esc(L(x.d))}))}</section>
     <section class="sec"><div class="sec-h"><span class="sec-n">02</span><h2 class="sec-t">${esc(L(m.evid.h))}</h2></div>
       ${defs(Object.keys(EVID),k=>({a:evTag(k),b:esc(L(EVID[k].d))}))}</section>
-    <section class="sec"><div class="sec-h"><span class="sec-n">03</span><h2 class="sec-t">${esc(L(m.score.h))}</h2></div>
-      ${defs(SCORE_KEYS,x=>({a:esc(L(x)),b:esc(L(x.d))}))}<p class="hint">${esc(L(m.score.foot))}</p></section>
-    <section class="sec"><div class="sec-h"><span class="sec-n">04</span><h2 class="sec-t">${esc(L(m.verd.h))}</h2></div>
-      ${defs(VERDICTS,x=>({a:verdictPill(x.id),b:esc(L(x.d))}))}</section>
-    <section class="sec"><div class="sec-h"><span class="sec-n">05</span><h2 class="sec-t">${esc(L(m.stat.h))}</h2></div>
+    <section class="sec"><div class="sec-h"><span class="sec-n">03</span><h2 class="sec-t">${esc(L(m.stat.h))}</h2></div>
       ${defs(STATUSES,x=>({a:statusPill(x.id),b:esc(L(x.d))}))}</section>
-    <section class="sec"><div class="sec-h"><span class="sec-n">06</span><h2 class="sec-t">${esc(L(m.find.h))}</h2></div>
+    <section class="sec"><div class="sec-h"><span class="sec-n">04</span><h2 class="sec-t">${esc(L(m.find.h))}</h2></div>
       ${defs(m.find.items,x=>({a:esc(L(x.n)),b:esc(L(x.d))}))}</section>
-    <section class="sec"><div class="sec-h"><span class="sec-n">07</span><h2 class="sec-t">${esc(L(m.mods.h))}</h2></div>
+    <section class="sec"><div class="sec-h"><span class="sec-n">05</span><h2 class="sec-t">${esc(L(m.mods.h))}</h2></div>
       ${defs(m.mods.items,x=>({a:esc(L(x.n)),b:esc(L(x.d))}))}</section>
   </div>`;
   const h=$("#rh"); if(h) h.focus({preventScroll:true});
