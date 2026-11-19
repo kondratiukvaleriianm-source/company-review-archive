@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Company Review Archive</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Playfair+Display:ital,wght@0,500;1,500;1,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Layout idea: an archive binder. Cream paper, one vermilion accent, numbered index rows,
+     condensed caps headlines with italic serif accents, a black verdict block. */
+  --paper:#EAE5D9;
+  --paper-deep:#DED7C6;
+  --card:#F3EFE5;
+  --ink:#16130F;
+  --ink-soft:#3B372F;
+  --mute:#5E584C;
+  --red:#D93A22;
+  --red-text:#B52A14;
+  --red-on-dark:#FF6F57;
+  --rule:rgba(22,19,15,.18);
+  --f-display:'Oswald','Arial Narrow',Impact,sans-serif;
+  --f-serif:'Playfair Display',Georgia,'Times New Roman',serif;
+  --f-body:'IBM Plex Sans',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --f-mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;background:var(--paper)}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 16px/1.55 var(--f-body);-webkit-font-smoothing:antialiased;min-height:100%}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.5;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .09 0 0 0 0 .08 0 0 0 0 .06 0 0 0 .22 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+a{color:inherit}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--red-text);outline-offset:3px}
+mark{background:rgba(217,58,34,.22);color:inherit;padding:0 1px}
+.wrap{position:relative;z-index:1;max-width:1280px;margin:0 auto;padding:0 clamp(16px,3vw,40px)}
+.mono{font-family:var(--f-mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase}
+
+/* top bar */
+.topbar{position:relative;z-index:2;border-bottom:1px solid var(--ink)}
+.topbar .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-top:14px;padding-bottom:14px}
+.wordmark{font:600 20px/1 var(--f-display);text-transform:uppercase;text-decoration:none;letter-spacing:.02em}
+.wordmark em{font:italic 500 20px var(--f-serif);color:var(--red-text);text-transform:none}
+.topnav{display:flex;align-items:center;gap:22px}
+.topnav a{font:500 12px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;text-decoration:none;padding:6px 0;border-bottom:1px solid transparent}
+.topnav a:hover,.topnav a[aria-current="page"]{border-color:var(--ink)}
+.lang{display:flex;border:1px solid var(--ink)}
+.lang button{background:transparent;border:0;padding:6px 11px;font:500 12px var(--f-mono);letter-spacing:.06em}
+.lang button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+
+/* hero */
+.hero{display:grid;grid-template-columns:1fr auto;gap:32px;align-items:end;padding:clamp(28px,5vw,56px) 0 28px}
+.hero .kick{margin:0 0 14px;color:var(--red-text)}
+.hero h1{margin:0;font:700 clamp(60px,13vw,176px)/.86 var(--f-display);text-transform:uppercase;letter-spacing:-.01em}
+.hero h1 span{display:block;font:italic 500 clamp(54px,11.5vw,156px)/1 var(--f-serif);text-transform:none;color:var(--red);letter-spacing:-.02em}
+.hero h1 span b{font-weight:400;font-style:normal;color:var(--ink)}
+.hero-sub{max-width:52ch;margin:22px 0 0;font-size:18px;color:var(--ink-soft)}
+.seal{width:clamp(130px,16vw,190px);height:auto;flex:none}
+.seal text{font-family:var(--f-mono);font-size:11.5px;letter-spacing:.14em;fill:var(--ink)}
+.seal .seal-n{font-family:var(--f-display);font-weight:600;font-size:52px;letter-spacing:0;fill:var(--paper)}
+.seal-ring{transform-box:view-box;transform-origin:50% 50%}
+@media(prefers-reduced-motion:no-preference){.seal-ring{animation:spin 70s linear infinite}}
+@keyframes spin{to{transform:rotate(360deg)}}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--ink);border-bottom:1px solid var(--ink)}
+.stat{padding:14px 18px;border-left:1px solid var(--rule)}
+.stat:first-child{padding-left:0;border-left:0}
+.stat b{display:block;font:600 34px/1 var(--f-display);font-variant-numeric:tabular-nums}
+.stat span{display:block;margin-top:6px;color:var(--mute)}
+
+/* search */
+.searchbar{padding:34px 0 8px}
+.search{display:flex;align-items:center;gap:14px;border-bottom:2px solid var(--ink);padding-bottom:10px}
+.search svg{flex:none}
+.search input{flex:1;min-width:0;border:0;background:transparent;font:500 clamp(20px,3vw,30px)/1.2 var(--f-display);text-transform:none;color:var(--ink);padding:6px 0;border-radius:0}
+.search input::placeholder{color:var(--mute);opacity:1}
+.search input:focus{outline:none}
+.search:focus-within{border-color:var(--red)}
+.search .x{background:transparent;border:1px solid var(--ink);padding:4px 10px}
+.search-help{margin:10px 0 0;color:var(--mute);font-size:13px}
+.quick{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;align-items:center}
+.quick .mono{color:var(--mute);margin-right:4px}
+
+/* layout */
+.layout{display:grid;grid-template-columns:270px minmax(0,1fr);gap:clamp(28px,4vw,56px);padding:36px 0 80px;align-items:start}
+.side{position:sticky;top:16px;max-height:calc(100vh - 32px);overflow:auto;padding-right:6px}
+.fgroup{border-top:1px solid var(--ink);padding:14px 0 16px}
+.fgroup>summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font:500 12px var(--f-mono);letter-spacing:.08em;text-transform:uppercase}
+.fgroup>summary::-webkit-details-marker{display:none}
+.fgroup>summary::after{content:"+";font:500 18px/1 var(--f-mono)}
+.fgroup[open]>summary::after{content:"–"}
+.fgroup ul{list-style:none;margin:12px 0 0;padding:0}
+.flist button{display:flex;width:100%;justify-content:space-between;align-items:baseline;gap:10px;background:transparent;border:0;border-bottom:1px solid var(--rule);padding:9px 0;text-align:left;font-size:15px}
+.flist li:nth-child(even) button span:first-child{font:italic 500 16px var(--f-serif)}
+.flist button .n{font:400 12px var(--f-mono);color:var(--mute);font-variant-numeric:tabular-nums;white-space:nowrap}
+.flist button[aria-pressed="true"]{color:var(--red-text);font-weight:600;border-bottom-color:var(--red)}
+.flist button[aria-pressed="true"] .n{color:var(--red-text)}
+.flist button:disabled{opacity:.45;cursor:default}
+.flist button:not(:disabled):hover{background:var(--card)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.chip{background:transparent;border:1px solid var(--ink);border-radius:999px;padding:5px 12px;font:400 13px/1.2 var(--f-body);display:inline-flex;gap:8px;align-items:center}
+.chip .n{font:400 11px var(--f-mono);color:var(--mute)}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.chip[aria-pressed="true"] .n{color:var(--paper)}
+.chip:disabled{opacity:.4;cursor:default}
+.chip:not(:disabled):not([aria-pressed="true"]):hover{background:var(--card)}
+.hint{margin:10px 0 0;font-size:12.5px;color:var(--mute)}
+.mobile-filter{display:none}
+
+/* results */
+.res-head{display:flex;flex-wrap:wrap;gap:16px 28px;align-items:end;justify-content:space-between;border-bottom:2px solid var(--ink);padding-bottom:14px}
+.res-head h2{margin:0;font:700 clamp(36px,5vw,60px)/.95 var(--f-display);text-transform:uppercase}
+.res-head h2 em{font:italic 500 clamp(34px,4.6vw,56px) var(--f-serif);color:var(--red);text-transform:none;margin-left:.15em}
+.res-tools{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.res-tools .count{font:500 12px var(--f-mono);letter-spacing:.06em;text-transform:uppercase}
+.sel{background:var(--card);border:1px solid var(--ink);padding:7px 10px;font:400 13px var(--f-body);border-radius:0;color:var(--ink)}
+.seg{display:flex;border:1px solid var(--ink)}
+.seg button{background:transparent;border:0;padding:7px 12px;font:500 12px var(--f-mono);letter-spacing:.06em;text-transform:uppercase}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.active{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 0;align-items:center}
+.active .chip{background:var(--card)}
+.active .clear{background:transparent;border:0;text-decoration:underline;padding:4px 6px;font-size:13px}
+
+.rows{list-style:none;margin:0;padding:0}
+.row{display:grid;grid-template-columns:64px minmax(0,1fr) auto;gap:8px 24px;padding:24px 0;border-bottom:1px solid var(--ink);text-decoration:none;align-items:center;position:relative}
+.row:hover{background:var(--card)}
+.row .no{font:600 28px/1 var(--f-display);color:var(--red);font-variant-numeric:tabular-nums}
+.row h3{margin:0;font:600 clamp(26px,3.2vw,38px)/1.02 var(--f-display);text-transform:uppercase}
+.row:hover h3{text-decoration:underline;text-decoration-color:var(--red);text-decoration-thickness:3px;text-underline-offset:5px}
+.row .tag{margin:6px 0 0;font:italic 500 18px/1.35 var(--f-serif);color:var(--ink-soft);max-width:60ch}
+.row .meta{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:10px;color:var(--mute)}
+.row .snip{margin:8px 0 0;font-size:13.5px;color:var(--mute)}
+.aside{display:flex;gap:30px;align-items:center}
+.cell small{display:block;font:500 10.5px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--mute);margin-bottom:4px}
+.cell b{font:600 22px/1 var(--f-display);font-variant-numeric:tabular-nums;white-space:nowrap}
+.cell .ev{margin-top:5px}
+.bars{display:flex;gap:2px;margin-top:6px}
+.bars i{width:12px;height:7px;background:transparent;border:1px solid var(--ink)}
+.bars i.on{background:var(--red);border-color:var(--red)}
+.pill{display:inline-flex;align-items:center;gap:6px;font:500 11px/1 var(--f-mono);letter-spacing:.06em;text-transform:uppercase;padding:6px 10px;border:1px solid var(--ink);white-space:nowrap}
+.v-learn{background:var(--ink);color:var(--paper)}
+.v-dig{background:var(--red-text);color:var(--paper);border-color:var(--red-text)}
+.v-track{background:transparent}
+.v-pass{background:transparent;color:var(--mute);border:1px dashed var(--mute)}
+.s-refresh{color:var(--red-text);border-color:var(--red-text)}
+.s-reviewed{background:transparent}
+.s-research,.s-queue{border-style:dashed}
+
+.grid{list-style:none;margin:22px 0 0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px}
+.card{display:flex;flex-direction:column;gap:12px;height:100%;padding:22px;background:var(--card);border:1px solid var(--ink);text-decoration:none;position:relative}
+.card:hover{background:#F8F5EC;box-shadow:6px 6px 0 var(--red)}
+.card .no{font:700 64px/.9 var(--f-display);color:var(--red)}
+.card h3{margin:0;font:600 28px/1.02 var(--f-display);text-transform:uppercase}
+.card .tag{margin:0;font:italic 500 16.5px/1.4 var(--f-serif);color:var(--ink-soft)}
+.card dl{margin:auto 0 0;display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:13.5px;border-top:1px solid var(--ink);padding-top:12px}
+.card dt{color:var(--mute);font:500 10.5px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;padding-top:3px}
+.card dd{margin:0;font-variant-numeric:tabular-nums}
+.card .pills{display:flex;gap:8px;flex-wrap:wrap}
+
+.empty{padding:56px 0;border-bottom:1px solid var(--ink)}
+.empty h3{margin:0 0 8px;font:600 34px/1.05 var(--f-display);text-transform:uppercase}
+.empty p{margin:0 0 18px;color:var(--ink-soft);max-width:52ch}
+.btn{background:var(--ink);color:var(--paper);border:0;padding:11px 18px;font:500 12px var(--f-mono);letter-spacing:.08em;text-transform:uppercase}
+.btn:hover{background:var(--red-text)}
+
+/* detail */
+.crumbs{display:flex;flex-wrap:wrap;gap:10px;padding:20px 0 0;color:var(--mute)}
+.crumbs a,.crumbs button{background:transparent;border:0;padding:0;text-decoration:underline;font:inherit;letter-spacing:inherit;text-transform:inherit;color:var(--ink)}
+.rhead{padding:22px 0 30px}
+.rhead .kick{margin:0 0 12px;color:var(--red-text)}
+.rhead h1{margin:0;font:700 clamp(48px,9vw,128px)/.9 var(--f-display);text-transform:uppercase;overflow-wrap:anywhere}
+.rhead .tag{margin:18px 0 0;font:italic 500 clamp(20px,2.4vw,28px)/1.35 var(--f-serif);max-width:44ch}
+.rhead .aka{margin:14px 0 0;color:var(--mute)}
+.badges{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px;align-items:center}
+.statusnote{margin:12px 0 0;max-width:62ch;font-size:14px;color:var(--red-text);font-weight:500}
+.strip{background:var(--ink);color:var(--paper);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0}
+.strip>div{padding:clamp(20px,3vw,34px)}
+.strip>div+div{border-left:1px solid rgba(234,229,217,.25)}
+.strip h2{margin:0 0 14px;font:500 12px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--red-on-dark)}
+.strip p{margin:0;font-size:16.5px;line-height:1.5}
+.doc>div{min-width:0}
+.doc{display:grid;grid-template-columns:200px minmax(0,1fr);gap:clamp(24px,4vw,56px);padding-bottom:80px}
+.toc{position:sticky;top:16px;align-self:start;padding-top:34px}
+.toc h2{margin:0 0 10px;color:var(--mute);font-weight:500}
+.toc ol{list-style:none;margin:0;padding:0;border-top:1px solid var(--ink)}
+.toc button{display:flex;gap:10px;width:100%;text-align:left;background:transparent;border:0;border-bottom:1px solid var(--rule);padding:9px 0;font-size:14px}
+.toc button i{font:500 11px/1.9 var(--f-mono);color:var(--mute);font-style:normal}
+.toc button[aria-current="true"]{color:var(--red-text);font-weight:600}
+.toc button[aria-current="true"] i{color:var(--red-text)}
+.sec{padding:52px 0 8px;border-top:2px solid var(--ink);margin-top:44px;scroll-margin-top:12px}
+.sec:first-child{margin-top:0}
+.sec-h{display:flex;align-items:baseline;gap:18px;margin-bottom:26px}
+.sec-n{font:700 clamp(46px,7vw,88px)/.8 var(--f-display);color:var(--red)}
+.sec-t{margin:0;font:600 clamp(26px,3.4vw,42px)/1.05 var(--f-display);text-transform:uppercase}
+.sec h3{margin:34px 0 12px;font:500 12px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--mute)}
+.sec p{max-width:66ch}
+.score{display:grid;gap:0;margin:0 0 6px;border-top:1px solid var(--ink)}
+.score-row{display:grid;grid-template-columns:minmax(150px,1fr) 150px minmax(0,2fr);gap:8px 24px;align-items:baseline;padding:14px 0;border-bottom:1px solid var(--rule)}
+.score-row b{font:600 18px var(--f-display);text-transform:uppercase}
+.score-row .bars i{width:20px;height:9px}
+.score-row p{margin:0;font-size:14.5px;color:var(--ink-soft);max-width:none}
+.score-total{display:flex;flex-wrap:wrap;gap:12px 30px;align-items:center;padding:16px 0}
+.score-total .big{font:700 52px/1 var(--f-display);font-variant-numeric:tabular-nums}
+.score-total .big small{font:500 22px var(--f-display);color:var(--mute)}
+.dl{margin:0;border-top:1px solid var(--ink)}
+.dl .r{display:grid;grid-template-columns:200px minmax(0,1fr) auto;gap:6px 24px;padding:14px 0;border-bottom:1px solid var(--rule);align-items:start}
+.dl dt{font:500 11.5px/1.7 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--mute)}
+.dl dd{margin:0}
+.dl .note{display:block;margin-top:4px;font-size:13.5px;color:var(--mute)}
+.refs{font:400 11px var(--f-mono);color:var(--mute);white-space:nowrap;margin-left:8px}
+.ev{display:inline-flex;align-items:center;gap:7px;font:500 11px/1.2 var(--f-mono);letter-spacing:.05em;text-transform:uppercase;white-space:nowrap}
+.ev i{width:11px;height:11px;border-radius:50%;border:1.5px solid var(--ink);display:inline-block;flex:none}
+.ev-reported i{background:var(--ink)}
+.ev-claimed i{background:transparent}
+.ev-estimate i{background:linear-gradient(90deg,var(--red) 50%,transparent 50%);border-color:var(--red-text)}
+.ev-estimate{color:var(--red-text)}
+.ev-unknown{color:var(--mute)}
+.ev-unknown i{border-style:dashed;border-color:var(--mute)}
+.tw{overflow-x:auto;margin:0 0 6px}
+.tbl{width:100%;border-collapse:collapse;font-size:14.5px;min-width:560px}
+.tbl th{text-align:left;font:500 11px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--mute);padding:0 16px 10px 0;border-bottom:1px solid var(--ink);white-space:nowrap}
+.tbl td{padding:13px 16px 13px 0;border-bottom:1px solid var(--rule);vertical-align:top;font-variant-numeric:tabular-nums}
+.tbl td:first-child{font-weight:600}
+.tbl .ev{margin-right:8px}
+.tbl .sub{display:block;margin-top:3px;font-size:13px;color:var(--mute);font-weight:400}
+.math{background:var(--paper-deep);border-left:4px solid var(--red);padding:20px 24px;margin:6px 0 0}
+.math h3{margin:0 0 12px}
+.math pre{margin:0 0 14px;font:400 14px/1.7 var(--f-mono);white-space:pre-wrap;font-variant-numeric:tabular-nums}
+.math p{margin:10px 0 0;font-size:14px;color:var(--ink-soft);max-width:72ch}
+.callout{border:1px solid var(--ink);background:var(--card);padding:18px 22px;margin-top:24px}
+.callout h3{margin:0 0 10px}
+.callout ul{margin:0;padding-left:20px}
+.callout li{margin:5px 0}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:clamp(20px,4vw,48px)}
+.list{list-style:none;margin:0;padding:0;border-top:1px solid var(--ink)}
+.list li{padding:13px 0;border-bottom:1px solid var(--rule);display:flex;gap:14px;align-items:flex-start}
+.list li>span{min-width:0}
+.list li>span:last-child{flex:1}
+.list.num{counter-reset:n}
+.list.num li::before{counter-increment:n;content:counter(n,decimal-leading-zero);font:600 20px/1.2 var(--f-display);color:var(--red);flex:none;min-width:30px}
+.list.q li::before{content:"?";font:600 20px/1.2 var(--f-display);color:var(--red);flex:none;min-width:30px}
+.list.plus li::before{content:"+";font:600 20px/1.2 var(--f-display);color:var(--ink);flex:none;min-width:30px}
+.sev{font:500 10.5px/1 var(--f-mono);letter-spacing:.06em;text-transform:uppercase;padding:5px 8px;border:1px solid var(--ink);flex:none;min-width:84px;text-align:center}
+.sev-high{background:var(--red-text);border-color:var(--red-text);color:var(--paper)}
+.sev-med{background:transparent}
+.sev-low{border-color:var(--mute);color:var(--mute)}
+.sev-unk{border-style:dashed;border-color:var(--mute);color:var(--mute)}
+.kwrow{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.kwrow button{background:transparent;border:1px solid var(--ink);border-radius:999px;padding:5px 12px;font-size:13px}
+.kwrow button:hover{background:var(--ink);color:var(--paper)}
+details.app{border-top:1px solid var(--ink)}
+details.app:last-of-type{border-bottom:1px solid var(--ink)}
+details.app>summary{cursor:pointer;list-style:none;padding:16px 0;display:flex;justify-content:space-between;gap:16px;font:600 20px var(--f-display);text-transform:uppercase}
+details.app>summary::-webkit-details-marker{display:none}
+details.app>summary::after{content:"+";font:500 22px/1 var(--f-mono)}
+details.app[open]>summary::after{content:"–"}
+details.app .in{padding:2px 0 26px}
+.src li{display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:6px 16px;padding:13px 0;border-bottom:1px solid var(--rule)}
+.src .id{font:600 16px var(--f-display);color:var(--red-text)}
+.src .t{font-weight:600}
+.src .u{font-size:13.5px;color:var(--mute);word-break:break-all}
+.src .u a{color:var(--ink)}
+.src .ty{font:500 10.5px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--mute);text-align:right}
+.log li{display:grid;grid-template-columns:110px minmax(0,1fr);gap:16px;padding:13px 0;border-bottom:1px solid var(--rule)}
+.log .d{font:500 12px/1.8 var(--f-mono);color:var(--mute)}
+.pn{display:flex;justify-content:space-between;gap:16px;border-top:2px solid var(--ink);padding:18px 0}
+.pn a{font:600 20px var(--f-display);text-transform:uppercase;text-decoration:none}
+.pn a:hover{color:var(--red-text)}
+
+/* method */
+.method h1{margin:0;font:700 clamp(52px,10vw,140px)/.9 var(--f-display);text-transform:uppercase}
+.method h1 em{font:italic 500 .9em var(--f-serif);color:var(--red);text-transform:none}
+.method .lead{max-width:56ch;font-size:19px;color:var(--ink-soft);margin:20px 0 40px}
+.method .def{display:grid;grid-template-columns:200px minmax(0,1fr);gap:8px 28px;padding:14px 0;border-bottom:1px solid var(--rule);align-items:baseline}
+.method .def:first-of-type{border-top:1px solid var(--ink)}
+.method .def p{margin:0;max-width:62ch}
+.method .def b{font:600 18px var(--f-display);text-transform:uppercase}
+
+.foot{position:relative;z-index:1;border-top:1px solid var(--ink);padding:22px 0 40px;color:var(--mute)}
+.foot .wrap{display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-between}
+
+.drawer-bg{display:none}
+@media(max-width:1000px){
+  .row{grid-template-columns:48px minmax(0,1fr)}
+  .row .aside{grid-column:2;flex-wrap:wrap;gap:14px 26px}
+  .doc{grid-template-columns:minmax(0,1fr)}
+  .toc{display:none}
+  .strip{grid-template-columns:minmax(0,1fr)}
+  .strip>div+div{border-left:0;border-top:1px solid rgba(234,229,217,.25)}
+}
+@media(max-width:900px){
+  .layout{grid-template-columns:minmax(0,1fr)}
+  .mobile-filter{display:inline-flex}
+  .side{position:fixed;z-index:20;inset:0 auto 0 0;width:min(340px,88vw);max-height:none;background:var(--paper);padding:20px 20px 40px;transform:translateX(-102%);transition:transform .22s ease;border-right:1px solid var(--ink)}
+  .side.open{transform:none}
+  .drawer-bg.open{display:block;position:fixed;inset:0;background:rgba(22,19,15,.45);z-index:19}
+  .hero{grid-template-columns:minmax(0,1fr)}
+  .seal{display:none}
+  .score-row{grid-template-columns:minmax(0,1fr)}
+  .dl .r{grid-template-columns:minmax(0,1fr)}
+  .two{grid-template-columns:minmax(0,1fr)}
+  .method .def{grid-template-columns:minmax(0,1fr)}
+  .src li{grid-template-columns:40px minmax(0,1fr)}
+  .src .ty{grid-column:2;text-align:left}
+}
+@media(max-width:640px){
+  .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .stat:nth-child(odd){padding-left:0;border-left:0}
+  .stat:nth-child(n+3){border-top:1px solid var(--rule)}
+  .search input{font-size:18px}
+  .topbar .wrap{flex-wrap:wrap;gap:10px}
+  .topnav{gap:14px;flex-wrap:wrap}
+  .lang button{padding:6px 9px}
+  .wordmark,.wordmark em{font-size:18px}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.side{transition:none}}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap">
+    <a class="wordmark" href="#archive" data-i="wordmark"></a>
+    <nav class="topnav" aria-label="Main">
+      <a href="#archive" id="nav-archive" data-i="navArchive"></a>
+      <a href="#method" id="nav-method" data-i="navMethod"></a>
+      <div class="lang" role="group" aria-label="Language">
+        <button type="button" data-act="lang" data-v="en" aria-pressed="true">EN</button>
+        <button type="button" data-act="lang" data-v="uk" aria-pressed="false">УКР</button>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main id="app" tabindex="-1"></main>
+
+<footer class="foot"><div class="wrap mono"><span id="foot-l"></span><span id="foot-r"></span></div></footer>
+
+<script>
+/* ================================================================
+   DATA — one object per review. Add new reviews above the marker
+   line at the end of REVIEWS. Every text is {en, uk}.
+   ================================================================ */
+const CATS=[
+ {id:"community",en:"Communities & clubs",uk:"Спільноти та клуби"},
+ {id:"saas",en:"Software & SaaS",uk:"Софт і SaaS"},
+ {id:"marketplace",en:"Marketplaces",uk:"Маркетплейси"},
+ {id:"fintech",en:"Fintech & finance",uk:"Фінтех і фінанси"},
+ {id:"media",en:"Media & content",uk:"Медіа та контент"},
+ {id:"events",en:"Events & experiences",uk:"Події та досвід"},
+ {id:"services",en:"Services & agencies",uk:"Сервіси та агенції"},
+ {id:"hardware",en:"Hardware & consumer",uk:"Пристрої та споживчі товари"},
+ {id:"other",en:"Other",uk:"Інше"}
+];
+const MODELS=[
+ {id:"membership",en:"Membership / subscription",uk:"Членство / підписка"},
+ {id:"ticketing",en:"Tickets & event fees",uk:"Квитки та плата за події"},
+ {id:"franchise",en:"Franchise / licensing",uk:"Франшиза / ліцензування"},
+ {id:"sponsorship",en:"Sponsorship / ads",uk:"Спонсорство / реклама"},
+ {id:"takerate",en:"Take rate / commission",uk:"Комісія з транзакцій"},
+ {id:"services",en:"Services / consulting",uk:"Послуги / консалтинг"},
+ {id:"software",en:"Software licences",uk:"Ліцензії на ПЗ"},
+ {id:"hardware",en:"Hardware sales",uk:"Продаж пристроїв"},
+ {id:"usage",en:"Usage-based",uk:"Оплата за використання"}
+];
+const REGIONS={
+ ua:{en:"Ukraine",uk:"Україна"},pl:{en:"Poland",uk:"Польща"},pt:{en:"Portugal",uk:"Португалія"},
+ cy:{en:"Cyprus",uk:"Кіпр"},benelux:{en:"Benelux",uk:"Бенелюкс"},es:{en:"Spain",uk:"Іспанія"},
+ us:{en:"United States",uk:"США"},gb:{en:"United Kingdom",uk:"Велика Британія"},de:{en:"Germany",uk:"Німеччина"},
+ ae:{en:"UAE",uk:"ОАЕ"},global:{en:"Global",uk:"Глобально"}
+};
+const VERDICTS=[
+ {id:"learn",en:"Learn from",uk:"Вчимося",d:{en:"Not a target, but its model or tactics are worth borrowing.",uk:"Не ціль, але модель чи тактики варто запозичити."}},
+ {id:"dig",en:"Dig deeper",uk:"Копати глибше",d:{en:"Worth a deeper research round: interviews, financials, direct contact.",uk:"Варто глибшого дослідження: інтерв’ю, фінанси, прямий контакт."}},
+ {id:"track",en:"Track",uk:"Стежимо",d:{en:"Interesting, no action now. Check again at the next refresh.",uk:"Цікаво, але дій зараз немає. Повертаємось на наступному оновленні."}},
+ {id:"pass",en:"Pass",uk:"Пропускаємо",d:{en:"Reviewed. Not relevant or not strong enough.",uk:"Переглянуто. Нерелевантно або недостатньо сильно."}}
+];
+const STATUSES=[
+ {id:"queue",en:"In queue",uk:"У черзі",d:{en:"Listed for research, nothing written yet.",uk:"У списку на дослідження, тексту ще немає."}},
+ {id:"research",en:"Researching",uk:"У роботі",d:{en:"Research under way, sections incomplete.",uk:"Дослідження триває, розділи неповні."}},
+ {id:"reviewed",en:"Reviewed",uk:"Готово",d:{en:"All sections filled, figures tagged and dated.",uk:"Усі розділи заповнені, цифри позначені й датовані."}},
+ {id:"refresh",en:"Needs refresh",uk:"Потребує оновлення",d:{en:"Something material has happened since the figures were collected.",uk:"Після збору цифр сталося щось суттєве."}}
+];
+const EVID={
+ reported:{en:"Reported",uk:"Підтверджено",d:{en:"From a primary or audited source: filings, official statements, verified data.",uk:"З первинного чи аудованого джерела: звітність, офіційні заяви, перевірені дані."}},
+ claimed:{en:"Company-claimed",uk:"Заявлено компанією",d:{en:"Stated by the company itself and not independently checked.",uk:"Заявлено самою компанією, незалежно не перевірено."}},
+ estimate:{en:"Our estimate",uk:"Наша оцінка",d:{en:"Calculated by us from stated inputs, with the math shown.",uk:"Розраховано нами із заявлених вхідних даних, розрахунок показано."}},
+ unknown:{en:"Unknown",uk:"Невідомо",d:{en:"Looked for and not found. Never left blank.",uk:"Шукали й не знайшли. Ніколи не залишаємо порожнім."}}
+};
+const SEV={high:{en:"High",uk:"Високий"},med:{en:"Medium",uk:"Середній"},low:{en:"Low",uk:"Низький"},unk:{en:"Unknown",uk:"Невідомо"}};
+const CONF={low:{en:"Low",uk:"Низька"},med:{en:"Medium",uk:"Середня"},high:{en:"High",uk:"Висока"}};
+const GROW={up:{en:"Growing",uk:"Зростає"},flat:{en:"Flat",uk:"Стабільно"},down:{en:"Declining",uk:"Знижується"},unk:{en:"Unknown",uk:"Невідомо"}};
+const BANDS=[
+ {id:"b0",en:"Under $1M",uk:"До $1 млн"},{id:"b1",en:"$1–10M",uk:"$1–10 млн"},
+ {id:"b2",en:"$10–100M",uk:"$10–100 млн"},{id:"b3",en:"$100M+",uk:"$100 млн+"},{id:"bu",en:"Unknown",uk:"Невідомо"}
+];
+const SCORE_KEYS=[
+ {k:"model",en:"Business-model strength",uk:"Сила бізнес-моделі",d:{en:"Do the revenue streams fit together, repeat, and scale? 1 = single fragile stream, 5 = several recurring streams that reinforce each other.",uk:"Чи поєднуються джерела доходу, чи повторюються й масштабуються? 1 = одне крихке джерело, 5 = кілька регулярних джерел, що підсилюють одне одного."}},
+ {k:"revenue",en:"Revenue quality & evidence",uk:"Якість доходу та доказів",d:{en:"How solid is the money, and how well can we show it? 1 = no usable data, 5 = reported figures that reconcile.",uk:"Наскільки надійні гроші і чи можемо ми це показати? 1 = немає придатних даних, 5 = підтверджені цифри, що сходяться."}},
+ {k:"growth",en:"Growth momentum",uk:"Динаміка зростання",d:{en:"Direction and speed of customers, revenue or reach. 1 = shrinking, 5 = fast and sustained.",uk:"Напрям і швидкість росту клієнтів, доходу чи охоплення. 1 = скорочується, 5 = швидко й стабільно."}},
+ {k:"moat",en:"Defensibility",uk:"Захищеність",d:{en:"What stops a competitor copying it? 1 = nothing, 5 = network effects, scale, or rights that compound.",uk:"Що заважає конкуренту повторити? 1 = нічого, 5 = мережеві ефекти, масштаб чи права, що накопичуються."}},
+ {k:"relevance",en:"Relevance to us",uk:"Релевантність для нас",d:{en:"How directly it informs our ventures and work streams. 1 = tangential, 5 = a model we can test now.",uk:"Наскільки прямо це допомагає нашим проєктам і напрямам. 1 = дотично, 5 = модель, яку можна пробувати зараз."}}
+];
+
+const REVIEWS=[
+{
+ id:"ybc", no:1,
+ name:"Young Business Club",
+ aka:"YBC · YBC HUMAN FESTIVAL",
+ url:"https://ybc.club",
+ category:"community",
+ models:["membership","ticketing","franchise"],
+ regions:["ua","pl","pt","cy","benelux","es"],
+ founded:"2016",
+ revenue:{lo:4.054,hi:5.180,cur:"$",tag:"estimate"},
+ growth:"up", verdict:"learn", status:"refresh", confidence:"med",
+ reviewer:"Team", reviewed:"2026-09", updated:"2026-11-19",
+ relevantTo:[{en:"Clubs & communities stream",uk:"Напрям «Клуби та спільноти»"}],
+ statusNote:{en:"Figures date from September 2026. The YBC HUMAN festival (18–20 Sep) has since taken place and the club turns ten this month, so the numbers need a refresh.",uk:"Цифри від вересня 2026. Фестиваль YBC HUMAN (18–20 вересня) уже відбувся, а клубу цього місяця виповнюється десять років, тож дані потрібно оновити."},
+ keywords:[
+  {k:"business-club",en:"Business club",uk:"Бізнес-клуб"},
+  {k:"tiered-pricing",en:"Tiered pricing",uk:"Рівні за оборотом"},
+  {k:"gated-entry",en:"Gated entry",uk:"Відбір на вході"},
+  {k:"founder-led",en:"Founder-led",uk:"Засновницький бізнес"},
+  {k:"franchise-branches",en:"Franchise branches",uk:"Філії за франшизою"},
+  {k:"festival",en:"Festival",uk:"Фестиваль"},
+  {k:"peer-groups",en:"Peer groups",uk:"Peer-групи"},
+  {k:"mobile-app",en:"Mobile app",uk:"Мобільний застосунок"},
+  {k:"charity-auction",en:"Charity auctions",uk:"Благодійні аукціони"},
+  {k:"veterans",en:"Veterans programme",uk:"Ветеранська програма"}
+ ],
+ tagline:{en:"A ten-year-old business club for company owners, with a paid festival and a branch network on top.",uk:"Десятирічний бізнес-клуб для власників компаній із платним фестивалем і мережею філій."},
+ strip:{
+  why:{en:"The closest working model for our clubs & communities stream: tiers set by company turnover, a gated entry call, public prices, a paid festival on top, and a branch network that partly runs on franchise.",
+       uk:"Найближча робоча модель для нашого напряму «Клуби та спільноти»: рівні за оборотом компанії, вхід через відбірковий дзвінок, публічні ціни, платний фестиваль зверху та мережа філій, частина яких працює за франшизою."},
+  take:{en:"A founder-led membership business with several revenue layers on one audience. Nearly every figure is self-reported, so treat the numbers as directional. At list prices, memberships alone point to roughly $4–5M a year. The festival adds revenue at an unknown cost, because the package includes lodging, meals, transfers and two ships.",
+        uk:"Засновницький бізнес із членства з кількома шарами доходу на одну аудиторію. Майже всі цифри самозвітні, тож це орієнтири, а не факти. За прайсом лише членства дають приблизно $4–5 млн на рік. Фестиваль додає дохід з невідомими витратами, бо в пакет входять проживання, харчування, трансфери та два кораблі."},
+  next:{en:"Refresh the numbers after the September festival, reconcile the inconsistencies listed under Numbers, and benchmark pricing against two or three comparable clubs, for example EO and YPO.",
+        uk:"Оновити цифри після вересневого фестивалю, звірити розбіжності з розділу «Цифри» та порівняти ціни з двома-трьома схожими клубами, наприклад EO та YPO."}
+ },
+ scores:[
+  {k:"model",v:4,note:{en:"Several revenue layers on one audience: prepaid memberships, paid cross-branch events, a festival and franchise branches.",uk:"Кілька шарів доходу на одну аудиторію: передплачені членства, платні події в інших філіях, фестиваль і франшизні філії."}},
+  {k:"revenue",v:2,note:{en:"Prices are public, but counts are self-reported, there are no financials and some figures conflict.",uk:"Ціни публічні, але кількості самозвітні, фінансів немає, а частина цифр суперечить одна одній."}},
+  {k:"growth",v:4,note:{en:"229 new members in H1 2026, a new branch and 500+ festival registrations, all company-reported.",uk:"229 нових учасників у першому півріччі 2026, нова філія і 500+ реєстрацій на фестиваль, усе зі слів компанії."}},
+  {k:"moat",v:3,note:{en:"A ten-year brand and a network of 1,000+ founders, but low switching costs and dependence on the founder.",uk:"Десятирічний бренд і мережа 1000+ засновників, але низькі витрати на перехід і залежність від засновника."}},
+  {k:"relevance",v:4,note:{en:"Pricing, tiering and peer-group formats map directly onto the clubs & communities stream.",uk:"Ціни, рівні та формат peer-груп прямо стосуються напряму «Клуби та спільноти»."}}
+ ],
+ snapshot:[
+  {l:{en:"Founded",uk:"Засновано"},v:{en:"2016",uk:"2016"},tag:"claimed",src:["S1"],note:{en:"Another passage dates the start of community-building to 2017. To reconcile.",uk:"В іншому місці початок побудови спільноти датовано 2017 роком. Потрібно звірити."}},
+  {l:{en:"Lead",uk:"Керівник"},v:{en:"Andriy Ostapchuk, founder, co-owner and managing partner",uk:"Андрій Остапчук, засновник, співвласник і керуючий партнер"},tag:"claimed",src:["S1","S3"]},
+  {l:{en:"Structure",uk:"Структура"},v:{en:"11 branch locations listed, stated as “10+”. One branch, Cyprus, runs as a franchise; the rest are run directly. No central office: the large Kyiv office has closed.",uk:"11 локацій у списку, заявлено «10+». Одна філія, Кіпр, працює за франшизою, решта напряму. Центрального офісу немає: великий київський офіс закрито."},tag:"claimed",src:["S1"]},
+  {l:{en:"Footprint",uk:"Географія"},v:{en:"Ukraine (Kyiv, Lviv, Kharkiv, Odesa, Dnipro), Poland (Warsaw, Wrocław), Portugal (Lisbon), Cyprus, Benelux, Spain (Valencia). The club says 4 countries; the list covers at least 6.",uk:"Україна (Київ, Львів, Харків, Одеса, Дніпро), Польща (Варшава, Вроцлав), Португалія (Лісабон), Кіпр, Бенелюкс, Іспанія (Валенсія). Клуб заявляє 4 країни, у списку щонайменше 6."},tag:"claimed",src:["S1"]},
+  {l:{en:"Members",uk:"Учасники"},v:{en:"1,190 entrepreneurs in 2026: 612, 444 and 141 across three paid tiers, plus 31 honorary residents. The tiers sum to 1,197, or 1,228 with residents.",uk:"1 190 підприємців у 2026: 612, 444 і 141 у трьох платних рівнях плюс 31 почесний резидент. Рівні разом дають 1 197, а з резидентами 1 228."},tag:"claimed",src:["S1"]},
+  {l:{en:"Who joins",uk:"Хто вступає"},v:{en:"Founders and co-owners, usually under 40, though not strictly. Nominal bar is $100K annual turnover, in practice $500K+. Business at least 2 years old, no business with Russia. Entry is a call with a regional manager, then payment.",uk:"Засновники та співвласники, зазвичай до 40 років, але не жорстко. Номінальний поріг $100 тис. річного обороту, фактично від $500 тис. Бізнесу щонайменше 2 роки, без співпраці з РФ. Вступ: дзвінок із регіональним менеджером, потім оплата."},tag:"claimed",src:["S1"]},
+  {l:{en:"Entity, headcount, funding",uk:"Юрособа, штат, фінансування"},v:{en:"Not found in the sources reviewed.",uk:"Не знайдено в переглянутих джерелах."},tag:"unknown",src:[]}
+ ],
+ streams:{
+  head:[{en:"Stream",uk:"Джерело"},{en:"Price",uk:"Ціна"},{en:"Volume",uk:"Обсяг"},{en:"Est. revenue",uk:"Оцінка доходу"},{en:"Basis",uk:"Підстава"}],
+  rows:[
+   [{en:"Offline membership, 3 tiers",uk:"Офлайн-членство, 3 рівні"},{en:"$1,800–$4,400 per 6–12 months",uk:"$1 800–$4 400 за 6–12 місяців"},{en:"1,197 members (612 / 444 / 141)",uk:"1 197 учасників (612 / 444 / 141)"},{en:"$4.05–5.18M a year",uk:"$4,05–5,18 млн на рік"},{tag:"estimate",en:"List price × tier count",uk:"Прайс × кількість у рівні"}],
+   [{en:"Online membership",uk:"Онлайн-членство"},{en:"$1,200 (6 mo), $1,999 (12 mo)",uk:"$1 200 (6 міс.), $1 999 (12 міс.)"},{en:"Not disclosed",uk:"Не розкрито"},{en:"Not included",uk:"Не враховано"},{tag:"unknown",en:"Mix with offline unknown",uk:"Частка серед офлайн невідома"}],
+   [{en:"Event access in other cities",uk:"Участь у подіях інших міст"},{en:"$100–3,000 per event",uk:"$100–3 000 за подію"},{en:"Not disclosed",uk:"Не розкрито"},{en:"Unknown",uk:"Невідомо"},{tag:"unknown",en:"",uk:""}],
+   [{en:"YBC HUMAN festival",uk:"Фестиваль YBC HUMAN"},{en:"€2,500 Standard, €3,000 Private, €6,000 VIP",uk:"€2 500 Standard, €3 000 Private, €6 000 VIP"},{en:"500+ registered",uk:"500+ реєстрацій"},{en:"About €1.25M gross if all 500 bought the lowest ticket",uk:"Близько €1,25 млн валового, якщо всі 500 купили найдешевший квиток"},{tag:"estimate",en:"Illustration only: Cyprus-branch members enter free, ticket mix unknown",uk:"Лише ілюстрація: члени кіпрської філії входять безкоштовно, склад квитків невідомий"}],
+   [{en:"Franchise and branch fees",uk:"Франшиза та внески філій"},{en:"Not disclosed",uk:"Не розкрито"},{en:"1 franchise branch (Cyprus)",uk:"1 франшизна філія (Кіпр)"},{en:"Unknown",uk:"Невідомо"},{tag:"unknown",en:"",uk:""}],
+   [{en:"Sponsorship and partners",uk:"Спонсорство та партнери"},{en:"Not disclosed",uk:"Не розкрито"},{en:"—",uk:"—"},{en:"Unknown",uk:"Невідомо"},{tag:"unknown",en:"",uk:""}]
+  ],
+  note:{en:"Charity auctions at club events are not revenue: the proceeds go to the Ukrainian army and veterans. Cost drivers we can see: an all-inclusive festival (lodging, meals, transfers, concierge, two ships), 100+ meetings a year in Kyiv, personal managers for members, a mobile app. The missing central office keeps fixed costs low.",
+        uk:"Благодійні аукціони на подіях клубу не є доходом: кошти йдуть на ЗСУ та ветеранів. Витрати, які ми бачимо: фестиваль «все включено» (проживання, харчування, трансфери, консьєрж, два кораблі), понад 100 зустрічей на рік у Києві, персональні менеджери для учасників, мобільний застосунок. Відсутність центрального офісу тримає постійні витрати низькими."}
+ },
+ math:{
+  title:{en:"How the estimate is built",uk:"Як побудовано оцінку"},
+  a:{h:{en:"12-month list prices",uk:"Прайс на 12 місяців"},lines:["612 × $2,999 = $1,835,388","444 × $3,600 = $1,598,400","141 × $4,400 =   $620,400","Total         = $4,054,188"]},
+  b:{h:{en:"6-month list prices, doubled to a year",uk:"Прайс на 6 місяців, подвоєний до року"},lines:["612 × $3,600 = $2,203,200","444 × $4,800 = $2,131,200","141 × $6,000 =   $846,000","Total         = $5,180,400"]},
+  notes:[
+   {en:"Assumes every member pays list price and that the base-tier price applies to the $100K–$1M tier. Discounts, cheaper online members and non-renewals would lower it. The 31 residents pay nothing.",uk:"Припускає, що кожен учасник платить за прайсом, а ціна базового рівня діє для рівня $100 тис.–$1 млн. Знижки, дешевші онлайн-учасники та неподовження зменшать цифру. 31 резидент не платить."},
+   {en:"Festival illustration: 500 × €2,500 = €1,250,000 at the lowest ticket. Not a floor, because Cyprus-branch members enter free and the real ticket mix is unknown.",uk:"Ілюстрація для фестивалю: 500 × €2 500 = €1 250 000 за найдешевшим квитком. Це не нижня межа, бо члени кіпрської філії входять безкоштовно, а реальний склад квитків невідомий."},
+   {en:"Pricing signal: 12-month plans cost 17–27% less per month than 6-month plans (base $250 vs $300, Wise $300 vs $400, 10M $367 vs $500).",uk:"Цінова ознака: 12-місячні плани на 17–27% дешевші за місяць, ніж 6-місячні (базовий $250 проти $300, Wise $300 проти $400, 10M $367 проти $500)."}
+  ]
+ },
+ numbers:{
+  head:[{en:"Metric",uk:"Показник"},{en:"Value",uk:"Значення"},{en:"Evidence",uk:"Докази"},{en:"As of",uk:"Станом на"},{en:"Note",uk:"Примітка"}],
+  rows:[
+   [{en:"Members",uk:"Учасники"},"1,190",{tag:"claimed"},{en:"2026",uk:"2026"},{en:"Tiers sum to 1,197 (1,228 with residents)",uk:"Рівні разом 1 197 (1 228 з резидентами)"}],
+   [{en:"New members, H1 2026",uk:"Нові учасники, 1-ше пів. 2026"},"229",{tag:"claimed"},{en:"H1 2026",uk:"1-ше пів. 2026"},{en:"About 19% of the member base (our calc). Churn unknown.",uk:"Близько 19% бази (наш розрахунок). Відтік невідомий."}],
+   [{en:"Events, H1 2026",uk:"Події, 1-ше пів. 2026"},"799",{tag:"claimed"},{en:"H1 2026",uk:"1-ше пів. 2026"},""],
+   [{en:"Kyiv meetings a year",uk:"Зустрічей у Києві на рік"},"100+",{tag:"claimed"},{en:"2026",uk:"2026"},""],
+   [{en:"Festival registrations",uk:"Реєстрації на фестиваль"},"500+",{tag:"claimed"},{en:"Sep 2026",uk:"вер. 2026"},{en:"Pre-event figure. Attendance unknown.",uk:"Дані до події. Фактична кількість невідома."}],
+   [{en:"Cyprus opening auction",uk:"Аукціон на відкритті Кіпру"},"€43,000",{tag:"claimed"},{en:"H1 2026",uk:"1-ше пів. 2026"},{en:"Conflicts with $60,000 stated elsewhere",uk:"Суперечить $60 000 в іншому місці"}],
+   [{en:"Membership revenue at list price",uk:"Дохід від членств за прайсом"},"$4.05–5.18M",{tag:"estimate"},{en:"Sep 2026",uk:"вер. 2026"},{en:"Ceiling scenario. See the math above.",uk:"Сценарій верхньої межі. Див. розрахунок вище."}],
+   [{en:"Profit, funding, valuation",uk:"Прибуток, фінансування, оцінка"},{en:"—",uk:"—"},{tag:"unknown"},{en:"—",uk:"—"},""]
+  ]
+ },
+ reconcile:[
+  {en:"Founded 2016, but community-building is dated to 2017 elsewhere.",uk:"Засновано 2016, але в іншому місці побудову спільноти датовано 2017."},
+  {en:"Cyprus opening auction: €43,000 in one place, $60,000 in another.",uk:"Аукціон на відкритті Кіпру: €43 000 в одному місці, $60 000 в іншому."},
+  {en:"Members: 1,190 stated, tiers sum to 1,197 (1,228 with residents).",uk:"Учасники: заявлено 1 190, рівні разом 1 197 (1 228 з резидентами)."},
+  {en:"Countries: “4” stated, the branch list covers at least 6.",uk:"Країни: заявлено «4», у списку філій щонайменше 6."}
+ ],
+ market:{
+  position:{en:"The club describes itself as the largest business club in Europe and as a space for entrepreneurs and their AI agents. Both are company descriptions, not verified rankings.",uk:"Клуб називає себе найбільшим бізнес-клубом Європи та простором для підприємців і їхніх AI-агентів. Обидва твердження є описом від компанії, а не перевіреним рейтингом."},
+  comps:[
+   {n:"EO (Entrepreneurs’ Organization)",note:{en:"Benchmark pending: entry criteria, fees, chapter model.",uk:"Порівняння попереду: критерії вступу, внески, модель чаптерів."}},
+   {n:"YPO",note:{en:"Benchmark pending: entry criteria, fees, forum format.",uk:"Порівняння попереду: критерії вступу, внески, формат форумів."}}
+  ],
+  moat:{en:"A network of 1,000+ founders, a ten-year brand, cross-branch access and a peer-group format. Switching costs are low: the value sits in the people, and another club can try to recruit them.",uk:"Мережа 1000+ засновників, десятирічний бренд, доступ між філіями та формат peer-груп. Витрати на перехід низькі: цінність у людях, і інший клуб може спробувати їх залучити."}
+ },
+ strengths:[
+  {en:"Recurring, prepaid revenue from a base segmented by company turnover.",uk:"Регулярний передплачений дохід від бази, сегментованої за оборотом компаній."},
+  {en:"Several revenue layers on one audience: membership, paid cross-branch events, a festival, franchise.",uk:"Кілька шарів доходу на одну аудиторію: членство, платні події в інших філіях, фестиваль, франшиза."},
+  {en:"Asset-light distribution through branches, with no central office.",uk:"Легке за активами розповсюдження через філії, без центрального офісу."},
+  {en:"Clear entry gate (turnover, 2+ years in business, no Russia ties) that protects peer quality.",uk:"Чіткий вхідний фільтр (оборот, 2+ роки бізнесу, без зв’язків із РФ), що береже якість середовища."},
+  {en:"Rich product around the membership: peer groups, sub-clubs, a mobile app, a personal manager with a monthly one-to-one.",uk:"Багатий продукт навколо членства: peer-групи, підклуби, мобільний застосунок, персональний менеджер із щомісячним one-to-one."}
+ ],
+ risks:[
+  {sev:"high",t:{en:"Data reliability. Nearly all figures come from the club’s own materials and several contradict each other.",uk:"Достовірність даних. Майже всі цифри з власних матеріалів клубу, і кілька з них суперечать одна одній."}},
+  {sev:"med",t:{en:"Founder and partner dependence. The brand is tied to its founder, and each branch has its own local partners, so quality may vary by city.",uk:"Залежність від засновника та партнерів. Бренд пов’язаний із засновником, а кожна філія має власних місцевих партнерів, тож якість може відрізнятися за містами."}},
+  {sev:"med",t:{en:"Reputation. A public internal conflict and change of partners in 2023. The original dossier says it no longer affects the structure, and no source was recorded for that.",uk:"Репутація. Публічний внутрішній конфлікт і зміна партнерів у 2023 році. В оригінальному досьє сказано, що це більше не впливає на структуру, але джерела для цього не зафіксовано."}},
+  {sev:"med",t:{en:"Geographic concentration. 5 of 11 branches are in Ukraine, and the dossier does not say what share of members or revenue they represent.",uk:"Географічна концентрація. 5 з 11 філій в Україні, а в досьє не сказано, яку частку учасників чи доходу вони дають."}},
+  {sev:"low",t:{en:"Low switching costs. Value rests on member quality, which a rival can try to attract.",uk:"Низькі витрати на перехід. Цінність тримається на якості учасників, яких конкурент може спробувати залучити."}},
+  {sev:"unk",t:{en:"Not known: retention, margin, cost base, franchise terms.",uk:"Невідомо: утримання, маржа, структура витрат, умови франшизи."}}
+ ],
+ steal:[
+  {en:"Tier by company turnover, not by service level. Pricing and peer groups follow the size of the business.",uk:"Рівні за оборотом компанії, а не за рівнем сервісу. Ціни й peer-групи відповідають розміру бізнесу."},
+  {en:"Publish prices with a 6/12-month toggle and make the longer plan 17–27% cheaper per month.",uk:"Публікувати ціни з перемикачем 6/12 місяців і робити довший план на 17–27% дешевшим за місяць."},
+  {en:"Gate entry with a call with a regional manager before payment.",uk:"Відбирати на вході через дзвінок із регіональним менеджером до оплати."},
+  {en:"Offer a cheaper online tier ($1,200 / $1,999) with offline events paid separately.",uk:"Мати дешевший онлайн-рівень ($1 200 / $1 999), де офлайн-події оплачуються окремо."},
+  {en:"Run the festival as its own product open to non-members, free for the newest branch’s members as a launch incentive.",uk:"Робити фестиваль окремим продуктом, відкритим для нечленів, і безкоштовним для учасників наймолодшої філії як стимул запуску."},
+  {en:"Peer groups of 10–12 people with a professional moderator, one two-hour meeting a month.",uk:"Peer-групи по 10–12 людей із професійним модератором, одна дворічна зустріч на місяць."},
+  {en:"Ban direct advertising in member chats to keep the signal high.",uk:"Забороняти пряму рекламу в чатах учасників, щоб зберігати цінність."}
+ ],
+ questions:[
+  {en:"Real revenue and margin by stream, and the split between online and offline members.",uk:"Реальний дохід і маржа за джерелами та частка онлайн проти офлайн-учасників."},
+  {en:"Renewal and retention rate: how many of the 1,190 are active and paying.",uk:"Рівень поновлення й утримання: скільки з 1 190 активні й платять."},
+  {en:"Which branches are franchises, and what are the fee and revenue-share terms.",uk:"Які філії працюють за франшизою та які умови внесків і розподілу доходу."},
+  {en:"Festival 2026 actuals: attendance, gross, cost, and whether the $100,000 auction target was met.",uk:"Фактичні підсумки фестивалю 2026: відвідуваність, дохід, витрати і чи досягнуто цілі аукціону $100 000."},
+  {en:"Sponsorship and partner income, if any.",uk:"Спонсорський і партнерський дохід, якщо є."},
+  {en:"What happened in 2023, with sources, and the current partner structure.",uk:"Що сталося у 2023 році, з джерелами, і поточна структура партнерів."},
+  {en:"Reconcile the four inconsistencies listed under Numbers.",uk:"Звірити чотири розбіжності з розділу «Цифри»."}
+ ],
+ appendix:[
+  {title:{en:"Membership tiers",uk:"Рівні членства"},type:"table",
+   head:[{en:"Tier",uk:"Рівень"},{en:"Company turnover",uk:"Оборот компанії"},{en:"Members",uk:"Учасники"},{en:"6 months",uk:"6 місяців"},{en:"12 months",uk:"12 місяців"}],
+   rows:[
+    ["YBC","$100K–$1M","612","$1,800","$2,999"],
+    ["YBC Wise","$1M–$10M","444","$2,400","$3,600"],
+    ["The 10 million club","$10M–$100M","141","$3,000","$4,400"],
+    ["YBC Residence",{en:"Honorary: mentors, speakers, guests",uk:"Почесні: ментори, спікери, гості"},"31",{en:"Free",uk:"Безкоштовно"},{en:"Free",uk:"Безкоштовно"}]
+   ],
+   foot:{en:"Offline prices are the same in every branch city. Events in other cities cost $100–3,000 extra at any tier.",uk:"Офлайн-ціни однакові в усіх містах. Події в інших містах коштують додатково $100–3 000 на будь-якому рівні."}},
+  {title:{en:"Festival formats",uk:"Формати фестивалю"},type:"table",
+   head:[{en:"Format",uk:"Формат"},{en:"Dates",uk:"Дати"},{en:"Price",uk:"Ціна"},{en:"What differs",uk:"Відмінність"}],
+   rows:[
+    ["Standard",{en:"18–20 Sep, 3 days",uk:"18–20 вер., 3 дні"},"€2,500",{en:"Shared room",uk:"Проживання з підселенням"}],
+    ["Private",{en:"18–20 Sep, 3 days",uk:"18–20 вер., 3 дні"},"€3,000",{en:"Own room",uk:"Окремий номер"}],
+    ["VIP",{en:"17–22 Sep, 5 days",uk:"17–22 вер., 5 днів"},"€6,000",{en:"Premium hotel, time with speakers outside the programme, sea trip with speakers on NAPA BLUE",uk:"Готель преміум-класу, час зі спікерами поза програмою, вихід у море зі спікерами на NAPA BLUE"}]
+   ],
+   foot:{en:"All formats include lodging, meals, airport transfers, the full programme and a concierge from arrival. Cyprus-branch members enter free. Membership is not required.",uk:"У всіх форматах: проживання, харчування, трансфери з/до аеропорту, повна програма та консьєрж із моменту прильоту. Члени кіпрської філії входять безкоштовно. Членство не потрібне."}},
+  {title:{en:"Club meeting formats",uk:"Формати клубних зустрічей"},type:"table",
+   head:[{en:"Format",uk:"Формат"},{en:"Size",uk:"Розмір"},{en:"What it is",uk:"Що це"}],
+   rows:[
+    [{en:"Monthly intro dinners",uk:"Щомісячні зустрічі-знайомства"},"10–15",{en:"Shared lunches or dinners for meeting and exchanging experience",uk:"Спільні обіди чи вечері для знайомства й обміну досвідом"}],
+    [{en:"Monthly themed meeting",uk:"Щомісячна тематична зустріч"},"20–25",{en:"Invited expert speaker, member questions",uk:"Запрошений спікер-експерт, питання учасників"}],
+    ["Fuck Up Night","40–80",{en:"Founders talk openly about their mistakes",uk:"Підприємці відверто розповідають про власні помилки"}],
+    [{en:"Monthly large meeting",uk:"Щомісячна велика зустріч"},"100–150",{en:"Speakers from the country’s largest businesses, buffet networking",uk:"Спікери з найбільших бізнесів країни, фуршет і нетворкінг"}],
+    ["Peer to Peer","10–12",{en:"Closed group, monthly, 2 hours, professional moderator",uk:"Закрита група, раз на місяць, 2 години, професійний модератор"}],
+    ["Company Visit","30–50",{en:"Visits inside well-known companies",uk:"Візити всередину відомих компаній"}],
+    [{en:"Informal meetings",uk:"Неформальні зустрічі"},"10–50",{en:"Leisure with members and families, at least monthly",uk:"Дозвілля з учасниками та їхніми сім’ями, щонайменше раз на місяць"}],
+    [{en:"Sub-clubs: AI, Padel, Psychology, Shooting",uk:"Підклуби: AI, Падел, Психологія, Стрільба"},"10–20",{en:"Monthly interest groups; the AI sub-club shares tools and cases",uk:"Щомісячні групи за інтересами; підклуб AI ділиться інструментами та кейсами"}]
+   ],
+   foot:{en:"Also: 40+ Telegram chats with direct advertising banned, and a mobile app with profiles of 1,000+ founders and the event calendar.",uk:"Також: 40+ Telegram-чатів із забороною прямої реклами та мобільний застосунок із профілями 1000+ підприємців і календарем подій."}},
+  {title:{en:"Festival programme in brief",uk:"Програма фестивалю коротко"},type:"table",
+   head:[{en:"Day",uk:"День"},{en:"Theme",uk:"Тема"},{en:"Main elements",uk:"Основні елементи"}],
+   rows:[
+    [{en:"Day 1",uk:"День 1"},{en:"Take off the mask",uk:"Зніми маску"},{en:"Airport welcome, mask ritual, opening dinner, fire show, Wild Resonance night, afterparty",uk:"Зустріч в аеропорту, ритуал масок, вечеря відкриття, фаєр-шоу, ніч Wild Resonance, афтерпаті"}],
+    [{en:"Day 2",uk:"День 2"},{en:"Live",uk:"Живи"},{en:"06:00 morning formats, about 30 formats in Human Space, Sea Party on two ships of 120 guests each, main stage, charity auction with a $100,000 target",uk:"Ранкові формати з 06:00, близько 30 форматів у Human Space, Sea Party на двох кораблях по 120 гостей, головна сцена, благодійний аукціон із ціллю $100 000"}],
+    [{en:"Day 3",uk:"День 3"},{en:"Laugh",uk:"Смійся"},{en:"Open air, Greek welcome, Human Comedy, Greek lunch and show, official closing, plate breaking",uk:"Open Air, Greek Welcome, Human Comedy, грецький обід і шоу, офіційне закриття, розбивання тарілок"}]
+   ],
+   foot:{en:"Full schedule with timings: ybc.com.cy/checkin/schedule",uk:"Повний розклад із таймінгом: ybc.com.cy/checkin/schedule"}},
+  {title:{en:"People and speakers",uk:"Люди та спікери"},type:"table",
+   head:[{en:"Role",uk:"Роль"},{en:"Names",uk:"Імена"}],
+   rows:[
+    [{en:"Founder",uk:"Засновник"},{en:"Andriy Ostapchuk (leads a morning run, speaks on the main stage)",uk:"Андрій Остапчук (веде ранкову пробіжку, виступає на головній сцені)"}],
+    [{en:"Business Zone and MasterMind",uk:"Business Zone і MasterMind"},{en:"Mykhailo Slobodianiuk, Yevgeny Chichvarkin, Lilya Bagirova, M. Drozdovskyi, Andriy Ostapchuk",uk:"Михайло Слободянюк, Євген Чичваркін, Ліля Багірова, М. Дроздовський, Андрій Остапчук"}],
+    [{en:"Women’s Circle",uk:"Women’s Circle"},{en:"Kateryna Osadcha (host), Svitlana Kerimova",uk:"Катерина Осадча (ведуча), Світлана Керімова"}],
+    [{en:"Main stage",uk:"Головна сцена"},{en:"Andriy Fediv, Garik Korogodsky; interviews by Maria Yefrosynina",uk:"Андрій Федорів, Гарік Корогодський; інтерв’ю веде Марія Єфросиніна"}],
+    [{en:"Entertainment",uk:"Розваги"},{en:"S.V.E.T. (band), Volodymyr Shumko (Human Comedy)",uk:"Гурт S.V.E.T., Володимир Шумко (Human Comedy)"}]
+   ],
+   foot:{en:"What it tells us: business names sit beside wellness and entertainment, which positions the festival as an experience rather than a conference.",uk:"Що це говорить: бізнес-імена стоять поруч із велнесом і розвагами, тож фестиваль позиціонується як досвід, а не конференція."}},
+  {title:{en:"Timeline",uk:"Хронологія"},type:"table",
+   head:[{en:"When",uk:"Коли"},{en:"What",uk:"Що"},{en:"Evidence",uk:"Докази"}],
+   rows:[
+    ["2016",{en:"Club founded in Ukraine",uk:"Клуб заснований в Україні"},{tag:"claimed"}],
+    ["2017",{en:"Founder starts building the community (conflicts with 2016)",uk:"Засновник починає будувати спільноту (суперечить 2016)"},{tag:"claimed"}],
+    ["2023",{en:"Public internal conflict and change of partners",uk:"Публічний внутрішній конфлікт і зміна партнерів"},{tag:"claimed"}],
+    [{en:"H1 2026",uk:"1-ше пів. 2026"},{en:"Cyprus branch opens, charity auction at the opening",uk:"Відкриття кіпрської філії, благодійний аукціон на відкритті"},{tag:"claimed"}],
+    [{en:"18–20 Sep 2026",uk:"18–20 вер. 2026"},{en:"YBC HUMAN festival, Cyprus",uk:"Фестиваль YBC HUMAN, Кіпр"},{tag:"claimed"}],
+    [{en:"Nov 2026",uk:"лист. 2026"},{en:"Club’s tenth anniversary",uk:"Десятиріччя клубу"},{tag:"claimed"}]
+   ]}
+ ],
+ sources:[
+  {id:"S1",t:"ybc.club",u:"https://ybc.club",ty:{en:"Primary",uk:"Первинне"},use:{en:"Club structure, tiers, prices, statistics",uk:"Структура клубу, рівні, ціни, статистика"}},
+  {id:"S2",t:"ybc.com.cy",u:"https://ybc.com.cy",ty:{en:"Primary",uk:"Первинне"},use:{en:"Festival formats, prices, programme",uk:"Формати, ціни та програма фестивалю"}},
+  {id:"S3",t:"Forbes Ukraine",u:"",ty:{en:"Press",uk:"Преса"},use:{en:"Background and 2023 context. Article not recorded in the original dossier.",uk:"Історія та контекст 2023 року. Конкретна стаття в оригінальному досьє не зафіксована."}},
+  {id:"S4",t:"ybc.club/calendar",u:"https://www.ybc.club/calendar",ty:{en:"Primary",uk:"Первинне"},use:{en:"Event calendar",uk:"Календар подій"}},
+  {id:"S5",t:"ybc.com.cy/checkin/schedule",u:"https://ybc.com.cy/checkin/schedule",ty:{en:"Primary",uk:"Первинне"},use:{en:"Festival schedule with timings",uk:"Розклад фестивалю з таймінгом"}}
+ ],
+ sourceNote:{en:"The original dossier listed sources per page, not per claim. Source tags in this review are mapped by topic. Accessed September 2026.",uk:"Оригінальне досьє вказувало джерела для сторінки, а не для кожного твердження. Позначки джерел тут прив’язані за темою. Переглянуто у вересні 2026."},
+ log:[
+  {d:"2026-09",t:{en:"Original dossier “YBC & YBC HUMAN: research” written by the team, in Ukrainian.",uk:"Команда написала оригінальне досьє «YBC & YBC HUMAN: рісерч» українською."}},
+  {d:"2026-11-19",t:{en:"Rebuilt into template v1: added the revenue estimate, evidence tags, scores, risks and an inconsistency check. No figure was re-verified. Status set to Needs refresh because the festival has taken place.",uk:"Перероблено за шаблоном v1: додано оцінку доходу, позначки доказів, оцінки, ризики та перевірку розбіжностей. Жодну цифру не перевіряли повторно. Статус «Потребує оновлення», бо фестиваль уже відбувся."}}
+ ]
+}
+/*__NEW_REVIEWS_ABOVE__*/
+];
+
+const METHOD={
+ title:{en:["How","reviews work"],uk:["Як","працюють огляди"]},
+ lead:{en:"Every company goes through the same template, so reviews can be compared and filtered. Money comes first, evidence is labelled, and our opinion is kept apart from what the company says.",uk:"Кожна компанія проходить один шаблон, тому огляди можна порівнювати й фільтрувати. Спершу гроші, докази позначені, а наша думка відокремлена від слів компанії."},
+ order:{h:{en:"Review order",uk:"Порядок огляду"},items:[
+  {n:{en:"Verdict and score",uk:"Вердикт і оцінка"},d:{en:"Top of every page: why it matters to us, our take, the next step, and five scores.",uk:"Угорі кожної сторінки: чому це важливо для нас, наш висновок, наступний крок і п’ять оцінок."}},
+  {n:{en:"1 Snapshot",uk:"1 Зведення"},d:{en:"Founding, leadership, structure, members, entry rules. Each fact tagged and sourced.",uk:"Заснування, керівництво, структура, учасники, правила вступу. Кожен факт позначений і має джерело."}},
+  {n:{en:"2 Business model",uk:"2 Бізнес-модель"},d:{en:"Who pays whom for what. A table of revenue streams with price, volume, estimated revenue and basis.",uk:"Хто, кому й за що платить. Таблиця джерел доходу з ціною, обсягом, оцінкою доходу та підставою."}},
+  {n:{en:"3 Numbers",uk:"3 Цифри"},d:{en:"Metrics with evidence tag and date, a “show the math” block for estimates, and a list of contradictions.",uk:"Показники з позначкою доказу та датою, блок «покажи розрахунок» для оцінок і список розбіжностей."}},
+  {n:{en:"4 Market and competition",uk:"4 Ринок і конкуренти"},d:{en:"Position, comparables to benchmark, moat.",uk:"Позиція, з ким порівняти, захищеність."}},
+  {n:{en:"5 Strengths and risks",uk:"5 Сильні сторони та ризики"},d:{en:"Risks carry a severity. This section is our assessment.",uk:"Ризики мають рівень серйозності. Цей розділ є нашою оцінкою."}},
+  {n:{en:"6 Worth stealing",uk:"6 Що варто взяти"},d:{en:"Concrete tactics we could copy or adapt.",uk:"Конкретні тактики, які можна скопіювати чи адаптувати."}},
+  {n:{en:"7 Open questions",uk:"7 Відкриті питання"},d:{en:"What the next research round should answer.",uk:"На що має відповісти наступний раунд дослідження."}},
+  {n:{en:"8 Appendix",uk:"8 Додатки"},d:{en:"Programme detail, people, timelines. Collapsed so the main flow stays short.",uk:"Деталі програм, люди, хронології. Згорнуто, щоб основний текст лишався коротким."}},
+  {n:{en:"9 Sources and log",uk:"9 Джерела та журнал"},d:{en:"Numbered sources with type and access date, plus a refresh log.",uk:"Пронумеровані джерела з типом і датою перегляду та журнал оновлень."}}
+ ]},
+ evid:{h:{en:"Evidence tags",uk:"Позначки доказів"}},
+ score:{h:{en:"Scores, 1 to 5",uk:"Оцінки від 1 до 5"},foot:{en:"Evidence confidence (low, medium, high) is rated separately, so thin data never lowers a score silently.",uk:"Достовірність даних (низька, середня, висока) оцінюється окремо, щоб брак даних не знижував оцінку непомітно."}},
+ verd:{h:{en:"Verdicts",uk:"Вердикти"}},
+ stat:{h:{en:"Statuses",uk:"Статуси"}},
+ find:{h:{en:"Search and filters",uk:"Пошук і фільтри"},items:[
+  {n:{en:"Search",uk:"Пошук"},d:{en:"Looks through English and Ukrainian text of every review. Every word you type must match. Best matches come first.",uk:"Шукає в англійському й українському тексті всіх оглядів. Кожне введене слово має збігатися. Найближчі збіги першими."}},
+  {n:{en:"Filters",uk:"Фільтри"},d:{en:"Inside one group, any selected option matches. Across groups, all must match. Counts update as you narrow down.",uk:"Усередині групи підходить будь-який вибраний варіант. Між групами мають збігатися всі. Лічильники оновлюються під час звуження."}},
+  {n:{en:"Keywords",uk:"Ключові слова"},d:{en:"Free tags added per review. Pick several and results must carry all of them.",uk:"Вільні теги, які додаються до кожного огляду. Оберіть кілька, і результат має містити всі."}}
+ ]},
+ mods:{h:{en:"Modules by company type",uk:"Модулі за типом компанії"},items:[
+  {n:{en:"Community and events",uk:"Спільноти та події"},d:{en:"Members by tier, price per tier, retention, ticket prices, sponsor mix, cost per event, branch or franchise model. Used in the first review.",uk:"Учасники за рівнями, ціни за рівнями, утримання, ціни квитків, склад спонсорів, витрати на подію, модель філій чи франшизи. Використано в першому огляді."}},
+  {n:{en:"Software",uk:"Софт"},d:{en:"ARR, net revenue retention, pricing, ideal customer. Planned.",uk:"ARR, чисте утримання доходу, ціни, ідеальний клієнт. У планах."}},
+  {n:{en:"Marketplace",uk:"Маркетплейс"},d:{en:"GMV, take rate, liquidity. Planned.",uk:"GMV, комісія, ліквідність. У планах."}}
+ ]}
+};
+
+/* ================================================================
+   UI STRINGS
+   ================================================================ */
+const UI={
+ en:{wordmark:"Company<em>/Archive</em>",navArchive:"Archive",navMethod:"Method",
+  kicker:"Team only / since 2026",h1a:"Company",h1b:"Archive",
+  sub:"Outside companies worth our attention: how they make money, what the numbers are worth, and what we can borrow.",
+  sReviews:"Reviews",sCats:"Categories in use",sRefresh:"Need refresh",sUpdated:"Last change",
+  ph:"Search by company, keyword or number…",help:"Searches English and Ukrainian text. Every word must match. Press / to jump here.",
+  clearQ:"Clear",kwQuick:"Keywords",
+  filters:"Filters",clearAll:"Clear all",showN:"Show {n}",close:"Close",
+  fCategory:"Category",fVerdict:"Verdict",fStatus:"Status",fModel:"Business model",fRegion:"Region",fBand:"Revenue (est.)",fConf:"Evidence confidence",fGrowth:"Growth",fKw:"Keywords",
+  kwHint:"Pick several: results must match all.",
+  selA:"Selected",selB:"reviews",countOf:"{n} of {t}",
+  sort:"Sort",sRel:"Best match",sUpd:"Recently updated",sScore:"Score, high to low",sRev:"Revenue, high to low",sName:"Name A–Z",
+  list:"List",cards:"Cards",
+  emptyT:"No review matches this search",emptyB:"Try fewer words or clear a filter. Only companies already reviewed appear here.",emptyBtn:"Clear search and filters",
+  lRev:"Revenue (est.)",lScore:"Score",lReviewed:"Reviewed",lVerdict:"Verdict",lStatus:"Status",lFounded:"Founded",lMatch:"Match in",
+  back:"Back to archive",no:"No.",onPage:"On this page",
+  wWhy:"Why it matters to us",wTake:"Our take",wNext:"Next step",
+  secScore:"Score",total:"Total",conf:"Evidence confidence",scoreNote:"First-pass scores, to be confirmed by the team.",
+  s1:"Snapshot",s2:"Business model",s3:"Numbers",s4:"Market & competition",s5:"Strengths & risks",s6:"Worth stealing",s7:"Open questions",s8:"Appendix",s9:"Sources & log",
+  hStreams:"Revenue streams",hReconcile:"Reconcile before relying on these",hPosition:"Position",hComps:"Comparables to benchmark",hMoat:"Moat",hStrengths:"Strengths",hRisks:"Risks (our assessment)",hSources:"Sources",hLog:"Review log",
+  relTo:"Relevant to",reviewer:"Reviewer",reviewedL:"Reviewed",rebuilt:"Rebuilt",visit:"Open",prev:"Previous",next:"Next",
+  footL:"Company Review Archive · team only",footR:"Template v1",
+  months:"",langSwitch:"Language"},
+ uk:{wordmark:"Компанії<em>/Архів</em>",navArchive:"Архів",navMethod:"Метод",
+  kicker:"Лише для команди / з 2026",h1a:"Компанії",h1b:"Архів",
+  sub:"Зовнішні компанії, на які варто звернути увагу: як вони заробляють, чого варті цифри і що ми можемо запозичити.",
+  sReviews:"Огляди",sCats:"Категорій у роботі",sRefresh:"Потребують оновлення",sUpdated:"Остання зміна",
+  ph:"Пошук за компанією, словом чи цифрою…",help:"Шукає в англійському й українському тексті. Усі слова мають збігатися. Натисніть /, щоб перейти сюди.",
+  clearQ:"Очистити",kwQuick:"Ключові слова",
+  filters:"Фільтри",clearAll:"Скинути все",showN:"Показати {n}",close:"Закрити",
+  fCategory:"Категорія",fVerdict:"Вердикт",fStatus:"Статус",fModel:"Бізнес-модель",fRegion:"Регіон",fBand:"Дохід (оцінка)",fConf:"Достовірність даних",fGrowth:"Зростання",fKw:"Ключові слова",
+  kwHint:"Оберіть кілька: результат має містити всі.",
+  selA:"Обрані",selB:"огляди",countOf:"{n} з {t}",
+  sort:"Сортування",sRel:"Найближчі збіги",sUpd:"Нещодавно оновлені",sScore:"Оцінка: від вищої",sRev:"Дохід: від більшого",sName:"Назва А–Я",
+  list:"Список",cards:"Картки",
+  emptyT:"За цим запитом оглядів немає",emptyB:"Спробуйте менше слів або скиньте фільтр. Тут лише компанії, які вже розглянуто.",emptyBtn:"Скинути пошук і фільтри",
+  lRev:"Дохід (оцінка)",lScore:"Оцінка",lReviewed:"Огляд",lVerdict:"Вердикт",lStatus:"Статус",lFounded:"Засновано",lMatch:"Збіг у тексті",
+  back:"До архіву",no:"№",onPage:"На сторінці",
+  wWhy:"Чому це важливо для нас",wTake:"Наш висновок",wNext:"Наступний крок",
+  secScore:"Оцінка",total:"Разом",conf:"Достовірність даних",scoreNote:"Попередні оцінки, команда має підтвердити.",
+  s1:"Зведення",s2:"Бізнес-модель",s3:"Цифри",s4:"Ринок і конкуренти",s5:"Сильні сторони та ризики",s6:"Що варто взяти",s7:"Відкриті питання",s8:"Додатки",s9:"Джерела та журнал",
+  hStreams:"Джерела доходу",hReconcile:"Звірити перед використанням",hPosition:"Позиція",hComps:"З ким порівняти",hMoat:"Захищеність",hStrengths:"Сильні сторони",hRisks:"Ризики (наша оцінка)",hSources:"Джерела",hLog:"Журнал огляду",
+  relTo:"Релевантно для",reviewer:"Автор огляду",reviewedL:"Огляд",rebuilt:"Перероблено",visit:"Відкрити",prev:"Попередній",next:"Наступний",
+  footL:"Архів оглядів компаній · лише для команди",footR:"Шаблон v1",
+  months:"",langSwitch:"Мова"}
+};
+
+/* ================================================================
+   HELPERS
+   ================================================================ */
+const state={lang:"en",q:"",sort:"updated",sortUser:false,open:{},view:"list",drawer:false,
+ f:{category:new Set(),verdict:new Set(),status:new Set(),model:new Set(),region:new Set(),band:new Set(),conf:new Set(),growth:new Set(),kw:new Set()}};
+let lastIndexScroll=0, currentRoute="";
+const $=s=>document.querySelector(s);
+const T=k=>UI[state.lang][k]??UI.en[k]??k;
+const L=x=>x==null?"":(typeof x==="string"||typeof x==="number")?String(x):(x[state.lang]??x.en??x.uk??"");
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const norm=s=>String(s||"").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"");
+const byId=(arr,id)=>arr.find(x=>x.id===id)||{};
+const pad=n=>String(n).padStart(2,"0");
+const nf=()=>new Intl.NumberFormat(state.lang,{maximumFractionDigits:1,minimumFractionDigits:1});
+
+function fmtDate(s){
+  if(!s) return "";
+  const p=s.split("-").map(Number);
+  const d=new Date(p[0],(p[1]||1)-1,p[2]||1);
+  const o=p[2]?{day:"numeric",month:"short",year:"numeric"}:{month:"short",year:"numeric"};
+  try{return new Intl.DateTimeFormat(state.lang,o).format(d)}catch(e){return s}
+}
+function fmtRev(r){
+  const v=r.revenue; if(!v) return "—";
+  const u=state.lang==="uk"?" млн":"M";
+  return v.cur+nf().format(v.lo)+"–"+nf().format(v.hi)+u;
+}
+function bandOf(r){
+  const v=r.revenue; if(!v) return "bu";
+  const m=(v.lo+v.hi)/2;
+  return m<1?"b0":m<10?"b1":m<100?"b2":"b3";
+}
+const scoreOf=r=>r.scores.reduce((a,s)=>a+s.v,0);
+const revMid=r=>r.revenue?(r.revenue.lo+r.revenue.hi)/2:-1;
+const evTag=t=>t?`<span class="ev ev-${t}"><i></i>${esc(L(EVID[t]))}</span>`:"";
+const bars=v=>`<span class="bars" aria-hidden="true">${[1,2,3,4,5].map(i=>`<i class="${i<=v?"on":""}"></i>`).join("")}</span>`;
+const verdictPill=id=>`<span class="pill v-${id}">${esc(L(byId(VERDICTS,id)))}</span>`;
+const statusPill=id=>`<span class="pill s-${id}">${id==="refresh"?"↻ ":""}${esc(L(byId(STATUSES,id)))}</span>`;
+const catName=id=>L(byId(CATS,id));
+const modelName=id=>L(byId(MODELS,id));
+
+/* keyword registry and search index */
+const KW={};
+function strings(o,out){
+  if(o==null) return out;
+  if(typeof o==="string"||typeof o==="number"){out.push(String(o));return out}
+  if(Array.isArray(o)){o.forEach(x=>strings(x,out));return out}
+  if(typeof o==="object"){Object.keys(o).forEach(k=>{if(k==="id"||k==="tag"||k==="sev"||k==="cur"||k==="lo"||k==="hi"||k==="no"||(k==="v"&&typeof o[k]==="number"))return;strings(o[k],out)});}
+  return out;
+}
+REVIEWS.forEach(r=>{
+  r.keywords.forEach(k=>{if(!KW[k.k])KW[k.k]={en:k.en,uk:k.uk}});
+  const extra=[byId(CATS,r.category),...r.models.map(m=>byId(MODELS,m)),byId(VERDICTS,r.verdict),byId(STATUSES,r.status),...r.regions.map(x=>REGIONS[x])]
+    .flatMap(o=>[o.en,o.uk]);
+  r._strings=strings({name:r.name,aka:r.aka,url:r.url,founded:r.founded,tagline:r.tagline,keywords:r.keywords,strip:r.strip,snapshot:r.snapshot,streams:r.streams,math:r.math,numbers:r.numbers,reconcile:r.reconcile,market:r.market,strengths:r.strengths,risks:r.risks,steal:r.steal,questions:r.questions,appendix:r.appendix,sources:r.sources,statusNote:r.statusNote,relevantTo:r.relevantTo,scores:r.scores},[]).concat(extra);
+  const joined=norm(r._strings.join(" \n "));
+  r._blob=joined+" \n "+joined.replace(/(\d)[,\s](?=\d)/g,"$1");
+  r._name=norm(r.name+" "+r.aka);
+  r._tags=norm(r.keywords.map(k=>k.en+" "+k.uk).join(" ")+" "+extra.join(" "));
+  r._tag=norm(L2(r.tagline));
+});
+function L2(x){return x.en+" "+x.uk}
+
+/* ================================================================
+   FILTERING
+   ================================================================ */
+const FACETS=[
+ {key:"category",label:"fCategory",open:true,style:"list",all:true,get:r=>[r.category],opts:()=>CATS,name:id=>catName(id)},
+ {key:"verdict",label:"fVerdict",open:true,style:"chips",all:true,get:r=>[r.verdict],opts:()=>VERDICTS,name:id=>L(byId(VERDICTS,id))},
+ {key:"status",label:"fStatus",open:true,style:"chips",all:true,get:r=>[r.status],opts:()=>STATUSES,name:id=>L(byId(STATUSES,id))},
+ {key:"model",label:"fModel",open:false,style:"chips",get:r=>r.models,opts:()=>MODELS,name:id=>modelName(id)},
+ {key:"region",label:"fRegion",open:false,style:"chips",get:r=>r.regions,opts:()=>Object.keys(REGIONS).map(id=>({id})),name:id=>L(REGIONS[id])},
+ {key:"band",label:"fBand",open:false,style:"chips",get:r=>[bandOf(r)],opts:()=>BANDS,name:id=>L(byId(BANDS,id))},
+ {key:"conf",label:"fConf",open:false,style:"chips",get:r=>[r.confidence],opts:()=>Object.keys(CONF).map(id=>({id})),name:id=>L(CONF[id])},
+ {key:"growth",label:"fGrowth",open:false,style:"chips",get:r=>[r.growth],opts:()=>Object.keys(GROW).map(id=>({id})),name:id=>L(GROW[id])}
+];
+function tokens(){return norm(state.q).split(/\s+/).filter(Boolean)}
+function visible(skip){
+  const tk=tokens();
+  return REVIEWS.filter(r=>{
+    if(tk.length&&!tk.every(t=>r._blob.includes(t))) return false;
+    for(const f of FACETS){
+      if(f.key===skip) continue;
+      const s=state.f[f.key]; if(!s.size) continue;
+      if(!f.get(r).some(v=>s.has(v))) return false;
+    }
+    if(skip!=="kw"&&state.f.kw.size){
+      const mine=new Set(r.keywords.map(k=>k.k));
+      for(const k of state.f.kw) if(!mine.has(k)) return false;
+    }
+    return true;
+  });
+}
+function relevance(r){
+  let sc=0; tokens().forEach(t=>{sc+=r._name.includes(t)?5:0; sc+=r._tags.includes(t)?3:0; sc+=r._tag.includes(t)?2:0; sc+=1});
+  return sc;
+}
+function effSort(){
+  if(state.q) return state.sortUser?state.sort:"relevance";
+  return (state.sortUser&&state.sort!=="relevance")?state.sort:"updated";
+}
+function sorted(list){
+  const a=list.slice();
+  const s=effSort();
+  if(s==="relevance") a.sort((x,y)=>relevance(y)-relevance(x));
+  else if(s==="updated") a.sort((x,y)=>y.updated.localeCompare(x.updated)||x.no-y.no);
+  else if(s==="score") a.sort((x,y)=>scoreOf(y)-scoreOf(x));
+  else if(s==="revenue") a.sort((x,y)=>revMid(y)-revMid(x));
+  else if(s==="name") a.sort((x,y)=>x.name.localeCompare(y.name));
+  return a;
+}
+function activeCount(){let n=0;for(const k in state.f)n+=state.f[k].size;return n}
+function snippet(r){
+  const tk=tokens(); if(!tk.length) return "";
+  if(tk.every(t=>r._name.includes(t)||r._tags.includes(t)||r._tag.includes(t))) return "";
+  const strs=r._strings.filter(s=>s.length>24);
+  const lang=state.lang;
+  for(const t of tk){
+    if(r._name.includes(t)||r._tags.includes(t)||r._tag.includes(t)) continue;
+    for(const s of strs){
+      const i=s.toLowerCase().indexOf(t);
+      if(i>=0){
+        const a=Math.max(0,i-40), b=Math.min(s.length,i+t.length+70);
+        return (a>0?"…":"")+s.slice(a,b)+(b<s.length?"…":"");
+      }
+    }
+  }
+  return "";
+}
+function hl(text){
+  const tk=tokens(); const e=esc(text);
+  if(!tk.length) return e;
+  const re=new RegExp("("+tk.map(t=>t.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")).join("|")+")","gi");
+  return e.replace(re,"<mark>$1</mark>");
+}
+
+/* ================================================================
+   INDEX PAGE
+   ================================================================ */
+function sealSvg(){
+  const n=pad(REVIEWS.length);
+  const ring=state.lang==="uk"?"ОГЛЯДИ КОМПАНІЙ · ЛИШЕ ДЛЯ КОМАНДИ · ДОСЛІДЖЕННЯ · ":"COMPANY REVIEWS · TEAM ONLY · RESEARCH POOL · ";
+  return `<svg class="seal" viewBox="0 0 200 200" role="img" aria-label="${n} ${esc(T("sReviews"))}">
+    <defs><path id="sealpath" d="M100,100 m-76,0 a76,76 0 1,1 152,0 a76,76 0 1,1 -152,0"/></defs>
+    <g class="seal-ring"><text><textPath href="#sealpath" textLength="470" lengthAdjust="spacing">${esc(ring)}</textPath></text></g>
+    <circle cx="100" cy="100" r="46" fill="var(--red)"/>
+    <text class="seal-n" x="100" y="118" text-anchor="middle">${n}</text></svg>`;
+}
+function renderIndex(){
+  const cats=new Set(REVIEWS.map(r=>r.category)).size;
+  const refresh=REVIEWS.filter(r=>r.status==="refresh").length;
+  const last=REVIEWS.map(r=>r.updated).sort().pop();
+  $("#app").innerHTML=`
+  <div class="wrap">
+    <section class="hero">
+      <div>
+        <p class="kick mono">${esc(T("kicker"))}</p>
+        <h1>${esc(T("h1a"))}<span><b>/</b>${esc(T("h1b"))}</span></h1>
+        <p class="hero-sub">${esc(T("sub"))}</p>
+      </div>
+      ${sealSvg()}
+    </section>
+    <div class="stats">
+      <div class="stat"><b>${pad(REVIEWS.length)}</b><span class="mono">${esc(T("sReviews"))}</span></div>
+      <div class="stat"><b>${pad(cats)}</b><span class="mono">${esc(T("sCats"))}</span></div>
+      <div class="stat"><b>${pad(refresh)}</b><span class="mono">${esc(T("sRefresh"))}</span></div>
+      <div class="stat"><b style="font-size:24px;line-height:1.3">${esc(fmtDate(last))}</b><span class="mono">${esc(T("sUpdated"))}</span></div>
+    </div>
+    <div class="searchbar">
+      <div class="search">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21"/></svg>
+        <input id="q" type="search" autocomplete="off" spellcheck="false" placeholder="${esc(T("ph"))}" aria-label="${esc(T("ph"))}" value="${esc(state.q)}">
+        <button type="button" class="x mono" id="qclear" data-act="clear-q" ${state.q?"":"hidden"}>${esc(T("clearQ"))}</button>
+      </div>
+      <p class="search-help">${esc(T("help"))}</p>
+      <div class="quick" id="quick"></div>
+    </div>
+    <div class="layout">
+      <div class="drawer-bg" id="drawer-bg" data-act="drawer-close"></div>
+      <aside class="side" id="side" aria-label="${esc(T("filters"))}"></aside>
+      <section id="results" aria-live="polite"></section>
+    </div>
+  </div>`;
+  updateIndex();
+  $("#q").addEventListener("input",e=>{state.q=e.target.value;$("#qclear").hidden=!state.q;updateIndex()});
+}
+function facetHtml(f){
+  const base=visible(f.key);
+  const all=f.opts();
+  const items=all.map(o=>{
+    const id=o.id;
+    const n=base.filter(r=>f.get(r).includes(id)).length;
+    const total=REVIEWS.filter(r=>f.get(r).includes(id)).length;
+    return {id,n,total};
+  }).filter(o=>f.all||o.total>0||state.f[f.key].has(o.id));
+  if(!items.length) return "";
+  const pressed=id=>state.f[f.key].has(id);
+  const body=f.style==="list"
+   ?`<ul class="flist">${items.map(o=>`<li><button type="button" data-act="toggle" data-f="${f.key}" data-v="${o.id}" aria-pressed="${pressed(o.id)}" ${o.n===0&&!pressed(o.id)?"disabled":""}><span>${esc(f.name(o.id))}</span><span class="n">[ ${o.n} ]</span></button></li>`).join("")}</ul>`
+   :`<div class="chips">${items.map(o=>`<button type="button" class="chip" data-act="toggle" data-f="${f.key}" data-v="${o.id}" aria-pressed="${pressed(o.id)}" ${o.n===0&&!pressed(o.id)?"disabled":""}>${esc(f.name(o.id))}<span class="n">${o.n}</span></button>`).join("")}</div>`;
+  const isOpen=state.open[f.key]!==undefined?state.open[f.key]:(f.open||state.f[f.key].size>0);
+  return `<details class="fgroup" data-k="${f.key}"${isOpen?" open":""}><summary>${esc(T(f.label))}</summary>${body}</details>`;
+}
+function kwList(){
+  const base=visible("kw"), counts={};
+  base.forEach(r=>r.keywords.forEach(k=>counts[k.k]=(counts[k.k]||0)+1));
+  return Object.keys(KW).map(k=>({k,n:counts[k]||0,total:REVIEWS.filter(r=>r.keywords.some(x=>x.k===k)).length}))
+    .sort((a,b)=>b.total-a.total||L(KW[a.k]).localeCompare(L(KW[b.k])));
+}
+function updateIndex(){
+  const list=sorted(visible(null));
+  const kws=kwList();
+  /* quick keywords */
+  $("#quick").innerHTML=`<span class="mono">${esc(T("kwQuick"))}</span>`+kws.slice(0,8).map(o=>`<button type="button" class="chip" data-act="toggle" data-f="kw" data-v="${esc(o.k)}" aria-pressed="${state.f.kw.has(o.k)}">${esc(L(KW[o.k]))}</button>`).join("");
+  /* sidebar */
+  const n=activeCount();
+  $("#side").innerHTML=`
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px" class="mono">
+      <span>${esc(T("filters"))}${n?` (${n})`:""}</span>
+      <span style="display:flex;gap:12px">${n?`<button type="button" class="x" style="background:none;border:0;text-decoration:underline;font:inherit;letter-spacing:inherit;text-transform:inherit" data-act="clear-f">${esc(T("clearAll"))}</button>`:""}<button type="button" data-act="drawer-close" class="mobile-filter" style="background:none;border:0;font:inherit;letter-spacing:inherit;text-transform:inherit">${esc(T("close"))} ✕</button></span>
+    </div>
+    ${FACETS.map(facetHtml).join("")}
+    <details class="fgroup" data-k="kw" ${state.open.kw===false?"":"open"}><summary>${esc(T("fKw"))}</summary>
+      <div class="chips">${kws.map(o=>`<button type="button" class="chip" data-act="toggle" data-f="kw" data-v="${esc(o.k)}" aria-pressed="${state.f.kw.has(o.k)}" ${o.n===0&&!state.f.kw.has(o.k)?"disabled":""}>${esc(L(KW[o.k]))}<span class="n">${o.n}</span></button>`).join("")}</div>
+      <p class="hint">${esc(T("kwHint"))}</p>
+    </details>
+    <div class="mobile-filter" style="margin-top:18px"><button type="button" class="btn" data-act="drawer-close">${esc(T("showN").replace("{n}",list.length))}</button></div>`;
+  /* active chips */
+  const act=[];
+  FACETS.forEach(f=>state.f[f.key].forEach(v=>act.push({f:f.key,v,t:T(f.label)+": "+f.name(v)})));
+  state.f.kw.forEach(v=>act.push({f:"kw",v,t:T("fKw")+": "+L(KW[v]||{en:v})}));
+  const sortOpts=[["relevance",T("sRel")],["updated",T("sUpd")],["score",T("sScore")],["revenue",T("sRev")],["name",T("sName")]]
+    .filter(o=>o[0]!=="relevance"||state.q);
+  const curSort=effSort();
+  let body;
+  if(!list.length){
+    body=`<div class="empty"><h3>${esc(T("emptyT"))}</h3><p>${esc(T("emptyB"))}</p><button type="button" class="btn" data-act="reset">${esc(T("emptyBtn"))}</button></div>`;
+  }else if(state.view==="grid"){
+    body=`<ul class="grid">${list.map(cardHtml).join("")}</ul>`;
+  }else{
+    body=`<ul class="rows">${list.map(rowHtml).join("")}</ul>`;
+  }
+  $("#results").innerHTML=`
+    <div class="res-head">
+      <h2>${esc(T("selA"))}<em>${esc(T("selB"))}</em></h2>
+      <div class="res-tools">
+        <span class="count">${esc(T("countOf").replace("{n}",list.length).replace("{t}",REVIEWS.length))}</span>
+        <button type="button" class="btn mobile-filter" data-act="drawer-open">${esc(T("filters"))}${n?` (${n})`:""}</button>
+        <label class="mono" style="display:flex;gap:8px;align-items:center">${esc(T("sort"))}
+          <select class="sel" id="sortsel" aria-label="${esc(T("sort"))}">${sortOpts.map(o=>`<option value="${o[0]}" ${o[0]===curSort?"selected":""}>${esc(o[1])}</option>`).join("")}</select></label>
+        <div class="seg" role="group" aria-label="View">
+          <button type="button" data-act="view" data-v="list" aria-pressed="${state.view==="list"}">${esc(T("list"))}</button>
+          <button type="button" data-act="view" data-v="grid" aria-pressed="${state.view==="grid"}">${esc(T("cards"))}</button>
+        </div>
+      </div>
+    </div>
+    ${act.length?`<div class="active">${act.map(a=>`<button type="button" class="chip" data-act="toggle" data-f="${a.f}" data-v="${esc(a.v)}" aria-label="Remove ${esc(a.t)}">${esc(a.t)} ✕</button>`).join("")}<button type="button" class="clear" data-act="clear-f">${esc(T("clearAll"))}</button></div>`:""}
+    ${body}`;
+  $("#sortsel").addEventListener("change",e=>{state.sort=e.target.value;state.sortUser=true;updateIndex();$("#sortsel").focus()});
+  $("#drawer-bg").classList.toggle("open",state.drawer);
+  $("#side").classList.toggle("open",state.drawer);
+}
+function rowHtml(r){
+  const sn=snippet(r);
+  return `<li><a class="row" href="#${r.id}">
+    <span class="no">${pad(r.no)}</span>
+    <div>
+      <h3>${hl(r.name)}</h3>
+      <p class="tag">${hl(L(r.tagline))}</p>
+      <div class="meta mono"><span>${esc(catName(r.category))}</span>${r.models.map(m=>`<span>· ${esc(modelName(m))}</span>`).join("")}</div>
+      ${sn?`<p class="snip"><span class="mono">${esc(T("lMatch"))}:</span> ${hl(sn)}</p>`:""}
+    </div>
+    <div class="aside">
+      <div class="cell"><small>${esc(T("lRev"))}</small><b>${esc(fmtRev(r))}</b>${evTag(r.revenue&&r.revenue.tag)}</div>
+      <div class="cell"><small>${esc(T("lScore"))}</small><b>${scoreOf(r)}/25</b>${bars(Math.round(scoreOf(r)/5))}</div>
+      <div class="cell">${verdictPill(r.verdict)}<div style="margin-top:8px">${statusPill(r.status)}</div></div>
+    </div>
+  </a></li>`;
+}
+function cardHtml(r){
+  return `<li><a class="card" href="#${r.id}">
+    <span class="no">${pad(r.no)}.</span>
+    <h3>${hl(r.name)}</h3>
+    <p class="tag">${hl(L(r.tagline))}</p>
+    <div class="pills">${verdictPill(r.verdict)}${statusPill(r.status)}</div>
+    <dl>
+      <dt>${esc(T("lRev"))}</dt><dd>${esc(fmtRev(r))} ${evTag(r.revenue&&r.revenue.tag)}</dd>
+      <dt>${esc(T("lScore"))}</dt><dd>${scoreOf(r)}/25</dd>
+      <dt>${esc(T("lReviewed"))}</dt><dd>${esc(fmtDate(r.reviewed))}</dd>
+    </dl>
+  </a></li>`;
+}
+
+/* ================================================================
+   REVIEW PAGE
+   ================================================================ */
+function cellHtml(c){
+  if(c==null) return "";
+  if(typeof c==="object"&&c.tag!==undefined){
+    const t=L(c);
+    return evTag(c.tag)+(t?`<span class="sub">${esc(t)}</span>`:"");
+  }
+  return esc(L(c));
+}
+function tableHtml(head,rows,foot){
+  return `<div class="tw"><table class="tbl"><thead><tr>${head.map(h=>`<th scope="col">${esc(L(h))}</th>`).join("")}</tr></thead><tbody>${rows.map(r=>`<tr>${r.map(c=>`<td>${cellHtml(c)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>${foot?`<p class="hint">${esc(L(foot))}</p>`:""}`;
+}
+function sec(n,id,title,inner){
+  return `<section class="sec" id="sec-${id}" data-sec="${id}"><div class="sec-h"><span class="sec-n">${n}</span><h2 class="sec-t">${esc(title)}</h2></div>${inner}</section>`;
+}
+function renderReview(r){
+  const idx=REVIEWS.indexOf(r), prev=REVIEWS[idx-1], next=REVIEWS[idx+1];
+  const SECS=[["1","snap",T("s1")],["2","model",T("s2")],["3","nums",T("s3")],["4","mkt",T("s4")],["5","risk",T("s5")],["6","steal",T("s6")],["7","qs",T("s7")],["8","app",T("s8")],["9","src",T("s9")]];
+  const snap=`<dl class="dl">${r.snapshot.map(s=>`<div class="r"><dt>${esc(L(s.l))}</dt><dd>${esc(L(s.v))}${s.note?`<span class="note">${esc(L(s.note))}</span>`:""}</dd><div>${evTag(s.tag)}${s.src.length?`<span class="refs">${s.src.join(" ")}</span>`:""}</div></div>`).join("")}</dl>`;
+  const mathBlock=`<div class="math"><h3>${esc(L(r.math.title))}</h3>
+    <div class="two"><div><div class="mono" style="margin-bottom:8px;color:var(--mute)">${esc(L(r.math.a.h))}</div><pre>${esc(r.math.a.lines.join("\n"))}</pre></div>
+    <div><div class="mono" style="margin-bottom:8px;color:var(--mute)">${esc(L(r.math.b.h))}</div><pre>${esc(r.math.b.lines.join("\n"))}</pre></div></div>
+    ${r.math.notes.map(n=>`<p>${esc(L(n))}</p>`).join("")}</div>`;
+  const model=`<h3>${esc(T("hStreams"))}</h3>${tableHtml(r.streams.head,r.streams.rows)}<p style="margin-top:14px;font-size:14.5px;color:var(--ink-soft)">${esc(L(r.streams.note))}</p>${mathBlock}`;
+  const nums=tableHtml(r.numbers.head,r.numbers.rows)+`<div class="callout"><h3>${esc(T("hReconcile"))}</h3><ul>${r.reconcile.map(x=>`<li>${esc(L(x))}</li>`).join("")}</ul></div>`;
+  const mkt=`<h3>${esc(T("hPosition"))}</h3><p>${esc(L(r.market.position))}</p>
+    <div class="two"><div><h3>${esc(T("hComps"))}</h3><ul class="list">${r.market.comps.map(c=>`<li><span><b>${esc(c.n)}</b><br><span style="font-size:14px;color:var(--mute)">${esc(L(c.note))}</span></span></li>`).join("")}</ul></div>
+    <div><h3>${esc(T("hMoat"))}</h3><p>${esc(L(r.market.moat))}</p></div></div>`;
+  const risk=`<div class="two"><div><h3 style="margin-top:0">${esc(T("hStrengths"))}</h3><ul class="list plus">${r.strengths.map(s=>`<li><span>${esc(L(s))}</span></li>`).join("")}</ul></div>
+    <div><h3 style="margin-top:0">${esc(T("hRisks"))}</h3><ul class="list">${r.risks.map(s=>`<li><span class="sev sev-${s.sev}">${esc(L(SEV[s.sev]))}</span><span>${esc(L(s.t))}</span></li>`).join("")}</ul></div></div>`;
+  const steal=`<ul class="list num">${r.steal.map(s=>`<li><span>${esc(L(s))}</span></li>`).join("")}</ul>`;
+  const qs=`<ul class="list q">${r.questions.map(s=>`<li><span>${esc(L(s))}</span></li>`).join("")}</ul>`;
+  const app=r.appendix.map(a=>`<details class="app"><summary>${esc(L(a.title))}</summary><div class="in">${tableHtml(a.head,a.rows,a.foot)}</div></details>`).join("");
+  const src=`<h3 style="margin-top:0">${esc(T("hSources"))}</h3><ul class="list src" style="border-top:1px solid var(--ink)">${r.sources.map(s=>`<li><span class="id">${s.id}</span><span><span class="t">${s.u?`<a href="${esc(s.u)}" target="_blank" rel="noopener">${esc(s.t)}</a>`:esc(s.t)}</span><br><span class="u">${esc(L(s.use))}</span></span><span class="ty">${esc(L(s.ty))}</span></li>`).join("")}</ul><p class="hint">${esc(L(r.sourceNote))}</p>
+    <h3>${esc(T("hLog"))}</h3><ul class="list log" style="border-top:1px solid var(--ink)">${r.log.map(l=>`<li><span class="d">${esc(fmtDate(l.d))}</span><span>${esc(L(l.t))}</span></li>`).join("")}</ul>`;
+  const total=scoreOf(r);
+  $("#app").innerHTML=`
+  <div class="wrap">
+    <div class="crumbs mono"><a href="#archive">← ${esc(T("back"))}</a><span>/</span><button type="button" data-act="catgo" data-v="${r.category}">${esc(catName(r.category))}</button></div>
+    <header class="rhead">
+      <p class="kick mono">${esc(T("no"))} ${pad(r.no)} · ${esc(catName(r.category))}</p>
+      <h1 id="rh" tabindex="-1">${esc(r.name)}</h1>
+      <p class="tag">${esc(L(r.tagline))}</p>
+      <p class="aka mono">${esc(r.aka)} · <a href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.url.replace("https://",""))}</a></p>
+      <div class="badges">${verdictPill(r.verdict)}${statusPill(r.status)}<span class="mono" style="color:var(--mute)">${esc(T("lReviewed"))} ${esc(fmtDate(r.reviewed))} · ${esc(T("rebuilt"))} ${esc(fmtDate(r.updated))} · ${esc(T("reviewer"))}: ${esc(r.reviewer)}</span></div>
+      ${r.status==="refresh"&&r.statusNote?`<p class="statusnote">↻ ${esc(L(r.statusNote))}</p>`:""}
+      <div class="kwrow">${r.keywords.map(k=>`<button type="button" data-act="kwgo" data-v="${esc(k.k)}">${esc(L(k))}</button>`).join("")}</div>
+    </header>
+  </div>
+  <div class="wrap">
+    <section class="strip" aria-label="Verdict">
+      <div><h2>${esc(T("wWhy"))}</h2><p>${esc(L(r.strip.why))}</p></div>
+      <div><h2>${esc(T("wTake"))}</h2><p>${esc(L(r.strip.take))}</p></div>
+      <div><h2>${esc(T("wNext"))}</h2><p>${esc(L(r.strip.next))}</p></div>
+    </section>
+    <div class="doc">
+      <nav class="toc" aria-label="${esc(T("onPage"))}"><h2 class="mono">${esc(T("onPage"))}</h2><ol>
+        <li><button type="button" data-act="toc" data-v="score"><i>00</i>${esc(T("secScore"))}</button></li>
+        ${SECS.map(s=>`<li><button type="button" data-act="toc" data-v="${s[1]}"><i>0${s[0]}</i>${esc(s[2])}</button></li>`).join("")}</ol></nav>
+      <div>
+        <section class="sec" id="sec-score" data-sec="score" style="margin-top:0;border-top:0;padding-top:34px">
+          <div class="score">${r.scores.map(s=>{const k=byId(SCORE_KEYS.map(x=>({...x,id:x.k})),s.k);return `<div class="score-row"><b>${esc(L(k))}</b><span>${bars(s.v)} <span class="mono" style="margin-left:8px">${s.v}/5</span></span><p>${esc(L(s.note))}</p></div>`}).join("")}</div>
+          <div class="score-total"><span class="big">${total}<small>/25</small></span><span><span class="mono" style="color:var(--mute)">${esc(T("conf"))}</span><br><b style="font:600 20px var(--f-display);text-transform:uppercase">${esc(L(CONF[r.confidence]))}</b></span><span style="color:var(--mute);font-size:13.5px;max-width:34ch">${esc(T("scoreNote"))}</span></div>
+        </section>
+        ${sec("01","snap",T("s1"),snap)}
+        ${sec("02","model",T("s2"),model)}
+        ${sec("03","nums",T("s3"),nums)}
+        ${sec("04","mkt",T("s4"),mkt)}
+        ${sec("05","risk",T("s5"),risk)}
+        ${sec("06","steal",T("s6"),steal)}
+        ${sec("07","qs",T("s7"),qs)}
+        ${sec("08","app",T("s8"),app)}
+        ${sec("09","src",T("s9"),src)}
+        <div class="pn">${prev?`<a href="#${prev.id}">← ${esc(prev.name)}</a>`:`<a href="#archive">← ${esc(T("back"))}</a>`}${next?`<a href="#${next.id}">${esc(next.name)} →</a>`:""}</div>
+      </div>
+    </div>
+  </div>`;
+  const h=$("#rh"); if(h) h.focus({preventScroll:true});
+  spy();
+}
+let spyObs=null;
+function spy(){
+  if(spyObs){spyObs.disconnect();spyObs=null}
+  if(!("IntersectionObserver" in window)) return;
+  const btns=[...document.querySelectorAll(".toc button")];
+  spyObs=new IntersectionObserver(es=>{
+    es.forEach(e=>{if(e.isIntersecting){
+      btns.forEach(b=>b.removeAttribute("aria-current"));
+      const b=document.querySelector('.toc button[data-v="'+e.target.dataset.sec+'"]'); if(b) b.setAttribute("aria-current","true");
+    }});
+  },{rootMargin:"-10% 0px -80% 0px"});
+  document.querySelectorAll(".sec[data-sec]").forEach(s=>spyObs.observe(s));
+}
+
+/* ================================================================
+   METHOD PAGE
+   ================================================================ */
+function renderMethod(){
+  const m=METHOD, t=L(m.title);
+  const defs=(arr,fn)=>arr.map(x=>`<div class="def"><b>${fn(x).a}</b><p>${fn(x).b}</p></div>`).join("");
+  $("#app").innerHTML=`
+  <div class="wrap method" style="padding-bottom:80px">
+    <div class="crumbs mono"><a href="#archive">← ${esc(T("back"))}</a></div>
+    <header style="padding:22px 0 0"><h1 id="rh" tabindex="-1">${esc(t[0])} <em>${esc(t[1])}</em></h1><p class="lead">${esc(L(m.lead))}</p></header>
+    <section class="sec" style="margin-top:0"><div class="sec-h"><span class="sec-n">01</span><h2 class="sec-t">${esc(L(m.order.h))}</h2></div>
+      ${defs(m.order.items,x=>({a:esc(L(x.n)),b:esc(L(x.d))}))}</section>
+    <section class="sec"><div class="sec-h"><span class="sec-n">02</span><h2 class="sec-t">${esc(L(m.evid.h))}</h2></div>
+      ${defs(Object.keys(EVID),k=>({a:evTag(k),b:esc(L(EVID[k].d))}))}</section>
+    <section class="sec"><div class="sec-h"><span class="sec-n">03</span><h2 class="sec-t">${esc(L(m.score.h))}</h2></div>
+      ${defs(SCORE_KEYS,x=>({a:esc(L(x)),b:esc(L(x.d))}))}<p class="hint">${esc(L(m.score.foot))}</p></section>
+    <section class="sec"><div class="sec-h"><span class="sec-n">04</span><h2 class="sec-t">${esc(L(m.verd.h))}</h2></div>
+      ${defs(VERDICTS,x=>({a:verdictPill(x.id),b:esc(L(x.d))}))}</section>
+    <section class="sec"><div class="sec-h"><span class="sec-n">05</span><h2 class="sec-t">${esc(L(m.stat.h))}</h2></div>
+      ${defs(STATUSES,x=>({a:statusPill(x.id),b:esc(L(x.d))}))}</section>
+    <section class="sec"><div class="sec-h"><span class="sec-n">06</span><h2 class="sec-t">${esc(L(m.find.h))}</h2></div>
+      ${defs(m.find.items,x=>({a:esc(L(x.n)),b:esc(L(x.d))}))}</section>
+    <section class="sec"><div class="sec-h"><span class="sec-n">07</span><h2 class="sec-t">${esc(L(m.mods.h))}</h2></div>
+      ${defs(m.mods.items,x=>({a:esc(L(x.n)),b:esc(L(x.d))}))}</section>
+  </div>`;
+  const h=$("#rh"); if(h) h.focus({preventScroll:true});
+}
+
+/* ================================================================
+   ROUTER, CHROME, EVENTS
+   ================================================================ */
+function chrome(){
+  document.documentElement.lang=state.lang;
+  document.querySelectorAll("[data-i]").forEach(el=>{const v=T(el.dataset.i);if(el.dataset.i==="wordmark")el.innerHTML=v;else el.textContent=v});
+  document.querySelectorAll('[data-act="lang"]').forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.v===state.lang)));
+  $("#foot-l").textContent=T("footL"); $("#foot-r").textContent=T("footR");
+  const rt=currentRoute;
+  $("#nav-archive").setAttribute("aria-current",rt==="archive"||REVIEWS.some(r=>r.id===rt)?"page":"false");
+  $("#nav-method").setAttribute("aria-current",rt==="method"?"page":"false");
+  if($("#nav-archive").getAttribute("aria-current")==="false")$("#nav-archive").removeAttribute("aria-current");
+  if($("#nav-method").getAttribute("aria-current")==="false")$("#nav-method").removeAttribute("aria-current");
+}
+function route(keepScroll){
+  const h=(location.hash||"").replace("#","");
+  const prevRoute=currentRoute;
+  if(prevRoute==="archive"&&!keepScroll) lastIndexScroll=window.scrollY;
+  const rev=REVIEWS.find(r=>r.id===h);
+  currentRoute=rev?h:(h==="method"?"method":"archive");
+  state.drawer=false;
+  if(rev) renderReview(rev);
+  else if(h==="method") renderMethod();
+  else renderIndex();
+  chrome();
+  if(!keepScroll){
+    if(currentRoute==="archive"&&prevRoute!=="archive"&&lastIndexScroll) window.scrollTo({top:lastIndexScroll,behavior:"instant"});
+    else if(currentRoute!==prevRoute) window.scrollTo({top:0,behavior:"instant"});
+  }
+}
+function setLang(l){
+  state.lang=l;
+  try{localStorage.setItem("cra-lang",l)}catch(e){}
+  route(true);
+}
+function resetAll(){
+  state.q=""; for(const k in state.f) state.f[k].clear();
+}
+document.addEventListener("click",e=>{
+  const el=e.target.closest("[data-act]"); if(!el) return;
+  const a=el.dataset.act, v=el.dataset.v;
+  if(a==="lang"){setLang(v)}
+  else if(a==="toggle"){
+    const inSide=!!el.closest("#side"), fk=el.dataset.f;
+    const s=state.f[fk]; if(s.has(v))s.delete(v); else s.add(v); updateIndex();
+    if(inSide){const nb=[...document.querySelectorAll('#side button[data-act="toggle"]')].find(b=>b.dataset.f===fk&&b.dataset.v===v); if(nb)nb.focus({preventScroll:true})}
+  }
+  else if(a==="clear-f"){for(const k in state.f)state.f[k].clear();updateIndex()}
+  else if(a==="clear-q"){state.q="";const q=$("#q");if(q){q.value="";q.focus()}$("#qclear").hidden=true;updateIndex()}
+  else if(a==="reset"){resetAll();const q=$("#q");if(q)q.value="";$("#qclear").hidden=true;updateIndex()}
+  else if(a==="view"){state.view=v;try{localStorage.setItem("cra-view",v)}catch(e){}updateIndex()}
+  else if(a==="drawer-open"){state.drawer=true;updateIndex()}
+  else if(a==="drawer-close"){state.drawer=false;$("#drawer-bg").classList.remove("open");const sd=$("#side");if(sd)sd.classList.remove("open")}
+  else if(a==="toc"){const t=document.getElementById("sec-"+v);if(t){const rm=window.matchMedia("(prefers-reduced-motion: reduce)").matches;t.scrollIntoView({behavior:rm?"auto":"smooth",block:"start"})}}
+  else if(a==="kwgo"){resetAll();state.f.kw.add(v);lastIndexScroll=0;location.hash="archive"}
+  else if(a==="catgo"){resetAll();state.f.category.add(v);lastIndexScroll=0;location.hash="archive"}
+});
+document.addEventListener("keydown",e=>{
+  const q=$("#q");
+  if(e.key==="/"&&q&&document.activeElement!==q&&!/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)){e.preventDefault();q.focus()}
+  else if(e.key==="Escape"){
+    if(state.drawer){state.drawer=false;updateIndex()}
+    else if(q&&document.activeElement===q&&state.q){state.q="";q.value="";$("#qclear").hidden=true;updateIndex()}
+  }
+});
+document.addEventListener("toggle",e=>{const d=e.target;if(d&&d.matches&&d.matches("details.fgroup[data-k]"))state.open[d.dataset.k]=d.open},true);
+window.addEventListener("hashchange",()=>route(false));
+
+function start(saved){
+  try{const l=localStorage.getItem("cra-lang"),v=localStorage.getItem("cra-view");if(l)state.lang=l;if(v)state.view=v}catch(e){}
+  if(!localStorage_ok()) state.lang=(navigator.language||"en").toLowerCase().startsWith("uk")?"uk":"en";
+  if(saved&&saved.lang)state.lang=saved.lang;
+  if(saved&&saved.q)state.q=saved.q;
+  if(saved&&saved.sort)state.sort=saved.sort;
+  if(saved&&saved.view)state.view=saved.view;
+  route(true);
+}
+function localStorage_ok(){try{return localStorage.getItem("cra-lang")!==null}catch(e){return false}}
+if(window.claude&&window.claude.hot&&window.claude.hot.snapshot){
+  window.claude.hot.snapshot(()=>({lang:state.lang,q:state.q,sort:state.sort,view:state.view}));
+}
+window.claude?.hot?.ready ? window.claude.hot.ready(start) : start(window.claude?.hot?.data ?? {});
+</script>
+</body>
+</html>
