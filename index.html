@@ -374,6 +374,7 @@ body.locked .topbar,body.locked main,body.locked .foot{display:none}
 const CATS=[
  {id:"community",en:"Communities & clubs",uk:"Спільноти та клуби"},
  {id:"saas",en:"Software & SaaS",uk:"Софт і SaaS"},
+ {id:"ai",en:"AI & agents",uk:"AI та агенти"},
  {id:"marketplace",en:"Marketplaces",uk:"Маркетплейси"},
  {id:"fintech",en:"Fintech & finance",uk:"Фінтех і фінанси"},
  {id:"media",en:"Media & content",uk:"Медіа та контент"},
@@ -638,6 +639,177 @@ const REVIEWS=[
  log:[
   {d:"2026-09",t:{en:"Original dossier “YBC & YBC HUMAN: research” written by the team, in Ukrainian.",uk:"Команда написала оригінальне досьє «YBC & YBC HUMAN: рісерч» українською."}},
   {d:"2026-11-19",t:{en:"Rebuilt into template v1: added the revenue estimate, evidence tags, scores, risks and an inconsistency check. No figure was re-verified. Status set to Needs refresh because the festival has taken place.",uk:"Перероблено за шаблоном v1: додано оцінку доходу, позначки доказів, оцінки, ризики та перевірку розбіжностей. Жодну цифру не перевіряли повторно. Статус «Потребує оновлення», бо фестиваль уже відбувся."}}
+ ]
+}
+,{
+ id:"instinct", no:2,
+ name:"Instinct",
+ aka:"SPEAR STREET TECHNOLOGY, INC. · PERSONAL AI AGENT",
+ url:"https://instinct.com",
+ category:"ai",
+ models:["takerate","sponsorship"],
+ regions:["us"],
+ founded:"2025–2026",
+ revenue:null,
+ growth:"up", verdict:"track", status:"reviewed", confidence:"med",
+ reviewer:"Team", reviewed:"2026-11", updated:"2026-11-19",
+ relevantTo:[{en:"AI agents & assistants",uk:"Напрям «AI-агенти та асистенти»"}],
+ keywords:[
+  {k:"ai-agent",en:"AI agent",uk:"AI-агент"},
+  {k:"personal-assistant",en:"Personal assistant",uk:"Персональний асистент"},
+  {k:"sms-interface",en:"Text-message interface",uk:"Інтерфейс через SMS"},
+  {k:"invite-only",en:"Invite-only",uk:"Лише за запрошенням"},
+  {k:"pre-revenue",en:"Pre-revenue",uk:"Без доходу"},
+  {k:"venture-backed",en:"Venture-backed",uk:"Венчурне фінансування"},
+  {k:"young-founder",en:"Young founder",uk:"Молодий засновник"},
+  {k:"data-privacy",en:"Data & privacy risk",uk:"Ризик даних і приватності"},
+  {k:"concierge",en:"Concierge calls",uk:"Дзвінки-консьєрж"},
+  {k:"travel",en:"Travel bookings",uk:"Бронювання подорожей"}
+ ],
+ tagline:{en:"A personal AI agent that acts on your behalf by text and phone, valued at $10B within about five months of the company being registered, with no reported revenue.",uk:"Персональний AI-агент, що діє від вашого імені через SMS і дзвінки, оцінений у $10 млрд приблизно за п’ять місяців після реєстрації компанії, без повідомленого доходу."},
+ strip:{
+  why:{en:"The fastest-funded consumer AI agent right now. It shows what investors pay for an agent that actually completes tasks, and which trust and data questions come with it.",
+       uk:"Найшвидше профінансований споживчий AI-агент зараз. Показує, скільки інвестори платять за агента, що справді виконує завдання, і які питання довіри та даних із цим пов’язані."},
+  take:{en:"The valuation is far ahead of anything we can verify. No revenue, no public pricing and no company-stated user count; one outlet reports 100,000+ invited users. Money so far rests on the founder's pedigree, speed and the size of the opportunity. The business model is still open: subscription, advertising and referral income have all been floated, and none is confirmed. We track it rather than copy it.",
+        uk:"Оцінка набагато випереджає те, що ми можемо перевірити. Немає доходу, публічних цін і заявленої компанією кількості користувачів; одне видання повідомляє про 100 000+ запрошених користувачів. Гроші поки тримаються на репутації засновника, швидкості та розмірі можливості. Бізнес-модель відкрита: називали підписку, рекламу й реферальний дохід, і жодне не підтверджено. Ми стежимо, а не копіюємо."},
+  next:{en:"Refresh at the next funding or pricing announcement. Look for: public pricing, a company-stated user number, retention, and how the referral and recommendations stream is structured. Benchmark against Meta's Muse and Lindy.",
+        uk:"Оновити після наступного раунду чи оголошення цін. Шукати: публічні ціни, заявлену компанією кількість користувачів, утримання та структуру реферального й рекомендаційного потоку. Порівняти з Muse від Meta та Lindy."}
+ },
+ scores:[
+  {k:"model",v:2,note:{en:"Subscription, ads and referral income were all floated, but none is confirmed. The product is free today.",uk:"Підписку, рекламу й реферальний дохід називали, але жодне не підтверджено. Зараз продукт безкоштовний."}},
+  {k:"revenue",v:1,note:{en:"Reported as pre-revenue, with no public pricing. Nothing to verify.",uk:"Повідомляється як такий, що не має доходу, без публічних цін. Перевіряти нічого."}},
+  {k:"growth",v:4,note:{en:"100,000+ invited users reported within weeks, and three rounds in about five months. The user figure comes from one outlet.",uk:"100 000+ запрошених користувачів за тижні та три раунди приблизно за п’ять місяців. Цифра користувачів — з одного видання."}},
+  {k:"moat",v:2,note:{en:"Capital, brand and speed, but the underlying models are shared, Meta competes directly and the data terms draw criticism.",uk:"Капітал, бренд і швидкість, але базові моделі спільні, Meta конкурує напряму, а умови щодо даних критикують."}},
+  {k:"relevance",v:3,note:{en:"Useful as a signal of where agents are heading and how trust is handled. Not a model we can test now.",uk:"Корисно як сигнал, куди рухаються агенти і як вирішують довіру. Не модель, яку можна пробувати зараз."}}
+ ],
+ snapshot:[
+  {l:{en:"Founded",uk:"Засновано"},v:{en:"2025 per Sequoia and one tear sheet; entity registered in California in April 2026 per TechFundingNews",uk:"2025 за Sequoia та одним профілем; юрособу зареєстровано в Каліфорнії у квітні 2026 за TechFundingNews"},tag:"claimed",src:["S11","S7"],note:{en:"Sources conflict. To reconcile.",uk:"Джерела суперечать одне одному. Потрібно звірити."}},
+  {l:{en:"Legal entity",uk:"Юрособа"},v:{en:"Spear Street Technology, Inc. d/b/a Instinct, San Francisco",uk:"Spear Street Technology, Inc. d/b/a Instinct, Сан-Франциско"},tag:"reported",src:["S12","S5"]},
+  {l:{en:"Lead",uk:"Керівник"},v:{en:"Noah Shinn, founder and CEO, 23. Previously a research scientist at Sierra; co-author of the 2023 Reflexion paper.",uk:"Ноа Шинн, засновник і CEO, 23 роки. Раніше науковий співробітник у Sierra; співавтор статті Reflexion (2023)."},tag:"reported",src:["S12","S5","S15"]},
+  {l:{en:"Product",uk:"Продукт"},v:{en:"An agent with its own phone number and computer that books travel and tables, buys, pays bills, cancels subscriptions and orders groceries. Users reach it by SMS; no mobile app yet.",uk:"Агент із власним номером і комп’ютером, який бронює подорожі та столики, купує, платить рахунки, скасовує підписки й замовляє продукти. Користувачі пишуть через SMS; мобільного застосунку ще немає."},tag:"reported",src:["S1"]},
+  {l:{en:"Access",uk:"Доступ"},v:{en:"Invite-only since August 2026, soft-launched through venture investors. Concierge (phone calls) and a trusted-person network added in September.",uk:"Лише за запрошенням з серпня 2026, м’який запуск через венчурних інвесторів. У вересні додано Concierge (дзвінки) та мережу довірених осіб."},tag:"reported",src:["S1","S7","S17"]},
+  {l:{en:"Users",uk:"Користувачі"},v:{en:"100,000+ invited users per The Information, repeated by Dealroom. The company has shared no user numbers.",uk:"100 000+ запрошених користувачів за The Information, повторено Dealroom. Компанія не ділилася кількістю користувачів."},tag:"claimed",src:["S11","S10","S1"]},
+  {l:{en:"Headcount",uk:"Штат"},v:{en:"Not found in the sources reviewed.",uk:"Не знайдено в переглянутих джерелах."},tag:"unknown",src:[]}
+ ],
+ streams:{
+  head:[{en:"Stream",uk:"Джерело"},{en:"Price",uk:"Ціна"},{en:"Volume",uk:"Обсяг"},{en:"Est. revenue",uk:"Оцінка доходу"},{en:"Basis",uk:"Підстава"}],
+  rows:[
+   [{en:"Subscription",uk:"Підписка"},{en:"None published. One competitor guesses $200–500 a month.",uk:"Не опубліковано. Один конкурент припускає $200–500 на місяць."},{en:"Product is free today",uk:"Зараз продукт безкоштовний"},{en:"Unknown",uk:"Невідомо"},{tag:"unknown",en:"The competitor's figure is unsourced and conflicts with the CEO saying he does not want to charge.",uk:"Цифра конкурента без джерела й суперечить словам CEO, що він не хоче брати плату."}],
+   [{en:"Product recommendations",uk:"Рекомендації товарів"},{en:"Not disclosed",uk:"Не розкрито"},{en:"Launched 30 Sep 2026, with partners such as local chefs and designers",uk:"Запущено 30 вер. 2026, із партнерами на кшталт місцевих шефів і дизайнерів"},{en:"Unknown",uk:"Невідомо"},{tag:"claimed",en:"Announced by the founder as a possible revenue stream.",uk:"Засновник оголосив як можливе джерело доходу."}],
+   [{en:"Referral commissions",uk:"Реферальні комісії"},{en:"Third-party illustration: about $3,000 per home purchase, about $1.50 per dinner booking",uk:"Ілюстрація стороннього автора: близько $3 000 за купівлю житла, близько $1,50 за бронювання вечері"},{en:"Travel is half of transaction volume per the founder",uk:"Подорожі — половина обсягу транзакцій за словами засновника"},{en:"Unknown",uk:"Невідомо"},{tag:"unknown",en:"Single commentary source. Not confirmed by the company.",uk:"Одне джерело-коментар. Компанія не підтвердила."}],
+   [{en:"Advertising",uk:"Реклама"},{en:"Not disclosed",uk:"Не розкрито"},{en:"—",uk:"—"},{en:"Unknown",uk:"Невідомо"},{tag:"unknown",en:"The CEO has said advertising is a possibility.",uk:"CEO казав, що реклама можлива."}]
+  ],
+  note:{en:"Cost drivers we can infer: a dedicated cloud computer and phone line per task, vision-language model calls, and compute that Dealroom says is already strained. The company reports no cost data.",
+        uk:"Витрати, які ми можемо припустити: окремий хмарний комп’ютер і телефонна лінія на завдання, виклики мультимодальних моделей і обчислювальні потужності, які за Dealroom уже перевантажені. Дані про витрати компанія не наводить."}
+ },
+ math:{
+  title:{en:"What the valuation implies",uk:"Що означає оцінка"},
+  a:{h:{en:"Value per invited user",uk:"Вартість на запрошеного користувача"},lines:["$10,000,000,000 / 100,000 users","= $100,000 per user"]},
+  b:{h:{en:"Capital history",uk:"Історія капіталу"},lines:["Series C   $1,000M","Series B     $250M","Series A      $75M","Early round ~$25M  (350 − 250 − 75)","Total   ≈ $1.35B  (a tear sheet says $1.3B+)"]},
+  notes:[
+   {en:"The $100,000 per user is our calculation on a user figure reported by one outlet. It shows how far the price rests on future potential, not on current usage.",uk:"$100 000 на користувача — наш розрахунок на цифрі одного видання. Він показує, наскільки ціна тримається на майбутньому потенціалі, а не на поточному використанні."},
+   {en:"The early round of about $25M is our subtraction, not a reported figure.",uk:"Ранній раунд близько $25 млн — наше віднімання, а не повідомлена цифра."}
+  ]
+ },
+ numbers:{
+  head:[{en:"Metric",uk:"Показник"},{en:"Value",uk:"Значення"},{en:"Evidence",uk:"Докази"},{en:"As of",uk:"Станом на"},{en:"Note",uk:"Примітка"}],
+  rows:[
+   [{en:"Series C",uk:"Раунд C"},"$1B at $10B",{tag:"reported"},{en:"28 Sep 2026",uk:"28 вер. 2026"},{en:"Led by Sequoia, Coatue and Benchmark. Dealroom lists $6.47B for the same round.",uk:"Лідери: Sequoia, Coatue і Benchmark. Dealroom наводить $6,47 млрд для цього ж раунду."}],
+   [{en:"Series B",uk:"Раунд B"},"$250M at $2.5B",{tag:"reported"},{en:"26 Aug 2026",uk:"26 серп. 2026"},{en:"Co-led by Index Ventures and Benchmark. Total raised then: $350M.",uk:"Співлідери: Index Ventures і Benchmark. Загалом залучено на той момент: $350 млн."}],
+   [{en:"Series A",uk:"Раунд A"},"$75M",{tag:"reported"},{en:"Aug 2026",uk:"серп. 2026"},{en:"Led by Kleiner Perkins, per Forbes.",uk:"Лідер: Kleiner Perkins, за Forbes."}],
+   [{en:"Valuation steps",uk:"Кроки оцінки"},"$500M → $2.5B → $10B",{tag:"reported"},{en:"Aug–Sep 2026",uk:"серп.–вер. 2026"},{en:"Four times in about a month between the last two.",uk:"Чотирикратне зростання приблизно за місяць між останніми двома."}],
+   [{en:"Invited users",uk:"Запрошені користувачі"},"100,000+",{tag:"claimed"},{en:"Sep 2026",uk:"вер. 2026"},{en:"One outlet, The Information. Not stated by the company.",uk:"Одне видання, The Information. Компанія не заявляла."}],
+   [{en:"Travel share of transactions",uk:"Частка подорожей у транзакціях"},"≈50%",{tag:"claimed"},{en:"Sep 2026",uk:"вер. 2026"},{en:"Founder statement to Skift.",uk:"Заява засновника для Skift."}],
+   [{en:"Revenue",uk:"Дохід"},{en:"Pre-revenue",uk:"Без доходу"},{tag:"claimed"},{en:"2026",uk:"2026"},{en:"Per Sacra; no company figure.",uk:"За Sacra; цифри від компанії немає."}],
+   [{en:"Pricing, retention, margin",uk:"Ціни, утримання, маржа"},{en:"—",uk:"—"},{tag:"unknown"},{en:"—",uk:"—"},""]
+  ]
+ },
+ reconcile:[
+  {en:"Series C valuation: $10B in company and TechCrunch reporting, $6.47B on Dealroom.",uk:"Оцінка раунду C: $10 млрд у повідомленнях компанії та TechCrunch, $6,47 млрд на Dealroom."},
+  {en:"Founding: 2025 on Sequoia's listing, April 2026 for the registered entity.",uk:"Заснування: 2025 у лістингу Sequoia, квітень 2026 для зареєстрованої юрособи."},
+  {en:"The Spinnable article calls the $350M a Series B. The Series B was $250M; $350M is total funding at that point.",uk:"Стаття Spinnable називає $350 млн раундом B. Раунд B був $250 млн; $350 млн — загальні залучені кошти на той момент."},
+  {en:"Pricing: Spinnable cites $200–500 a month, while Sacra says the product is free and the CEO has said he does not want to charge.",uk:"Ціни: Spinnable називає $200–500 на місяць, тоді як Sacra пише, що продукт безкоштовний, а CEO казав, що не хоче брати плату."}
+ ],
+ market:{
+  position:{en:"Instinct is the best-funded of the new consumer agents that act through a phone and a computer. It is reached by text and is not yet open to the public.",uk:"Instinct — найкраще профінансований серед нових споживчих агентів, що діють через телефон і комп’ютер. Доступ через SMS, для всіх ще не відкритий."},
+  comps:[
+   {n:"Meta Muse",note:{en:"Similar task features, built into Meta's social products, top of US app stores, millions of downloads.",uk:"Подібні можливості, вбудований у соцпродукти Meta, на вершині магазинів застосунків США, мільйони завантажень."}},
+   {n:"Lindy",note:{en:"Email and calendar assistant with public pricing. A narrower device story.",uk:"Асистент для пошти й календаря з публічними цінами. Вужчий сценарій використання пристроїв."}},
+   {n:"OpenClaw",note:{en:"Self-hosted and user-operated, while Instinct is a managed cloud service.",uk:"Self-hosted і керований користувачем, тоді як Instinct — керований хмарний сервіс."}}
+  ],
+  moat:{en:"Capital, brand and an early lead with technologists. Against that: shared underlying models, a direct rival with a huge distribution base, low switching costs, and data terms that early users have criticised.",uk:"Капітал, бренд і рання перевага серед технарів. Проти цього: спільні базові моделі, прямий конкурент із величезною базою розповсюдження, низькі витрати на перехід і умови щодо даних, які критикують перші користувачі."}
+ },
+ strengths:[
+  {en:"Founder with a research record at Sierra and the Reflexion paper, which opened funding quickly.",uk:"Засновник із науковим доробком у Sierra та статтею Reflexion, що швидко відкрило фінансування."},
+  {en:"Strong investor line-up: Sequoia, Benchmark, Index, Kleiner Perkins, Coatue.",uk:"Сильний склад інвесторів: Sequoia, Benchmark, Index, Kleiner Perkins, Coatue."},
+  {en:"Simple interface: text a number, no app to install.",uk:"Простий інтерфейс: написати на номер, застосунок не потрібен."},
+  {en:"Distribution through venture investors gave a dense early user group of technologists.",uk:"Розповсюдження через венчурних інвесторів дало щільну ранню групу користувачів-технарів."},
+  {en:"Real task completion, with travel reported as about half of transaction volume.",uk:"Реальне виконання завдань, а подорожі — приблизно половина обсягу транзакцій за повідомленнями."}
+ ],
+ risks:[
+  {sev:"high",t:{en:"Data and trust. Terms allow training on user data and the agent needs deep account access. The first privacy policy drew criticism and has been updated.",uk:"Дані та довіра. Умови дозволяють навчання на даних користувачів, а агенту потрібен глибокий доступ до акаунтів. Першу політику приватності критикували, її оновлено."}},
+  {sev:"high",t:{en:"No proven revenue. The $10B valuation depends on a model that has not been chosen or shown.",uk:"Немає доведеного доходу. Оцінка $10 млрд залежить від моделі, яку ще не обрано й не показано."}},
+  {sev:"med",t:{en:"Compute strain. Dealroom reports the user base is straining capacity.",uk:"Навантаження на обчислення. Dealroom повідомляє, що користувачі перевантажують потужності."}},
+  {sev:"med",t:{en:"Agent errors. A competitor's review lists a non-refundable flight and duplicate purchases; this is unverified and from a rival.",uk:"Помилки агента. В огляді конкурента згадано невозвратний переліт і дублі покупок; це не перевірено й від суперника."}},
+  {sev:"med",t:{en:"Reaction to monetisation. Product recommendations drew complaints from some users on launch.",uk:"Реакція на монетизацію. Рекомендації товарів на запуску викликали невдоволення частини користувачів."}},
+  {sev:"low",t:{en:"Dependence on one young founder who declines interviews.",uk:"Залежність від одного молодого засновника, який відмовляється від інтерв’ю."}},
+  {sev:"unk",t:{en:"Not known: headcount, costs, retention, real pricing.",uk:"Невідомо: штат, витрати, утримання, реальні ціни."}}
+ ],
+ steal:[
+  {en:"Distribute first through a dense, trusted group (investors and their networks), then widen.",uk:"Спершу розповсюджувати через щільну довірену групу (інвестори та їхні мережі), потім розширювати."},
+  {en:"Use an interface people already have, such as text, and ask for no new app.",uk:"Використовувати інтерфейс, який у людей уже є, наприклад SMS, і не просити нового застосунку."},
+  {en:"Announce the new capability with a concrete job (phone calls for bookings) rather than a general claim.",uk:"Оголошувати нову можливість через конкретне завдання (дзвінки для бронювань), а не загальне твердження."},
+  {en:"Update the privacy policy openly when criticism arrives, and say so.",uk:"Відкрито оновлювати політику приватності, коли з’являється критика, і казати про це."}
+ ],
+ questions:[
+  {en:"Which revenue model will they pick, and when does pricing go public?",uk:"Яку модель доходу оберуть і коли ціни стануть публічними?"},
+  {en:"A company-stated user count, usage per user, and retention.",uk:"Заявлена компанією кількість користувачів, використання на користувача та утримання."},
+  {en:"Why Dealroom lists $6.47B for a round reported at $10B.",uk:"Чому Dealroom наводить $6,47 млрд для раунду, про який повідомлено $10 млрд."},
+  {en:"The cost of a task: compute and phone per completed booking.",uk:"Вартість завдання: обчислення й телефонія на одне виконане бронювання."},
+  {en:"Primary-source text of the terms of service, instead of the competitor's reading of clauses 4, 6 and 12.",uk:"Первинний текст умов користування замість прочитання конкурентом пунктів 4, 6 і 12."},
+  {en:"Headcount and team structure.",uk:"Кількість людей і структура команди."}
+ ],
+ appendix:[
+  {title:{en:"Funding timeline",uk:"Хронологія фінансування"},type:"table",
+   head:[{en:"When",uk:"Коли"},{en:"Round",uk:"Раунд"},{en:"Amount",uk:"Сума"},{en:"Valuation",uk:"Оцінка"},{en:"Lead investors",uk:"Основні інвестори"}],
+   rows:[
+    [{en:"Date not found",uk:"Дату не знайдено"},{en:"Early round",uk:"Ранній раунд"},"≈$25M (our calc)",{en:"—",uk:"—"},"Conviction (Pranav Reddy)"],
+    [{en:"Aug 2026",uk:"серп. 2026"},"Series A","$75M","$500M","Kleiner Perkins (Mamoon Hamid)"],
+    [{en:"26 Aug 2026",uk:"26 серп. 2026"},"Series B","$250M","$2.5B","Index Ventures, Benchmark"],
+    [{en:"28 Sep 2026",uk:"28 вер. 2026"},"Series C","$1B","$10B","Sequoia, Coatue, Benchmark"]
+   ],
+   foot:{en:"Valuation at Series A is the $500M round reported five weeks before Series B; the exact link to the $75M is our reading.",uk:"Оцінка на раунді A — це $500 млн, про які повідомлялося за п’ять тижнів до раунду B; точний зв’язок із $75 млн — наше прочитання."}},
+  {title:{en:"Product timeline",uk:"Хронологія продукту"},type:"table",
+   head:[{en:"When",uk:"Коли"},{en:"What",uk:"Що"},{en:"Evidence",uk:"Докази"}],
+   rows:[
+    [{en:"Apr 2026",uk:"квіт. 2026"},{en:"Spear Street Technology registered in California",uk:"Spear Street Technology зареєстровано в Каліфорнії"},{tag:"claimed"}],
+    [{en:"Aug 2026",uk:"серп. 2026"},{en:"Invite-only launch",uk:"Запуск лише за запрошеннями"},{tag:"reported"}],
+    [{en:"16–17 Sep 2026",uk:"16–17 вер. 2026"},{en:"Concierge phone calls in early access",uk:"Дзвінки Concierge у ранньому доступі"},{tag:"reported"}],
+    [{en:"30 Sep 2026",uk:"30 вер. 2026"},{en:"Product recommendations announced",uk:"Оголошено рекомендації товарів"},{tag:"reported"}]
+   ]}
+ ],
+ sources:[
+  {id:"S1",t:"TechCrunch, 28 Sep 2026",u:"https://techcrunch.com/?p=3170483",ty:{en:"Press",uk:"Преса"},use:{en:"Series C, product, Concierge, privacy, Muse",uk:"Раунд C, продукт, Concierge, приватність, Muse"}},
+  {id:"S2",t:"Verdict",u:"https://www.verdict.co.uk/newsletters/instinct-raises-1bn-series-c",ty:{en:"Press",uk:"Преса"},use:{en:"Series C investors",uk:"Інвестори раунду C"}},
+  {id:"S3",t:"KSL (Reuters wire)",u:"https://www.ksl.com/article/51629454",ty:{en:"Press",uk:"Преса"},use:{en:"Series C announcement",uk:"Оголошення раунду C"}},
+  {id:"S4",t:"SiliconANGLE, 27 Aug 2026",u:"https://siliconangle.com/2026/08/27/consumer-focused-ai-assistant-startup-instinct-reportedly-raising-250m/",ty:{en:"Press",uk:"Преса"},use:{en:"Series B, data terms",uk:"Раунд B, умови щодо даних"}},
+  {id:"S5",t:"Pulse 2.0",u:"https://pulse2.com/instinct-raises-250-million-at-2-5-billion-valuation-as-ai-assistant-goes-viral-in-silicon-valley/",ty:{en:"Press",uk:"Преса"},use:{en:"Series B, founder background",uk:"Раунд B, досвід засновника"}},
+  {id:"S6",t:"Sacra",u:"https://sacra.com/c/instinct/",ty:{en:"Analyst",uk:"Аналітик"},use:{en:"Pre-revenue, free product",uk:"Без доходу, безкоштовний продукт"}},
+  {id:"S7",t:"Layer3Labs guides",u:"https://www.layer3labs.io/guides/is-instinct-ai-free",ty:{en:"Secondary",uk:"Вторинне"},use:{en:"Pricing stance, registration date, Concierge",uk:"Позиція щодо цін, дата реєстрації, Concierge"}},
+  {id:"S8",t:"Skift, 28 Sep 2026",u:"https://skift.com/2026/09/28/instincts-app-is-fueled-by-travel-founder-says-its-half-of-volume/",ty:{en:"Press",uk:"Преса"},use:{en:"Travel share of volume",uk:"Частка подорожей в обсязі"}},
+  {id:"S9",t:"TechCrunch, 30 Sep 2026",u:"https://techcrunch.com/2026/09/30/instincts-new-product-recommendations-are-giving-some-users-the-ick/",ty:{en:"Press",uk:"Преса"},use:{en:"Product recommendations stream",uk:"Потік рекомендацій товарів"}},
+  {id:"S10",t:"Dealroom",u:"https://dealroom.co/news/157240-ai-startup-instinct-raises-1b-series-c-at-10b-valuation/",ty:{en:"Data provider",uk:"Постачальник даних"},use:{en:"Alternative valuation, user count, compute strain",uk:"Інша оцінка, кількість користувачів, навантаження"}},
+  {id:"S11",t:"Silicon Valley Invest Club tear sheet",u:"https://siliconvalleyinvestclub.com/pl/companies/instinct-co/tear-sheet.pdf",ty:{en:"Secondary",uk:"Вторинне"},use:{en:"Founding year, user count, total funding",uk:"Рік заснування, користувачі, загальне фінансування"}},
+  {id:"S12",t:"rywalker.com research",u:"https://rywalker.com/research/instinct",ty:{en:"Analyst",uk:"Аналітик"},use:{en:"Entity, founder, competitors",uk:"Юрособа, засновник, конкуренти"}},
+  {id:"S13",t:"Spinnable, “What is Instinct AI”",u:"https://www.spinnable.ai/blog/what-is-instinct-ai-guide",ty:{en:"Competitor",uk:"Конкурент"},use:{en:"Starting article. Used for pricing guess and terms-of-service claims, both unverified.",uk:"Стартова стаття. Використано для припущення про ціни та тверджень щодо умов користування, обидва не перевірені."}},
+  {id:"S14",t:"Runtime Wire (Forbes)",u:"https://runtimewire.com/article/noah-shinn-instinct-seeks-200m-2-5b-valuation",ty:{en:"Press",uk:"Преса"},use:{en:"Series A and early-round leads",uk:"Лідери раунду A і раннього раунду"}},
+  {id:"S15",t:"ValueAdd VC",u:"https://valueaddvc.com/blog/instinct-ai-valuation-2026-250m-series-b-2-5b-noah-shinns-viral-assistant",ty:{en:"Secondary",uk:"Вторинне"},use:{en:"Series B date, $500M round",uk:"Дата раунду B, раунд на $500 млн"}},
+  {id:"S16",t:"Business Model Analyst",u:"https://businessmodelanalyst.com/instinct-ai-assistant-referral-fee-business-model/",ty:{en:"Commentary",uk:"Коментар"},use:{en:"Referral-fee illustration",uk:"Ілюстрація реферальних комісій"}},
+  {id:"S17",t:"Business Insider via AI Weekly",u:"https://aiweekly.co/alerts/business-insider-profiles-noah-shinn-as-instinct-ai-talks-10b-valuation-invite",ty:{en:"Press",uk:"Преса"},use:{en:"Soft launch via investors",uk:"М’який запуск через інвесторів"}}
+ ],
+ sourceNote:{en:"Accessed 19 November 2026. Most figures come from press reports and the company has published little itself. The Spinnable article is written by a competitor and is used only where marked.",uk:"Переглянуто 19 листопада 2026. Більшість цифр — із преси, власних даних компанія опублікувала мало. Стаття Spinnable написана конкурентом і використана лише там, де позначено."},
+ log:[
+  {d:"2026-11-19",t:{en:"First review, started from the Spinnable article and checked against about 15 other sources. Status Reviewed, evidence confidence Medium.",uk:"Перший огляд, початий зі статті Spinnable та звірений приблизно з 15 іншими джерелами. Статус «Готово», впевненість у доказах середня."}}
  ]
 }
 /*__NEW_REVIEWS_ABOVE__*/
