@@ -317,8 +317,36 @@ details.app .in{padding:2px 0 26px}
 }
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.side{transition:none}}
 </style>
+<meta name="robots" content="noindex, nofollow">
+<style>
+body.locked .topbar,body.locked main,body.locked .foot{display:none}
+#gate{position:relative;z-index:2;min-height:100vh;display:flex;align-items:center;padding:32px clamp(16px,4vw,48px)}
+#gate[hidden]{display:none}
+#gate form{width:min(560px,100%);margin:0 auto}
+#gate .kick{margin:0 0 14px;color:var(--red-text)}
+#gate h1{margin:0 0 28px;font:700 clamp(54px,12vw,120px)/.88 var(--f-display);text-transform:uppercase}
+#gate h1 span{display:block;font:italic 500 .86em/1.05 var(--f-serif);color:var(--red);text-transform:none}
+#gate label{display:block;font:500 12px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px}
+#gate input{width:100%;border:0;border-bottom:2px solid var(--ink);background:transparent;padding:10px 0;font:500 24px var(--f-display);color:var(--ink);border-radius:0;letter-spacing:.04em}
+#gate input:focus{outline:none;border-color:var(--red)}
+#gate .row2{display:flex;gap:16px;align-items:center;margin-top:20px;flex-wrap:wrap}
+#gate .err{margin:14px 0 0;color:var(--red-text);font-weight:600}
+#gate .note{margin:26px 0 0;color:var(--mute);font-size:13.5px}
+</style>
 </head>
-<body>
+<body class="locked">
+
+<div id="gate" role="dialog" aria-modal="true" aria-labelledby="gate-t" hidden>
+  <form id="gate-form" autocomplete="off">
+    <p class="kick mono">Team only · Лише для команди</p>
+    <h1 id="gate-t">Company<span>/Archive</span></h1>
+    <label for="gate-pw">Access code · Код доступу</label>
+    <input id="gate-pw" type="password" autocomplete="off" required>
+    <div class="row2"><button class="btn" id="gate-go" type="submit">Enter · Увійти</button></div>
+    <p class="err" id="gate-err" role="alert" hidden>Wrong code. · Невірний код.</p>
+    <p class="note">Returning on this same browser skips this step. · Повторний візит із цього браузера пропускає цей крок.</p>
+  </form>
+</div>
 
 <header class="topbar">
   <div class="wrap">
@@ -1195,6 +1223,24 @@ if(window.claude&&window.claude.hot&&window.claude.hot.snapshot){
   window.claude.hot.snapshot(()=>({lang:state.lang,q:state.q,sort:state.sort,view:state.view}));
 }
 window.claude?.hot?.ready ? window.claude.hot.ready(start) : start(window.claude?.hot?.data ?? {});
+</script>
+<script>
+(function(){
+  // ---- CHANGE THIS ACCESS CODE, then give it only to the people who should have access ----
+  var ACCESS_CODE = "S3GGB2KP4PqXLRvm";
+  var KEY = "cra-access-granted";
+  var gate = document.getElementById("gate"), form = document.getElementById("gate-form");
+  var pw = document.getElementById("gate-pw"), err = document.getElementById("gate-err");
+  function unlock(){ gate.hidden = true; document.body.classList.remove("locked"); }
+  try{ if(localStorage.getItem(KEY) === "true"){ unlock(); return; } }catch(e){}
+  gate.hidden = false; pw.focus();
+  form.addEventListener("submit", function(e){
+    e.preventDefault(); err.hidden = true;
+    if(pw.value.trim() !== ACCESS_CODE){ err.hidden = false; pw.select(); return; }
+    try{ localStorage.setItem(KEY, "true"); }catch(e2){}
+    unlock();
+  });
+})();
 </script>
 </body>
 </html>
